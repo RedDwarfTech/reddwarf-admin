@@ -17,7 +17,7 @@ jobs:
         username: ${{ secrets.ALIYUN_DOCKER_REPO_USER_NAME }}
         password: ${{ secrets.ALIYUN_DOCKER_REPO_USER_PASSWORD }}
         tags: ${{ github.sha }}
-        repository: reddwarf-pro/dolphin-dict
+        repository: reddwarf-pro/admin
         path: '.'
 
     - name: deploy to cluster
