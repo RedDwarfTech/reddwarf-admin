@@ -1,0 +1,5 @@
+[release]
+workers = 12
+log_level = "normal"
+keep_alive = 5
+port = 11014
