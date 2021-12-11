@@ -1,9 +1,14 @@
 #[macro_use]
 extern crate rocket;
 
+#[macro_use]
+extern crate diesel;
+
 mod biz;
 mod model;
 mod service;
+mod models;
+mod schema;
 
 use rocket::{Build, Rocket};
 use biz::common::health_controller;

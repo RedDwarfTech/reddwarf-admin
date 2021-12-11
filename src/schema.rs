@@ -116,7 +116,7 @@ table! {
     dashboard (id) {
         id -> Int4,
         app_count -> Int4,
-        user_count -> Nullable<Int4>,
+        user_count -> Int4,
     }
 }
 
