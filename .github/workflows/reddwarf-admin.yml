@@ -1,0 +1,34 @@
+name: dolphin-admin
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build image push to aliyun
+      uses: docker/build-push-action@v1
+      with:
+        registry: ${{ secrets.ALI_DOCKER_HUB_REGISTRY }}
+        username: ${{ secrets.ALIYUN_DOCKER_REPO_USER_NAME }}
+        password: ${{ secrets.ALIYUN_DOCKER_REPO_USER_PASSWORD }}
+        tags: ${{ github.sha }}
+        repository: reddwarf-pro/dolphin-dict
+        path: '.'
+
+    - name: deploy to cluster
+      uses: steebchen/kubectl@v2.0.0
+      with: 
+        config: ${{ secrets.KUBE_CONFIG_DATA }}
+        command: set image --record deployment/admin-service admin-service=${{ secrets.ALI_DOCKER_HUB_REGISTRY }}/reddwarf-pro/admin:${{ github.sha }} -n reddwarf-pro
+
+    - name: verify deployment
+      uses: steebchen/kubectl@v2.0.0
+      with:
+        config: ${{ secrets.KUBE_CONFIG_DATA }}
+        version: v1.21.0
+        command: rollout status deployment/admin-service -n reddwarf-pro
