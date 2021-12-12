@@ -7,8 +7,8 @@ use crate::model::response::home::dashboard_response::DashboardResponse;
 use crate::models::Dashboard;
 use crate::service::home::home_service::dashboard_impl;
 
-#[post("/v1/dashboard/overview",data = "<record>")]
-pub fn overview(record: Json<HomeRequest>) -> content::Json<String> {
+#[get("/v1/dashboard/overview")]
+pub fn overview() -> content::Json<String> {
     let dashboards = dashboard_impl();
     let dashboard_response = DashboardResponse{
         id: if dashboards.len()>0{dashboards[0].id}else{0},
