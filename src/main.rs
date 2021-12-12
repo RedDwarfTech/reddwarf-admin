@@ -13,6 +13,7 @@ mod schema;
 use rocket::{Build, Rocket};
 use biz::common::health_controller;
 use biz::home::home_controller;
+use biz::user::user_controller;
 
 #[launch]
 fn rocket() -> _ {
@@ -26,7 +27,10 @@ fn build_rocket() -> Rocket<Build> {
             health_controller::health,
             health_controller::liveness
         ])
-        .mount("/manage",routes![
+        .mount("/manage/home",routes![
             home_controller::overview
+        ])
+        .mount("/manage/admin/user",routes![
+            user_controller::login
         ])
 }
