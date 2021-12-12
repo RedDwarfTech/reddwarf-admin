@@ -5,9 +5,12 @@ use crate::model::request::user::login_request::LoginRequest;
 use crate::model::response::home::dashboard_response::DashboardResponse;
 use crate::models::Dashboard;
 use crate::service::home::home_service::dashboard_impl;
+use crate::service::user::user_service::login_impl;
 
-#[post("/login",data = "<record>")]
-pub fn login(record: Json<LoginRequest>) -> content::Json<String> {
+#[post("/login",data = "<request>")]
+pub fn login(request: Json<LoginRequest>) -> content::Json<String> {
+    login_impl(request);
+
     let res = ApiResponse {
         result: "ok",
         ..Default::default()
