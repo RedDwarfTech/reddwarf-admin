@@ -3,5 +3,7 @@
 
 [print_schema]
 file = "src/schema.rs"
+
 # This will cause only the users and posts tables to be output
 filter = { only_tables = [ "dashboard","admin_users"] }
+
