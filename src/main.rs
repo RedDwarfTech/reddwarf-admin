@@ -9,11 +9,13 @@ mod model;
 mod service;
 mod models;
 mod schema;
+mod test;
 
 use rocket::{Build, Rocket};
 use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::user::user_controller;
+use biz::app::music::fav::fav_music_controller;
 
 #[launch]
 fn rocket() -> _ {
@@ -32,5 +34,8 @@ fn build_rocket() -> Rocket<Build> {
         ])
         .mount("/manage/admin/user",routes![
             user_controller::login
+        ])
+        .mount("/manage/app/music/fav",routes![
+            fav_music_controller::page
         ])
 }
