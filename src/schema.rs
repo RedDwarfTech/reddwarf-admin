@@ -1,30 +1,16 @@
 table! {
-    admin_users (id) {
+    favorites (id) {
         id -> Int8,
-        nickname -> Nullable<Varchar>,
-        avatar_url -> Nullable<Varchar>,
-        phone -> Nullable<Varchar>,
-        updated_time -> Nullable<Int8>,
-        created_time -> Nullable<Int8>,
-        salt -> Nullable<Varchar>,
-        pwd -> Nullable<Varchar>,
-        sex -> Nullable<Int4>,
-        level_type -> Nullable<Varchar>,
-        phone_region -> Nullable<Varchar>,
-        country_code -> Nullable<Int4>,
-        user_status -> Nullable<Varchar>,
+        song_id -> Nullable<Int8>,
+        created_time -> Int8,
+        updated_time -> Int8,
+        user_id -> Int8,
+        source_id -> Varchar,
+        like_status -> Int4,
+        source -> Int4,
+        playlist_id -> Int8,
+        play_count -> Int4,
+        fetched_download_url -> Nullable<Int4>,
+        downloaded -> Nullable<Int4>,
     }
 }
-
-table! {
-    dashboard (id) {
-        id -> Int4,
-        app_count -> Int4,
-        user_count -> Int4,
-    }
-}
-
-allow_tables_to_appear_in_same_query!(
-    admin_users,
-    dashboard,
-);
