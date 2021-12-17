@@ -9,7 +9,7 @@ use crate::service::home::home_service::fav_music_query;
 
 #[get("/v1/dashboard/overview")]
 pub fn overview() -> content::Json<String> {
-    let dashboards = fav_music_query();
+    let dashboards = fav_music_query::<Vec<Favorites>>();
 
     let res = ApiResponse {
         result: dashboards,

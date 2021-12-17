@@ -5,12 +5,12 @@ use rust_wheel::model::user::login_user_info::LoginUserInfo;
 use crate::model::request::app::music::fav::fav_music_request::FavMusicRequest;
 use crate::model::request::home::home_request::HomeRequest;
 use crate::model::response::home::dashboard_response::DashboardResponse;
-use crate::models::Dashboard;
+use crate::models::{Dashboard, Favorites};
 use crate::service::home::home_service::fav_music_query;
 
 #[post("/v1/fav/page",data = "<request>")]
 pub fn page(request: Json<FavMusicRequest>) -> content::Json<String> {
-    let dashboards = fav_music_query();
+    let dashboards = fav_music_query::<Vec<Favorites>>();
 
     let res = ApiResponse {
         result: "dashboard_response",

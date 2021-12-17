@@ -16,7 +16,7 @@ mod test {
         use crate::model::diesel::rhythm::rhythm_schema::favorites::dsl::*;
         use rust_wheel::common::query::pagination::{PaginateForQueryFragment, PaginateForQuerySource};
 
-        fav_music_query();
+        fav_music_query::<Vec<Favorites>>();
         //let conn = establish_music_connection();
         //let query = favorites.filter(like_status.eq(1)).paginate(1).per_page(10);
         //let query_result = query.load_and_count_pages::<Favorites>(&conn).unwrap();
