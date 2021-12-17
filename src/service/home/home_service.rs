@@ -3,7 +3,7 @@ use crate::models::{Dashboard};
 use crate::diesel::prelude::*;
 
 pub fn dashboard_impl() -> Vec<Dashboard>{
-    use crate::schema::dashboard::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::dashboard::dsl::*;
     let connection = config::establish_connection();
     let results = dashboard
         .limit(1)

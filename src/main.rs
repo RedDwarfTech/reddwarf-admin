@@ -8,7 +8,6 @@ mod biz;
 mod model;
 mod service;
 mod models;
-mod schema;
 mod test;
 
 use rocket::{Build, Rocket};

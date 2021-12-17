@@ -1,6 +1,6 @@
 use rocket::serde::Serialize;
 use serde::Deserialize;
-use crate::schema::dashboard;
+use crate::model::diesel::dolphin::dolphin_schema::dashboard;
 
 #[derive(Insertable, Serialize, Queryable, Deserialize,Default)]
 #[table_name = "dashboard"]
