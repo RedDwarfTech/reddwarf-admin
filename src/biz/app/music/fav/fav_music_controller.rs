@@ -6,18 +6,14 @@ use crate::model::request::app::music::fav::fav_music_request::FavMusicRequest;
 use crate::model::request::home::home_request::HomeRequest;
 use crate::model::response::home::dashboard_response::DashboardResponse;
 use crate::models::Dashboard;
-use crate::service::home::home_service::dashboard_impl;
+use crate::service::home::home_service::fav_music_query;
 
 #[post("/v1/fav/page",data = "<request>")]
 pub fn page(request: Json<FavMusicRequest>) -> content::Json<String> {
-    let dashboards = dashboard_impl();
-    let dashboard_response = DashboardResponse{
-        id: if dashboards.len()>0{dashboards[0].id}else{0},
-        appCount: if dashboards.len()>0{dashboards[0].app_count}else{0},
-        userCount: if dashboards.len()>0{dashboards[0].user_count}else{0}
-    };
+    let dashboards = fav_music_query();
+
     let res = ApiResponse {
-        result: dashboard_response,
+        result: "dashboard_response",
         ..Default::default()
     };
     let response_json = serde_json::to_string(&res).unwrap();
