@@ -5,6 +5,6 @@ use rocket::serde::Serialize;
 #[allow(non_snake_case)]
 pub struct FavMusicRequest {
     pub userId: i64,
-    pub pageNum: i32,
-    pub pageSize: i32
+    pub pageNum: i64,
+    pub pageSize: i64
 }

@@ -10,10 +10,9 @@ use crate::service::home::home_service::fav_music_query;
 
 #[post("/v1/fav/page",data = "<request>")]
 pub fn page(request: Json<FavMusicRequest>) -> content::Json<String> {
-    let dashboards = fav_music_query::<Vec<Favorites>>();
-
+    let fav_musics = fav_music_query::<Vec<Favorites>>(request);
     let res = ApiResponse {
-        result: "dashboard_response",
+        result: fav_musics,
         ..Default::default()
     };
     let response_json = serde_json::to_string(&res).unwrap();

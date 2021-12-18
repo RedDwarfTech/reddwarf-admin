@@ -6,6 +6,7 @@ mod test {
     use diesel::{Connection, ExpressionMethods, PgConnection, QueryDsl, RunQueryDsl};
     use rust_wheel::common::query::pagination::PaginateForQuerySource;
     use rust_wheel::config::db::config::establish_music_connection;
+    use rust_wheel::model::response::api_response::ApiResponse;
     use crate::model::diesel::rhythm::rhythm_schema::favorites::dsl::favorites;
     use crate::model::diesel::rhythm::rhythm_schema::favorites::like_status;
     use crate::models::Favorites;
@@ -16,10 +17,12 @@ mod test {
         use crate::model::diesel::rhythm::rhythm_schema::favorites::dsl::*;
         use rust_wheel::common::query::pagination::{PaginateForQueryFragment, PaginateForQuerySource};
 
-        fav_music_query::<Vec<Favorites>>();
-        //let conn = establish_music_connection();
-        //let query = favorites.filter(like_status.eq(1)).paginate(1).per_page(10);
-        //let query_result = query.load_and_count_pages::<Favorites>(&conn).unwrap();
+        //let dashboards = fav_music_query::<Favorites>();
+        let res = ApiResponse {
+            result: "dashboards",
+            ..Default::default()
+        };
+        let response_json = serde_json::to_string(&res).unwrap();
         println!("{:?}", 1);
     }
 }
