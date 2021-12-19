@@ -26,23 +26,8 @@ pub fn page(request: Json<FavMusicRequest>) -> content::Json<String> {
     for fav in &fav_musics.list{
         let filtered_music:Vec<_> = musics.iter()
             .filter(|item| item.source_id == fav.source_id)
-            .map(|item|FavMusicResponse{
-                id: (&fav.id.to_string()).parse().unwrap(),
-                song_id: None,
-                created_time: 0,
-                updated_time: 0,
-                user_id: 0,
-                source_id: fav.source_id.to_string(),
-                like_status: 0,
-                source: 0,
-                playlist_id: 0,
-                play_count: 0,
-                fetched_download_url: None,
-                downloaded: None,
-                music: item.clone()
-            })
+            .map(|item|FavMusicResponse::from(fav,item.clone()))
             .collect();
-
         result_list.push(filtered_music[0].clone());
     }
     let page_result = Pagination{
