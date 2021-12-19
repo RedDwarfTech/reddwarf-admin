@@ -1,6 +1,7 @@
 use rocket::serde::Deserialize;
 use rocket::serde::Serialize;
 use crate::models::{Favorites, Music};
+use num_traits::cast::ToPrimitive;
 
 #[derive( Serialize, Queryable, Deserialize,Default, Clone)]
 pub struct FavMusicResponse{
@@ -22,12 +23,12 @@ pub struct FavMusicResponse{
 impl FavMusicResponse {
     pub(crate) fn new(f: &Favorites, music: Music) -> Self {
         Self {
-            id: f.id,
+            id: f.id.to_i64().unwrap(),
             song_id: None,
-            created_time: 0,
+            created_time: f.created_time.to_i64().unwrap(),
             updated_time: 0,
             user_id: 0,
-            source_id: "".to_string(),
+            source_id: f.source_id.to_string(),
             like_status: 0,
             source: 0,
             playlist_id: 0,
