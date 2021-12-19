@@ -7,7 +7,7 @@ use crate::models::{Favorites};
 use crate::diesel::prelude::*;
 use crate::model::request::app::music::fav::fav_music_request::FavMusicRequest;
 
-pub fn fav_music_query<T>(request: Json<FavMusicRequest>) -> PaginationResponse<Vec<Favorites>> {
+pub fn fav_music_query<T>(request: &Json<FavMusicRequest>) -> PaginationResponse<Vec<Favorites>> {
     use crate::model::diesel::rhythm::rhythm_schema::favorites::dsl::*;
     let connection = config::establish_music_connection();
     let query = favorites.filter(like_status.eq(1)).paginate(request.pageNum).per_page(request.pageSize);
