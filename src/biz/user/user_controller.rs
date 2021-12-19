@@ -4,7 +4,6 @@ use rust_wheel::model::response::api_response::ApiResponse;
 use crate::model::request::user::login_request::LoginRequest;
 use crate::model::response::home::dashboard_response::DashboardResponse;
 use crate::models::Dashboard;
-use crate::service::home::home_service::fav_music_query;
 use crate::service::user::user_service::login_impl;
 
 #[post("/login",data = "<request>")]

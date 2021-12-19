@@ -26,3 +26,21 @@ pub struct Favorites {
     pub fetched_download_url: Option<i32>,
     pub downloaded: Option<i32>
 }
+
+
+#[derive( Serialize, Queryable, Deserialize,Default, Clone)]
+pub struct Music {
+    pub id: i64,
+    pub name: String,
+    pub artists: String,
+    pub album_id: i64,
+    pub publishtime: i64,
+    pub status: i32,
+    pub duration: i32,
+    pub source_id: String,
+    pub source: i32,
+    pub created_time: i64,
+    pub updated_time:i64,
+    pub album: String,
+    pub fetched_download_url: i32
+}

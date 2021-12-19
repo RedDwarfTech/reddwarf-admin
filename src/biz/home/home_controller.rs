@@ -5,7 +5,6 @@ use rust_wheel::model::user::login_user_info::LoginUserInfo;
 use crate::model::request::home::home_request::HomeRequest;
 use crate::model::response::home::dashboard_response::DashboardResponse;
 use crate::models::{Dashboard, Favorites};
-use crate::service::home::home_service::fav_music_query;
 
 #[get("/v1/dashboard/overview")]
 pub fn overview() -> content::Json<String> {

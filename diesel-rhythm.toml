@@ -4,6 +4,6 @@
 file = "src/model/diesel/rhythm/rhythm_schema.rs"
 
 # This will cause only the users and posts tables to be output
-filter = { only_tables = ["favorites"] }
+filter = { only_tables = ["favorites", "songs", "playlist"] }
 
 # https://stackoverflow.com/questions/59228152/rust-diesel-cli-setting-up-multiple-env-files-for-different-environments
