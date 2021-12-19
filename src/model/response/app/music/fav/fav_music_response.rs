@@ -19,13 +19,13 @@ pub struct FavMusicResponse{
     pub music: Music
 }
 
-impl From<&Favorites> for FavMusicResponse {
-    fn from(f: &Favorites, music: Music) -> Self {
-        Self{
+impl FavMusicResponse {
+    pub(crate) fn new(f: &Favorites, music: Music) -> Self {
+        Self {
             id: f.id,
             song_id: None,
-            created_time: f.created_time,
-            updated_time: f.updated_time,
+            created_time: 0,
+            updated_time: 0,
             user_id: 0,
             source_id: "".to_string(),
             like_status: 0,
@@ -34,7 +34,7 @@ impl From<&Favorites> for FavMusicResponse {
             play_count: 0,
             fetched_download_url: None,
             downloaded: None,
-            music: Default::default()
+            music,
         }
     }
 }

@@ -1,7 +1,5 @@
 use rocket::serde::Serialize;
 use serde::Deserialize;
-use crate::model::diesel::dolphin::dolphin_schema::dashboard;
-use crate::model::diesel::rhythm::rhythm_schema::favorites;
 
 #[derive(Serialize, Queryable, Deserialize,Default)]
 // #[table_name = "dashboard"]
