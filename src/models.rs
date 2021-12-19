@@ -12,7 +12,6 @@ pub struct Dashboard {
 }
 
 #[derive( Serialize, Queryable, Deserialize,Default)]
-// #[table_name = "favorites"]
 pub struct Favorites {
     pub id: i64,
     pub song_id: Option<i64>,

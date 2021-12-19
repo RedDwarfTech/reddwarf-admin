@@ -17,7 +17,7 @@ mod test {
         use crate::model::diesel::rhythm::rhythm_schema::favorites::dsl::*;
         use rust_wheel::common::query::pagination::{PaginateForQueryFragment, PaginateForQuerySource};
 
-        //let dashboards = fav_music_query::<Favorites>();
+        let dashboards = fav_music_query::<Favorites>();
         let res = ApiResponse {
             result: "dashboards",
             ..Default::default()
