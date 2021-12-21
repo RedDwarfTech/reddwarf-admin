@@ -41,6 +41,13 @@ pub struct Article {
 }
 
 #[derive(Queryable, Debug)]
+pub struct ArticleContent {
+    pub id: i64,
+    pub article_id: i64,
+    pub article_content: String,
+}
+
+#[derive(Queryable, Debug)]
 pub struct Dashboard {
     pub id: i32,
     pub app_count: i32,
