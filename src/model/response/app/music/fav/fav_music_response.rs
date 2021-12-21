@@ -27,7 +27,7 @@ impl FavMusicResponse {
             song_id: None,
             created_time: f.created_time.to_i64().unwrap(),
             updated_time: 0,
-            user_id: 0,
+            user_id: f.user_id.to_i64().unwrap(),
             source_id: f.source_id.to_string(),
             like_status: 0,
             source: 0,

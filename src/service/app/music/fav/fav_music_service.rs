@@ -10,9 +10,11 @@ use crate::model::request::app::music::fav::fav_music_request::FavMusicRequest;
 pub fn fav_music_query<T>(request: &Json<FavMusicRequest>) -> PaginationResponse<Vec<Favorites>> {
     use crate::model::diesel::rhythm::rhythm_schema::favorites::dsl::*;
     let connection = config::establish_music_connection();
-    let query = favorites.filter(like_status.eq(1)).paginate(request.pageNum).per_page(request.pageSize);
-    let query_result = query.load_and_count_pages::<Favorites>(&connection);
-    let page_result = map_pagination_res(query_result,request.pageNum,request.pageSize);
+    let query = favorites.filter(like_status.eq(1))
+        .paginate(request.pageNum)
+        .per_page(request.pageSize);
+    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Favorites>(&connection);
+    let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
 }
 

@@ -2,7 +2,6 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use std::default::Default;
 use rust_wheel::model::response::api_response::ApiResponse;
-use rust_wheel::model::response::pagination::Pagination;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use crate::model::request::app::music::fav::fav_music_request::FavMusicRequest;
 use crate::model::response::app::music::fav::fav_music_response::FavMusicResponse;
@@ -26,13 +25,8 @@ pub fn page(request: Json<FavMusicRequest>) -> content::Json<String> {
             .collect();
         result_list.push(filtered_music[0].clone());
     }
-    let page_result = Pagination{
-        pageNum: request.pageNum,
-        pageSize: request.pageSize,
-        total: 20
-    };
     let resp = PaginationResponse{
-        pagination: page_result,
+        pagination: fav_musics.pagination,
         list: result_list
     };
     let res = ApiResponse {
