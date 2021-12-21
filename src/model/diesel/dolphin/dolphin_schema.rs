@@ -16,15 +16,7 @@ table! {
     }
 }
 
-table! {
-    dashboard (id) {
-        id -> Int4,
-        app_count -> Int4,
-        user_count -> Int4,
-    }
-}
 
 allow_tables_to_appear_in_same_query!(
     admin_users,
-    dashboard,
 );
