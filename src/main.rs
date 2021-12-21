@@ -14,6 +14,7 @@ use rocket::{Build, Rocket};
 use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::app::music::fav::fav_music_controller;
+use biz::app::cruise::article::article_controller;
 
 #[launch]
 fn rocket() -> _ {
@@ -34,5 +35,8 @@ fn build_rocket() -> Rocket<Build> {
         ])
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page
+        ])
+        .mount("manage/app/cruise/article", routes![
+            article_controller::page
         ])
 }
