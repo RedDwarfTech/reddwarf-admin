@@ -13,7 +13,7 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
     let connection = config::establish_connection();
     let query = article
-        .filter(editor_pick.eq(1))
+        .filter(id.gt(0))
         .paginate(request.pageNum)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Article>(&connection);
