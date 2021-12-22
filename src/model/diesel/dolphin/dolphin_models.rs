@@ -3,10 +3,12 @@
 #![allow(unused)]
 #![allow(clippy::all)]
 
+use rocket::serde::Serialize;
+use serde::Deserialize;
 
 use chrono::DateTime;
 use chrono::offset::Utc;
-#[derive(Queryable, Debug)]
+#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
 pub struct AdminUser {
     pub id: i64,
     pub nickname: Option<String>,
@@ -23,7 +25,7 @@ pub struct AdminUser {
     pub user_status: Option<String>,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
 pub struct Article {
     pub id: i64,
     pub user_id: i64,
@@ -40,14 +42,14 @@ pub struct Article {
     pub editor_pick: Option<i32>,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
 pub struct ArticleContent {
     pub id: i64,
     pub article_id: i64,
-    pub article_content: String,
+    pub articleContent: String,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
 pub struct Dashboard {
     pub id: i32,
     pub app_count: i32,
