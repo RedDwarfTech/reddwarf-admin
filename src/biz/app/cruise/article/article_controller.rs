@@ -18,23 +18,16 @@ pub fn page(request: Json<ArticleRequest>) -> content::Json<String> {
 
 #[get("/v1/detail/<id>")]
 pub fn detail(id: i64) -> content::Json<String> {
-    let articles = article_detail_query(id);
-    let article = take(articles,0);
+    let article = article_detail_query(id);
     let res = ApiResponse {
-        result: article.unwrap(),
+        result: article,
         ..Default::default()
     };
     let response_json = serde_json::to_string(&res).unwrap();
     return content::Json(response_json);
 }
 
-fn take<T>(mut vec: Vec<T>, index: usize) -> Option<T> {
-    if vec.get(index).is_none() {
-        None
-    } else {
-        Some(vec.swap_remove(index))
-    }
-}
+
 
 
 
