@@ -36,7 +36,7 @@ fn build_rocket() -> Rocket<Build> {
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page
         ])
-        .mount("manage/app/cruise/article", routes![
+        .mount("/manage/app/cruise/article", routes![
             article_controller::page
         ])
 }
