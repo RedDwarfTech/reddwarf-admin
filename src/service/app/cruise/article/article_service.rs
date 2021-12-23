@@ -14,6 +14,7 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     let connection = config::establish_connection();
     let query = article
         .filter(id.gt(0))
+        .order(created_time.desc())
         .paginate(request.pageNum)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Article>(&connection);
