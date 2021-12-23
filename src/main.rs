@@ -15,6 +15,7 @@ use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::app::cruise::article::article_controller;
+use biz::app::app_controller;
 
 #[launch]
 fn rocket() -> _ {
@@ -30,6 +31,9 @@ fn build_rocket() -> Rocket<Build> {
         ])
         .mount("/manage/home",routes![
             home_controller::overview
+        ])
+        .mount("manage/app",routes![
+            app_controller::page
         ])
         .mount("/manage/admin/user",routes![
         ])
