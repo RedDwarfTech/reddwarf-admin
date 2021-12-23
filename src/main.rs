@@ -32,7 +32,7 @@ fn build_rocket() -> Rocket<Build> {
         .mount("/manage/home",routes![
             home_controller::overview
         ])
-        .mount("manage/app",routes![
+        .mount("/manage/app",routes![
             app_controller::page
         ])
         .mount("/manage/admin/user",routes![
