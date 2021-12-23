@@ -9,7 +9,7 @@ use crate::model::request::app::app_request::AppRequest;
 
 pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
-    let connection = config::establish_music_connection();
+    let connection = config::establish_connection();
     let query = apps.filter(id.gt(0))
         .paginate(request.pageNum)
         .per_page(request.pageSize);
