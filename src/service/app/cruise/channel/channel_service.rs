@@ -13,10 +13,13 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>) -> PaginationResponse<Ve
     let query = rss_sub_source
         .filter(id.gt(0))
         .order(created_time.desc())
-        .paginate(request.pageNum)
-        .per_page(request.pageSize);
+        .paginate(request.pageNum.unwrap_or(1))
+        .per_page(request.pageSize.unwrap_or(10));
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<RssSubSource>(&connection);
-    let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
+    let page_result = map_pagination_res(
+        query_result,
+        request.pageNum.unwrap_or(1),
+        request.pageSize.unwrap_or(10));
     return page_result;
 }
 
