@@ -1,21 +1,16 @@
-use rocket::serde::json::Json;
-use rust_wheel::common::query::pagination::{PaginateForQueryFragment};
-use rust_wheel::common::util::model_convert::map_pagination_res;
+use rust_wheel::common::util::collection_util::take;
 use rust_wheel::config::db::config;
-use rust_wheel::model::response::pagination_response::PaginationResponse;
-use crate::models::{Favorites};
 use crate::diesel::prelude::*;
-use crate::model::request::app::music::fav::fav_music_request::FavMusicRequest;
+use crate::model::diesel::dolphin::dolphin_models::Dashboard;
 
-pub fn dashboard_query<T>(request: Json<FavMusicRequest>) -> PaginationResponse<Vec<Favorites>> {
-    use crate::model::diesel::rhythm::rhythm_schema::favorites::dsl::*;
-    let connection = config::establish_music_connection();
-    let query = favorites.filter(like_status.eq(1)).paginate(request.pageNum).per_page(request.pageSize);
-
-    let query_result = query.load_and_count_pages_total::<Favorites>(&connection);
-    let page_result = map_pagination_res(query_result,request.pageNum,request.pageSize);
-
-    return page_result;
+pub fn overview_query() -> Dashboard {
+    use crate::model::diesel::dolphin::dolphin_schema::dashboard::dsl::*;
+    let connection = config::establish_connection();
+    let dashboards = dashboard.limit(1)
+        .load::<Dashboard>(&connection)
+        .expect("load dashboard failed");
+    let dashboard_data = take(dashboards,0).unwrap();
+    return dashboard_data;
 }
 
 
