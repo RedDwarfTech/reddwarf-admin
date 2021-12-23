@@ -66,10 +66,50 @@ table! {
     }
 }
 
+table! {
+    rss_sub_source (id) {
+        id -> Int8,
+        sub_url -> Varchar,
+        created_time -> Int8,
+        updated_time -> Int8,
+        sub_status -> Int2,
+        rss_type -> Varchar,
+        standard_type -> Varchar,
+        standard_version -> Varchar,
+        cron -> Varchar,
+        trigger_count -> Int4,
+        next_trigger_time -> Nullable<Timestamp>,
+        sub_name -> Varchar,
+        last_trigger_time -> Nullable<Timestamptz>,
+        tags -> Nullable<Array<Int4>>,
+        source_url -> Nullable<Varchar>,
+        sub_type -> Nullable<Varchar>,
+        intro -> Nullable<Varchar>,
+        remark -> Nullable<Varchar>,
+        title_hash -> Nullable<Varchar>,
+        failed_count -> Int4,
+        lang -> Nullable<Varchar>,
+        frequency_month -> Nullable<Int4>,
+        reputation -> Nullable<Int4>,
+        rep_lastest_refresh_time -> Nullable<Int8>,
+        scrapy_take_time -> Nullable<Int4>,
+        follower -> Nullable<Int8>,
+        censor_status -> Nullable<Int4>,
+        etag -> Nullable<Varchar>,
+        last_modified -> Nullable<Varchar>,
+        editor_pick -> Nullable<Int4>,
+        fav_icon_url -> Nullable<Varchar>,
+        dynamic_interval -> Int4,
+        local_icon_url -> Nullable<Varchar>,
+        creator -> Int8,
+    }
+}
+
 allow_tables_to_appear_in_same_query!(
     admin_users,
     apps,
     article,
     article_content,
     dashboard,
+    rss_sub_source,
 );

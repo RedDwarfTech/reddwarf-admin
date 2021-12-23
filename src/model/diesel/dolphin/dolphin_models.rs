@@ -6,6 +6,7 @@
 use rocket::serde::Serialize;
 use serde::Deserialize;
 
+use chrono::NaiveDateTime;
 use chrono::DateTime;
 use chrono::offset::Utc;
 #[derive(Queryable,Debug,Serialize,Deserialize,Default)]
@@ -68,5 +69,43 @@ pub struct Dashboard {
     pub id: i32,
     pub app_count: i32,
     pub user_count: i32,
+}
+
+#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+pub struct RssSubSource {
+    pub id: i64,
+    pub sub_url: String,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub sub_status: i16,
+    pub rss_type: String,
+    pub standard_type: String,
+    pub standard_version: String,
+    pub cron: String,
+    pub trigger_count: i32,
+    pub next_trigger_time: Option<NaiveDateTime>,
+    pub sub_name: String,
+    pub last_trigger_time: Option<DateTime<Utc>>,
+    pub tags: Option<Vec<i32>>,
+    pub source_url: Option<String>,
+    pub sub_type: Option<String>,
+    pub intro: Option<String>,
+    pub remark: Option<String>,
+    pub title_hash: Option<String>,
+    pub failed_count: i32,
+    pub lang: Option<String>,
+    pub frequency_month: Option<i32>,
+    pub reputation: Option<i32>,
+    pub rep_lastest_refresh_time: Option<i64>,
+    pub scrapy_take_time: Option<i32>,
+    pub follower: Option<i64>,
+    pub censor_status: Option<i32>,
+    pub etag: Option<String>,
+    pub last_modified: Option<String>,
+    pub editor_pick: Option<i32>,
+    pub fav_icon_url: Option<String>,
+    pub dynamic_interval: i32,
+    pub local_icon_url: Option<String>,
+    pub creator: i64,
 }
 
