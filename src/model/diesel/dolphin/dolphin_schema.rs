@@ -105,6 +105,18 @@ table! {
     }
 }
 
+table! {
+    trend (id) {
+        id -> Int8,
+        trend_item -> Int4,
+        app_id -> Int4,
+        created_time -> Int8,
+        updated_time -> Int8,
+        statistic_time -> Int8,
+        incre_num -> Int4,
+    }
+}
+
 allow_tables_to_appear_in_same_query!(
     admin_users,
     apps,
@@ -112,4 +124,5 @@ allow_tables_to_appear_in_same_query!(
     article_content,
     dashboard,
     rss_sub_source,
+    trend,
 );

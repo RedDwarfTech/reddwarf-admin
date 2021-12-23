@@ -109,3 +109,14 @@ pub struct RssSubSource {
     pub creator: i64,
 }
 
+#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+pub struct Trend {
+    pub id: i64,
+    pub trend_item: i32,
+    pub app_id: i32,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub statistic_time: i64,
+    pub incre_num: i32,
+}
+

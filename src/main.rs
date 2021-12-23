@@ -31,7 +31,8 @@ fn build_rocket() -> Rocket<Build> {
             health_controller::liveness
         ])
         .mount("/manage/home",routes![
-            home_controller::overview
+            home_controller::overview,
+            home_controller::trend_overview
         ])
         .mount("/manage/app",routes![
             app_controller::page
