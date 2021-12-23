@@ -17,6 +17,21 @@ table! {
 }
 
 table! {
+    apps (id) {
+        id -> Int4,
+        app_name -> Varchar,
+        remark -> Nullable<Varchar>,
+        created_time -> Int8,
+        updated_time -> Nullable<Int8>,
+        user_count -> Nullable<Int4>,
+        online_status -> Nullable<Int4>,
+        online_time -> Nullable<Int8>,
+        app_tag -> Nullable<Varchar>,
+        app_id -> Int4,
+    }
+}
+
+table! {
     article (id) {
         id -> Int8,
         user_id -> Int8,
@@ -53,6 +68,7 @@ table! {
 
 allow_tables_to_appear_in_same_query!(
     admin_users,
+    apps,
     article,
     article_content,
     dashboard,
