@@ -19,6 +19,8 @@ log = "0.4"
 env_logger = "0.9.0"
 config = "0.11"
 num-traits = "0.2"
+tokio = "1.15.0"
+futures = "0.3"
 
 # reddwarf public component
 rust_wheel = { git = "https://github.com/jiangxiaoqiang/rust_wheel.git" }

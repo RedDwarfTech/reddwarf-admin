@@ -10,7 +10,11 @@ mod service;
 mod models;
 mod test;
 
+use futures::stream::{self, StreamExt};
+use std::time::Duration;
 use rocket::{Build, Rocket};
+use rocket::tokio::time::Instant;
+use tokio::time;
 use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::app::music::fav::fav_music_controller;
@@ -19,10 +23,28 @@ use biz::app::cruise::channel::channel_controller;
 use biz::app::app_controller;
 
 #[launch]
-fn rocket() -> _ {
+#[tokio::main]
+async fn rocket() -> _ {
+    period_exec();
     build_rocket()
 }
 
+async fn period_exec(){
+    let interval = time::interval(Duration::from_millis(10));
+
+    let forever = stream::unfold(interval, |mut interval| async {
+        interval.tick().await;
+        do_something().await;
+        Some(((), interval))
+    });
+
+    let now = Instant::now();
+    forever.for_each(|_| async {}).await;
+}
+
+async fn do_something() {
+    eprintln!("do_something");
+}
 
 fn build_rocket() -> Rocket<Build> {
     rocket::build()
