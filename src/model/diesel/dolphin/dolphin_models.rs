@@ -120,3 +120,26 @@ pub struct Trend {
     pub incre_num: i32,
 }
 
+#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+pub struct User {
+    pub id: i64,
+    pub nickname: String,
+    pub avatar_url: Option<String>,
+    pub phone: String,
+    pub updated_time: i64,
+    pub created_time: i64,
+    pub salt: String,
+    pub pwd: String,
+    pub sex: Option<i32>,
+    pub level_type: Option<String>,
+    pub phone_region: Option<String>,
+    pub country_code: Option<i32>,
+    pub user_status: i32,
+    pub last_login_time: Option<i64>,
+    pub first_login_time: Option<i64>,
+    pub app_id: i32,
+    pub register_time: i64,
+    pub apple_iap_product_id: Option<String>,
+    pub auto_renew_product_expire_time_ms: Option<i64>,
+}
+

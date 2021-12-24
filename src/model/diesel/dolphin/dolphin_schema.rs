@@ -117,6 +117,30 @@ table! {
     }
 }
 
+table! {
+    users (id) {
+        id -> Int8,
+        nickname -> Varchar,
+        avatar_url -> Nullable<Varchar>,
+        phone -> Varchar,
+        updated_time -> Int8,
+        created_time -> Int8,
+        salt -> Varchar,
+        pwd -> Varchar,
+        sex -> Nullable<Int4>,
+        level_type -> Nullable<Varchar>,
+        phone_region -> Nullable<Varchar>,
+        country_code -> Nullable<Int4>,
+        user_status -> Int4,
+        last_login_time -> Nullable<Int8>,
+        first_login_time -> Nullable<Int8>,
+        app_id -> Int4,
+        register_time -> Int8,
+        apple_iap_product_id -> Nullable<Varchar>,
+        auto_renew_product_expire_time_ms -> Nullable<Int8>,
+    }
+}
+
 allow_tables_to_appear_in_same_query!(
     admin_users,
     apps,
@@ -125,4 +149,5 @@ allow_tables_to_appear_in_same_query!(
     dashboard,
     rss_sub_source,
     trend,
+    users,
 );
