@@ -20,6 +20,7 @@ use biz::home::home_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::app::cruise::article::article_controller;
 use biz::app::cruise::channel::channel_controller;
+use biz::user::user_controller;
 use biz::app::app_controller;
 
 #[launch]
@@ -62,7 +63,8 @@ fn build_rocket() -> Rocket<Build> {
         .mount("/manage/app/cruise/channel", routes![
             channel_controller::page
         ])
-        .mount("/manage/admin/user",routes![
+        .mount("/manage/user",routes![
+            user_controller::page
         ])
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page
