@@ -1,5 +1,7 @@
 use rocket::response::content;
+use rocket::serde::json::Json;
 use rust_wheel::model::response::api_response::ApiResponse;
+use crate::model::request::home::trend_request::TrendRequest;
 use crate::service::home::home_service::{overview_query, trend_query};
 
 #[get("/v1/dashboard/overview")]
@@ -13,8 +15,8 @@ pub fn overview() -> content::Json<String> {
     return content::Json(response_json);
 }
 
-#[get("/v1/trend/overview")]
-pub fn trend_overview() -> content::Json<String> {
+#[post("/v1/trend/overview",data = "<request>")]
+pub fn trend_overview(request: Json<TrendRequest>) -> content::Json<String> {
     let trends = trend_query();
     let res = ApiResponse {
         result: trends,
