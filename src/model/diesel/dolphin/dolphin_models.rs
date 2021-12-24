@@ -72,6 +72,23 @@ pub struct Dashboard {
 }
 
 #[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+pub struct Domain {
+    pub id: i64,
+    pub domain_name: String,
+    pub domain_url: String,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub cron: Option<String>,
+    pub next_trigger_time: Option<NaiveDateTime>,
+    pub monitor_status: Option<String>,
+    pub user_id: Option<i64>,
+    pub expire_date: Option<NaiveDateTime>,
+    pub days_before_trigger: i32,
+    pub notify_trigger_date: Option<NaiveDateTime>,
+    pub expire_date_ms: Option<i64>,
+}
+
+#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
 pub struct RssSubSource {
     pub id: i64,
     pub sub_url: String,

@@ -67,6 +67,24 @@ table! {
 }
 
 table! {
+    domain (id) {
+        id -> Int8,
+        domain_name -> Varchar,
+        domain_url -> Varchar,
+        created_time -> Int8,
+        updated_time -> Int8,
+        cron -> Nullable<Varchar>,
+        next_trigger_time -> Nullable<Timestamp>,
+        monitor_status -> Nullable<Varchar>,
+        user_id -> Nullable<Int8>,
+        expire_date -> Nullable<Timestamp>,
+        days_before_trigger -> Int4,
+        notify_trigger_date -> Nullable<Timestamp>,
+        expire_date_ms -> Nullable<Int8>,
+    }
+}
+
+table! {
     rss_sub_source (id) {
         id -> Int8,
         sub_url -> Varchar,
@@ -147,6 +165,7 @@ allow_tables_to_appear_in_same_query!(
     article,
     article_content,
     dashboard,
+    domain,
     rss_sub_source,
     trend,
     users,

@@ -6,6 +6,7 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 use crate::diesel::prelude::*;
 use crate::model::request::user::user_request::UserRequest;
 use crate::model::diesel::dolphin::dolphin_models::User;
+use crate::model::request::user::password_request::PasswordRequest;
 
 pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User>> {
     use crate::model::diesel::dolphin::dolphin_schema::users::dsl::*;
@@ -18,3 +19,9 @@ pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User
     return page_result;
 }
 
+pub fn password_edit(request: &Json<PasswordRequest>) -> &'static str {
+    use crate::model::diesel::dolphin::dolphin_schema::users::dsl::*;
+    let connection = config::establish_connection();
+
+    return "page_result";
+}

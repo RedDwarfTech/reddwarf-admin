@@ -12,7 +12,8 @@ filter = { only_tables = [
     "article_content",
     "rss_sub_source",
     "trend",
-    "users"
+    "users",
+    "domain"
 ] }
 
 # https://stackoverflow.com/questions/59228152/rust-diesel-cli-setting-up-multiple-env-files-for-different-environments
