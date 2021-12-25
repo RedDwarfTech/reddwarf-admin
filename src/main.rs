@@ -64,7 +64,8 @@ fn build_rocket() -> Rocket<Build> {
             channel_controller::page
         ])
         .mount("/manage/user",routes![
-            user_controller::page
+            user_controller::page,
+            user_controller::edit_pwd
         ])
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page

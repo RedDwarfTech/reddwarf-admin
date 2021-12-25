@@ -13,7 +13,7 @@ pub fn page(request: Json<UserRequest>) -> content::Json<String> {
 }
 
 #[post("/v1/pwd/edit",data = "<request>")]
-pub fn edit(request: Json<PasswordRequest>) -> content::Json<String> {
+pub fn edit_pwd(request: Json<PasswordRequest>) -> content::Json<String> {
     let result = password_edit(&request);
     return box_rest_response(result);
 }

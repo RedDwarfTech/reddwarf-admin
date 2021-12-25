@@ -1,11 +1,13 @@
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::{PaginateForQueryFragment};
+use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::map_pagination_res;
+use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use crate::diesel::prelude::*;
 use crate::model::request::user::user_request::UserRequest;
-use crate::model::diesel::dolphin::dolphin_models::User;
+use crate::model::diesel::dolphin::dolphin_models::{AdminUser, User};
 use crate::model::request::user::password_request::PasswordRequest;
 
 pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User>> {
@@ -20,8 +22,24 @@ pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User
 }
 
 pub fn password_edit(request: &Json<PasswordRequest>) -> &'static str {
-    use crate::model::diesel::dolphin::dolphin_schema::users::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
-
-    return "page_result";
+    // verify legacy password
+    let request_user_name:String = String::from(&request.userName);
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::admin_users::phone.eq(request_user_name);
+    let db_admin_user = admin_users.filter(&predicate)
+        .limit(1)
+        .load::<AdminUser>(&connection)
+        .expect("query admin user failed");
+    let single_user = take(db_admin_user,0).unwrap();
+    let pwd_salt = single_user.salt.unwrap();
+    let sha_password = get_sha(String::from(&request.oldPassword), &pwd_salt);
+    if sha_password.eq(&single_user.pwd.unwrap().as_str()){
+        let new_password = get_sha(String::from(&request.newPassword),&pwd_salt);
+        diesel::update(admin_users.filter(predicate))
+            .set(pwd.eq(new_password))
+            .get_result::<AdminUser>(&connection)
+            .expect("unable to update new password");
+    }
+    return "ok";
 }
