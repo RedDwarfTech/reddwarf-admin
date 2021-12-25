@@ -22,6 +22,7 @@ use biz::app::cruise::article::article_controller;
 use biz::app::cruise::channel::channel_controller;
 use biz::user::user_controller;
 use biz::app::app_controller;
+use biz::app::cernitor::domain::domain_controller;
 
 #[launch]
 #[tokio::main]
@@ -59,6 +60,9 @@ fn build_rocket() -> Rocket<Build> {
         ])
         .mount("/manage/app",routes![
             app_controller::page
+        ])
+        .mount("/manage/app/cernitor",routes![
+            domain_controller::page
         ])
         .mount("/manage/app/cruise/channel", routes![
             channel_controller::page
