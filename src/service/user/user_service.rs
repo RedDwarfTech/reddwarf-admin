@@ -42,7 +42,7 @@ pub fn password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
             .get_result::<AdminUser>(&connection)
             .expect("unable to update new password");
     }else{
-        return box_error_rest_response("old password did not match", "00100100064007".parse().unwrap());
+        return box_error_rest_response("", "00100100064007".parse().unwrap(), "old password did not match".parse().unwrap());
     }
     return box_rest_response("ok");
 }
