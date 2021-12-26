@@ -1,7 +1,7 @@
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::{PaginateForQueryFragment};
 use rust_wheel::common::util::collection_util::take;
-use rust_wheel::common::util::model_convert::map_pagination_res;
+use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_pagination_res};
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
@@ -21,7 +21,7 @@ pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User
     return page_result;
 }
 
-pub fn password_edit(request: &Json<PasswordRequest>) -> &'static str {
+pub fn password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     // verify legacy password
@@ -40,6 +40,8 @@ pub fn password_edit(request: &Json<PasswordRequest>) -> &'static str {
             .set(pwd.eq(new_password))
             .get_result::<AdminUser>(&connection)
             .expect("unable to update new password");
+    }else{
+        return box_error_rest_response("old password did not match", "00100100064007".parse().unwrap());
     }
-    return "ok";
+    return box_rest_response(result);
 }

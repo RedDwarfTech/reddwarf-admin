@@ -14,6 +14,5 @@ pub fn page(request: Json<UserRequest>) -> content::Json<String> {
 
 #[post("/v1/pwd/edit",data = "<request>")]
 pub fn edit_pwd(request: Json<PasswordRequest>) -> content::Json<String> {
-    let result = password_edit(&request);
-    return box_rest_response(result);
+    return password_edit(&request);
 }
