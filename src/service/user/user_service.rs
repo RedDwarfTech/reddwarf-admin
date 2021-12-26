@@ -1,3 +1,4 @@
+use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::{PaginateForQueryFragment};
 use rust_wheel::common::util::collection_util::take;
@@ -43,5 +44,5 @@ pub fn password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
     }else{
         return box_error_rest_response("old password did not match", "00100100064007".parse().unwrap());
     }
-    return box_rest_response(result);
+    return box_rest_response("ok");
 }
