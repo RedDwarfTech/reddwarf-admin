@@ -5,13 +5,13 @@
 
 use rocket::serde::Serialize;
 use serde::Deserialize;
-
 use crate::model::diesel::dolphin::dolphin_schema::*;
 
 use chrono::NaiveDateTime;
 use chrono::DateTime;
 use chrono::offset::Utc;
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "admin_users"]
 pub struct AdminUser {
     pub id: i64,
     pub nickname: Option<String>,
@@ -28,7 +28,8 @@ pub struct AdminUser {
     pub user_status: Option<String>,
 }
 
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "apps"]
 pub struct App {
     pub id: i32,
     pub app_name: String,
@@ -42,7 +43,8 @@ pub struct App {
     pub app_id: i32,
 }
 
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "article"]
 pub struct Article {
     pub id: i64,
     pub user_id: i64,
@@ -59,14 +61,16 @@ pub struct Article {
     pub editor_pick: Option<i32>,
 }
 
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "article_content"]
 pub struct ArticleContent {
     pub id: i64,
     pub article_id: i64,
     pub articleContent: String,
 }
 
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "dashboard"]
 pub struct Dashboard {
     pub id: i32,
     pub app_count: i32,
@@ -91,7 +95,8 @@ pub struct Domain {
     pub expire_date_ms: Option<i64>,
 }
 
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "rss_sub_source"]
 pub struct RssSubSource {
     pub id: i64,
     pub sub_url: String,
@@ -129,7 +134,8 @@ pub struct RssSubSource {
     pub creator: i64,
 }
 
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "trend"]
 pub struct Trend {
     pub id: i64,
     pub trend_item: i32,
@@ -140,7 +146,8 @@ pub struct Trend {
     pub incre_num: i32,
 }
 
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "users"]
 pub struct User {
     pub id: i64,
     pub nickname: String,
