@@ -6,6 +6,8 @@
 use rocket::serde::Serialize;
 use serde::Deserialize;
 
+use crate::model::diesel::dolphin::dolphin_schema::*;
+
 use chrono::NaiveDateTime;
 use chrono::DateTime;
 use chrono::offset::Utc;
@@ -71,7 +73,8 @@ pub struct Dashboard {
     pub user_count: i32,
 }
 
-#[derive(Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "domain"]
 pub struct Domain {
     pub id: i64,
     pub domain_name: String,
