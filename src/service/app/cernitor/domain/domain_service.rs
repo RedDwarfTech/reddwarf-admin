@@ -24,7 +24,26 @@ pub fn domain_query<T>(request: &Json<DomainRequest>) -> PaginationResponse<Vec<
 pub fn add_domain(request: &Json<AddDomainRequest>, login_user_info: LoginUserInfo) {
     let connection = config::establish_connection();
     let timestamp: i64 = get_current_millisecond();
-
+    let new_domain = Domain {
+        id: 0,
+        domain_name: request.domainName.to_string(),
+        domain_url: request.domainUrl.to_string(),
+        created_time: timestamp,
+        updated_time: timestamp,
+        cron: Some("* */1 * * * *".parse().unwrap()),
+        next_trigger_time: None,
+        monitor_status: None,
+        user_id: Option::from(login_user_info.userId),
+        expire_date: None,
+        days_before_trigger: 7,
+        notify_trigger_date: None,
+        expire_date_ms: None,
+    };
+    diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::domain::table)
+        .values(&new_domain)
+        .on_conflict_do_nothing()
+        .execute(&connection)
+        .unwrap();
 }
 
 
