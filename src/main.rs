@@ -62,7 +62,8 @@ fn build_rocket() -> Rocket<Build> {
             app_controller::page
         ])
         .mount("/manage/app/cernitor/domain",routes![
-            domain_controller::page
+            domain_controller::page,
+            domain_controller::add
         ])
         .mount("/manage/app/cruise/channel", routes![
             channel_controller::page
