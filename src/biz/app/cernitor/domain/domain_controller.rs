@@ -18,7 +18,7 @@ pub fn page(request: Json<DomainRequest>) -> content::Json<String> {
 pub fn add(request: Json<AddDomainRequest>, login_user_info: LoginUserInfo) -> content::Json<String> {
     let domain_regex = Regex::new(r"").unwrap();
     if !domain_regex.is_match(&request.domainUrl) {
-        box_error_rest_response("", "00100100064008".parse().unwrap(), "domain url format error".parse().unwrap());
+        return box_error_rest_response("failed", "00100100064008".parse().unwrap(), "domain url format error".parse().unwrap());
     }
     add_domain(&request, login_user_info);
     return box_rest_response("ok");
