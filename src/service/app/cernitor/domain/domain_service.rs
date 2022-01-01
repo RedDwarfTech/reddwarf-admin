@@ -6,7 +6,7 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::custom_dolphin_models::{Domain};
+use crate::model::diesel::dolphin::dolphin_models::{Domain};
 use crate::model::request::app::cernitor::domain::add_domain_request::AddDomainRequest;
 use crate::model::request::app::cernitor::domain::domain_request::DomainRequest;
 
@@ -24,7 +24,7 @@ pub fn domain_query<T>(request: &Json<DomainRequest>) -> PaginationResponse<Vec<
 pub fn add_domain(request: &Json<AddDomainRequest>, login_user_info: LoginUserInfo) {
     let connection = config::establish_connection();
     let timestamp: i64 = get_current_millisecond();
-    let new_domain = Domain {
+    let new_domain = crate::model::diesel::dolphin::custom_dolphin_models::Domain {
         domain_name: request.domainName.to_string(),
         domain_url: request.domainUrl.to_string(),
         created_time: timestamp,

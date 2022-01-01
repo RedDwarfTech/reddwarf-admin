@@ -6,8 +6,7 @@ use chrono::NaiveDateTime;
 use chrono::DateTime;
 use chrono::offset::Utc;
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default,Identifiable)]
-#[primary_key(id)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "domain"]
 pub struct Domain {
     pub domain_name: String,
