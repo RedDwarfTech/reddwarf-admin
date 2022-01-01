@@ -4,10 +4,11 @@ use rust_wheel::common::util::model_convert::box_rest_response;
 use crate::model::diesel::dict::dict_models::Dict;
 use crate::model::request::app::dict::translate::translate_request::TranslateRequest;
 use crate::service::app::dict::translate::translate_service::translate_query;
+use crate::service::app::dict::word::word_service::glossary_query;
 
-#[post("/v1/translate",data = "<request>")]
+#[post("/v1/glossary",data = "<request>")]
 pub fn page(request: Json<TranslateRequest>) -> content::Json<String> {
-    let dicts = translate_query(&request);
+    let dicts = glossary_query(&request);
     return box_rest_response(dicts);
 }
 
