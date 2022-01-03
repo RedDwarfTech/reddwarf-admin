@@ -6,6 +6,7 @@ use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use crate::diesel::prelude::*;
+use crate::model::diesel::dict::custom_dict_models::CustomUserDict;
 use crate::model::diesel::dict::dict_models::{Dict, UserDict};
 use crate::model::diesel::dolphin::dolphin_models::App;
 use crate::model::request::app::app_request::AppRequest;
@@ -31,8 +32,7 @@ pub fn glossary_add(request: &Json<GlossaryAddRequest>){
     use crate::model::diesel::dict::dict_schema::user_dict::dsl::*;
     let connection = config::establish_dict_connection();
     let timestamp: i64 = get_current_millisecond();
-    let new_glossary = crate::model::diesel::dict::dict_models::UserDict {
-        id: 0,
+    let new_glossary = CustomUserDict {
         created_time: timestamp,
         updated_time: timestamp,
         status: 0,
