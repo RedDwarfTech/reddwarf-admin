@@ -11,7 +11,7 @@ use crate::model::request::app::dict::translate::translate_request::TranslateReq
 
 pub fn translate_query(request: &Json<TranslateRequest>) -> Vec<Dict> {
     use crate::model::diesel::dict::dict_schema::dict::dsl::*;
-    let connection = config::establish_connection();
+    let connection = config::establish_dict_connection();
     let query = dict.filter(word.eq(&request.word))
         .limit(1)
         .load::<Dict>(&connection)
