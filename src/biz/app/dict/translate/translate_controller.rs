@@ -6,7 +6,7 @@ use crate::model::request::app::dict::translate::translate_request::TranslateReq
 use crate::service::app::dict::translate::translate_service::translate_query;
 
 #[post("/v1/translate",data = "<request>")]
-pub fn page(request: Json<TranslateRequest>) -> content::Json<String> {
+pub fn trans(request: Json<TranslateRequest>) -> content::Json<String> {
     let dicts = translate_query(&request);
     return box_rest_response(dicts);
 }
