@@ -11,8 +11,9 @@ use crate::model::diesel::dolphin::dolphin_models::App;
 use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::dict::translate::translate_request::TranslateRequest;
 use crate::model::request::app::dict::word::glossary_add_request::GlossaryAddRequest;
+use crate::model::request::app::dict::word::glossary_request::GlossaryRequest;
 
-pub fn glossary_query(request: &Json<TranslateRequest>) -> Vec<UserDict> {
+pub fn glossary_query(request: &Json<GlossaryRequest>) -> Vec<UserDict> {
     use crate::model::diesel::dict::dict_schema::user_dict::dsl::*;
     let connection = config::establish_dict_connection();
     let user_dicts:Vec<UserDict> = user_dict
