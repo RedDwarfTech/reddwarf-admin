@@ -85,6 +85,7 @@ fn build_rocket() -> Rocket<Build> {
             translate_controller::trans
         ])
         .mount("/manage/app/dict/word", routes![
-            word_controller::glossary
+            word_controller::glossary,
+            word_controller::add_glossary
         ])
 }
