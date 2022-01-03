@@ -24,6 +24,7 @@ use biz::user::user_controller;
 use biz::app::app_controller;
 use biz::app::cernitor::domain::domain_controller;
 use biz::app::dict::translate::translate_controller;
+use biz::app::dict::word::word_controller;
 
 #[launch]
 #[tokio::main]
@@ -82,5 +83,8 @@ fn build_rocket() -> Rocket<Build> {
         ])
         .mount("/manage/app/dict/translate", routes![
             translate_controller::trans
+        ])
+        .mount("/manage/app/dict/word", routes![
+            word_controller::glossary
         ])
 }

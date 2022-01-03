@@ -7,7 +7,7 @@ use crate::service::app::dict::translate::translate_service::translate_query;
 use crate::service::app::dict::word::word_service::glossary_query;
 
 #[post("/v1/glossary",data = "<request>")]
-pub fn page(request: Json<TranslateRequest>) -> content::Json<String> {
+pub fn glossary(request: Json<TranslateRequest>) -> content::Json<String> {
     let dicts = glossary_query(&request);
     return box_rest_response(dicts);
 }
