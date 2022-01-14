@@ -77,7 +77,8 @@ pub struct Dashboard {
     pub user_count: i32,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default,Identifiable)]
+#[primary_key(id)]
 #[table_name = "domain"]
 pub struct Domain {
     pub id: i64,

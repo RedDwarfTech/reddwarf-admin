@@ -9,6 +9,7 @@ use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{Domain};
 use crate::model::request::app::cernitor::domain::add_domain_request::AddDomainRequest;
 use crate::model::request::app::cernitor::domain::domain_request::DomainRequest;
+use crate::model::request::app::cernitor::domain::edit_domain_request::EditDomainRequest;
 
 pub fn domain_query<T>(request: &Json<DomainRequest>) -> PaginationResponse<Vec<Domain>> {
     use crate::model::diesel::dolphin::dolphin_schema::domain::dsl::*;
@@ -24,8 +25,7 @@ pub fn domain_query<T>(request: &Json<DomainRequest>) -> PaginationResponse<Vec<
 pub fn add_domain(request: &Json<AddDomainRequest>, login_user_info: LoginUserInfo) {
     let connection = config::establish_connection();
     let timestamp: i64 = get_current_millisecond();
-    let new_domain = Domain {
-        id: 0,
+    let new_domain = crate::model::diesel::dolphin::custom_dolphin_models::Domain {
         domain_name: request.domainName.to_string(),
         domain_url: request.domainUrl.to_string(),
         created_time: timestamp,
@@ -46,5 +46,14 @@ pub fn add_domain(request: &Json<AddDomainRequest>, login_user_info: LoginUserIn
         .unwrap();
 }
 
-
+pub fn edit_domain(request: &Json<EditDomainRequest>, login_user_info: LoginUserInfo) {
+    let connection = config::establish_connection();
+    use crate::model::diesel::dolphin::dolphin_schema::domain::dsl::*;
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::domain::id.eq(request.id)
+        .and(crate::model::diesel::dolphin::dolphin_schema::domain::user_id.eq(login_user_info.userId));
+    diesel::update(domain.filter(predicate))
+        .set((domain_url.eq(&request.domainUrl),domain_name.eq(&request.domainName)))
+        .get_result::<Domain>(&connection)
+        .expect("unable to update new password");
+}
 
