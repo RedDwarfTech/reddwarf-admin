@@ -15,6 +15,7 @@ pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> 
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let query = apps.filter(id.gt(0))
+        .order(created_time.desc())
         .paginate(request.pageNum)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<App>(&connection);
@@ -30,7 +31,7 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         .load::<App>(&connection)
         .expect("query app  failed");
     let app_db = take(apps_record,0).unwrap();
-    
+
     let current_time = get_current_millisecond();
     let app = AppAdd{
         app_name: request.appName.to_string(),
