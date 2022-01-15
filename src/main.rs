@@ -61,7 +61,8 @@ fn build_rocket() -> Rocket<Build> {
             home_controller::trend_overview
         ])
         .mount("/manage/app",routes![
-            app_controller::page
+            app_controller::page,
+            app_controller::add
         ])
         .mount("/manage/app/cernitor/domain",routes![
             domain_controller::page,
