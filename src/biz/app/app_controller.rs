@@ -12,7 +12,7 @@ pub fn page(request: Json<AppRequest>) -> content::Json<String> {
     return box_rest_response(apps);
 }
 
-#[post("/v1/create",data = "<request>")]
+#[post("/v1/add",data = "<request>")]
 pub fn create(request: Json<AddAppRequest>) -> content::Json<String> {
     app_create(&request);
     return box_rest_response("ok");
