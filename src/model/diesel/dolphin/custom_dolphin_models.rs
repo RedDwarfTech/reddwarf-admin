@@ -22,3 +22,18 @@ pub struct Domain {
     pub notify_trigger_date: Option<NaiveDateTime>,
     pub expire_date_ms: Option<i64>,
 }
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "apps"]
+pub struct AppAdd {
+    pub app_name: String,
+    pub remark: Option<String>,
+    pub created_time: i64,
+    pub updated_time: Option<i64>,
+    pub user_count: Option<i32>,
+    pub online_status: Option<i32>,
+    pub online_time: Option<i64>,
+    pub app_abbr: String,
+    pub app_id: i32,
+    pub app_tag: Option<String>,
+}
