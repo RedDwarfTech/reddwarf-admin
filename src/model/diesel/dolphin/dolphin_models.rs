@@ -39,8 +39,9 @@ pub struct App {
     pub user_count: Option<i32>,
     pub online_status: Option<i32>,
     pub online_time: Option<i64>,
-    pub app_tag: Option<String>,
+    pub app_abbr: String,
     pub app_id: i32,
+    pub app_tag: Option<String>,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
@@ -77,8 +78,7 @@ pub struct Dashboard {
     pub user_count: i32,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default,Identifiable)]
-#[primary_key(id)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "domain"]
 pub struct Domain {
     pub id: i64,
@@ -88,7 +88,7 @@ pub struct Domain {
     pub updated_time: i64,
     pub cron: Option<String>,
     pub next_trigger_time: Option<NaiveDateTime>,
-    pub monitor_status: Option<String>,
+    pub monitor_status: i32,
     pub user_id: Option<i64>,
     pub expire_date: Option<NaiveDateTime>,
     pub days_before_trigger: i32,

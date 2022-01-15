@@ -32,7 +32,7 @@ pub fn add_domain(request: &Json<AddDomainRequest>, login_user_info: LoginUserIn
         updated_time: timestamp,
         cron: Some("* */1 * * * *".parse().unwrap()),
         next_trigger_time: None,
-        monitor_status: None,
+        monitor_status: 1,
         user_id: Option::from(login_user_info.userId),
         expire_date: None,
         days_before_trigger: 7,

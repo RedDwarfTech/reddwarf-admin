@@ -34,7 +34,8 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         online_status: None,
         online_time: None,
         app_tag: None,
-        app_id: request.appId
+        app_id: 1,
+        app_abbr: request.appAbbr.to_string()
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::apps::table)
         .values(&app)

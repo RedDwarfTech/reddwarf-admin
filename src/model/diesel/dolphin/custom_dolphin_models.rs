@@ -6,7 +6,7 @@ use chrono::NaiveDateTime;
 use chrono::DateTime;
 use chrono::offset::Utc;
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "domain"]
 pub struct Domain {
     pub domain_name: String,
@@ -15,7 +15,7 @@ pub struct Domain {
     pub updated_time: i64,
     pub cron: Option<String>,
     pub next_trigger_time: Option<NaiveDateTime>,
-    pub monitor_status: Option<String>,
+    pub monitor_status: i32,
     pub user_id: Option<i64>,
     pub expire_date: Option<NaiveDateTime>,
     pub days_before_trigger: i32,

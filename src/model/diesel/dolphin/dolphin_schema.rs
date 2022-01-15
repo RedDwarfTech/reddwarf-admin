@@ -26,8 +26,9 @@ table! {
         user_count -> Nullable<Int4>,
         online_status -> Nullable<Int4>,
         online_time -> Nullable<Int8>,
-        app_tag -> Nullable<Varchar>,
+        app_abbr -> Varchar,
         app_id -> Int4,
+        app_tag -> Nullable<Varchar>,
     }
 }
 
@@ -75,7 +76,7 @@ table! {
         updated_time -> Int8,
         cron -> Nullable<Varchar>,
         next_trigger_time -> Nullable<Timestamp>,
-        monitor_status -> Nullable<Varchar>,
+        monitor_status -> Int4,
         user_id -> Nullable<Int8>,
         expire_date -> Nullable<Timestamp>,
         days_before_trigger -> Int4,
