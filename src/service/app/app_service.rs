@@ -10,6 +10,7 @@ use crate::model::diesel::dolphin::custom_dolphin_models::AppAdd;
 use crate::model::diesel::dolphin::dolphin_models::App;
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
+use crate::model::request::app::edit_app_request::EditAppRequest;
 
 pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
@@ -52,5 +53,13 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         .unwrap();
 }
 
-
+pub fn app_edit(request: &Json<EditAppRequest>) {
+    use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
+    let connection = config::establish_connection();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId);
+    diesel::update(apps.filter(predicate))
+        .set((app_name.eq(&request.appName),remark.eq(&request.remark)))
+        .get_result::<App>(&connection)
+        .expect("unable to update app");
+}
 
