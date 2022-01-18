@@ -14,7 +14,7 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>) -> PaginationResponse<Ve
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let query = rss_sub_source
-        .filter(id.gt(0))
+        .filter(find_channel(&request.0))
         .order(created_time.desc())
         .paginate(1)
         .per_page(10);
@@ -27,10 +27,10 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>) -> PaginationResponse<Ve
 }
 
 
-fn find_channel(request: ChannelRequest) -> Box<dyn BoxableExpression<crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::table, DB, SqlType=Bool>> {
+fn find_channel(request: &ChannelRequest) -> Box<dyn BoxableExpression<crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::table, DB, SqlType=Bool> + '_> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     match request {
-        ChannelRequest::editorPick(editorPick) => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::editor_pick.eq(editorPick)),
+        ChannelRequest { editorPickQuery, .. } => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::editor_pick.eq(editorPickQuery)),
         _ => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::editor_pick.eq(0))
     }
 }
