@@ -32,7 +32,7 @@ fn find_channel(request: &ChannelRequest) -> Box<dyn BoxableExpression<crate::mo
     match request {
         ChannelRequest { editorPick, .. } if editorPick.unwrap_or(0) == 1 => Box::new(editor_pick.eq(editorPick)),
         ChannelRequest { minimalReputation, ..} if minimalReputation.unwrap_or(0) > 0 => Box::new(reputation.gt(minimalReputation)),
-        ChannelRequest { excludeEditorPickChannel, ..} if excludeEditorPickChannel.unwrap_or(0) == 1 => Box::new(editor_pick.eq(excludeEditorPickChannel)),
+        ChannelRequest { excludeEditorPickChannel, ..} if excludeEditorPickChannel.unwrap_or(0) == 1 => Box::new(editor_pick.ne(excludeEditorPickChannel)),
         _ => Box::new(editor_pick.eq(0))
     }
 }
