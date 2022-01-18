@@ -3,8 +3,9 @@ use rocket::serde::Serialize;
 
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[allow(non_snake_case)]
-pub struct ChannelRequest {
-    pub userId: Option<i64>,
-    pub pageNum: Option<i64>,
-    pub pageSize: Option<i64>,
+pub enum ChannelRequest {
+    userId(Option<i64>),
+    pageNum(Option<i64>),
+    pageSize(Option<i64>),
+    editorPick(Option<i32>),
 }
