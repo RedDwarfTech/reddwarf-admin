@@ -30,7 +30,7 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>) -> PaginationResponse<Ve
 fn find_channel(request: &ChannelRequest) -> Box<dyn BoxableExpression<crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::table, DB, SqlType=Bool> + '_> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     match request {
-        ChannelRequest { editorPickQuery, .. } => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::editor_pick.eq(editorPickQuery)),
+        ChannelRequest { editorPick, .. } => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::editor_pick.eq(editorPick)),
         _ => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::editor_pick.eq(0))
     }
 }
