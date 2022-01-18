@@ -6,6 +6,7 @@ use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::config::db::config;
 use crate::model::diesel::dolphin::dolphin_models::{RssSubSource};
+use crate::model::diesel::dolphin::dolphin_schema::article::channel_reputation;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 
 type DB = diesel::pg::Pg;
@@ -31,6 +32,7 @@ fn find_channel(request: &ChannelRequest) -> Box<dyn BoxableExpression<crate::mo
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     match request {
         ChannelRequest { editorPick, .. } if editorPick.unwrap_or(0) == 1 => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::editor_pick.eq(editorPick)),
+        ChannelRequest{ minimalReputation, ..} if minimalReputation.unwrap_or(0) > 0 => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::reputation.gt(minimalReputation)),
         _ => Box::new(crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::editor_pick.eq(0))
     }
 }
