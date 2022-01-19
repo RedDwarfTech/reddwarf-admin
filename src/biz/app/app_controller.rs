@@ -5,7 +5,7 @@ use crate::model::diesel::dolphin::dolphin_models::App;
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
-use crate::service::app::app_service::{app_create, app_edit, app_query};
+use crate::service::app::app_service::{app_create, app_detail, app_edit, app_query};
 
 #[post("/v1/page",data = "<request>")]
 pub fn page(request: Json<AppRequest>) -> content::Json<String> {
@@ -23,4 +23,10 @@ pub fn add(request: Json<AddAppRequest>) -> content::Json<String> {
 pub fn edit(request: Json<EditAppRequest>) -> content::Json<String> {
     app_edit(&request);
     return box_rest_response("ok");
+}
+
+#[put("/v1/detail/<id>")]
+pub fn get(id: i32) -> content::Json<String> {
+    let app = app_detail(id);
+    return box_rest_response(app);
 }
