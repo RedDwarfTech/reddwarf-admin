@@ -4,6 +4,6 @@ use rocket::serde::Serialize;
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[allow(non_snake_case)]
 pub struct EditAppRequest {
-    pub onlineStatus: i32,
+    pub remark: String,
     pub appId: i32
 }
