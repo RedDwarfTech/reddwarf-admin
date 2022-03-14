@@ -93,6 +93,7 @@ fn build_rocket() -> Rocket<Build> {
             word_controller::add_glossary
         ])
         .mount("/manage/app/job/interview",routes![
-            interview_controller::page
+            interview_controller::page,
+            interview_controller::add
         ])
 }

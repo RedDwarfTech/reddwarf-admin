@@ -4,7 +4,7 @@ use rust_wheel::config::db::config;
 
 use crate::diesel::prelude::*;
 use crate::model::diesel::dict::custom_dict_models::CustomUserDict;
-use crate::model::diesel::dict::dict_models::{Dict, UserDict};
+use crate::model::diesel::dict::dict_models::{UserDict};
 use crate::model::request::app::dict::word::glossary_add_request::GlossaryAddRequest;
 use crate::model::request::app::dict::word::glossary_request::GlossaryRequest;
 
