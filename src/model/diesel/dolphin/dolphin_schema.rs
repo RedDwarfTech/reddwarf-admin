@@ -85,6 +85,8 @@ table! {
         created_time -> Int8,
         updated_time -> Int8,
         address -> Varchar,
+        status -> Int4,
+        interview_time -> Int8,
     }
 }
 

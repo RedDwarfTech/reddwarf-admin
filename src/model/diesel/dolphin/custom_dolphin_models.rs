@@ -45,6 +45,8 @@ pub struct InterviewAdd {
     pub company: String,
     pub created_time: i64,
     pub updated_time: i64,
+    pub interview_time: i64,
+    pub status: i32
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]

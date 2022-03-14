@@ -31,8 +31,10 @@ pub fn add_interview(request: &Json<AddInterviewRequest>) {
         city: request.city.to_string(),
         created_time: current_time,
         updated_time: current_time,
+        interview_time: current_time,
         company: request.company.to_string(),
-        address: request.address.to_string()
+        address: request.address.to_string(),
+        status: 0
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::interview::table)
         .values(&app)

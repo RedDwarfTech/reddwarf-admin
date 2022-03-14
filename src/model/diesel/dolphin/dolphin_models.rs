@@ -3,14 +3,13 @@
 #![allow(unused)]
 #![allow(clippy::all)]
 
-use chrono::DateTime;
-use chrono::NaiveDateTime;
-use chrono::offset::Utc;
 use rocket::serde::Serialize;
 use serde::Deserialize;
-
 use crate::model::diesel::dolphin::dolphin_schema::*;
 
+use chrono::NaiveDateTime;
+use chrono::DateTime;
+use chrono::offset::Utc;
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "admin_users"]
 pub struct AdminUser {
@@ -99,6 +98,8 @@ pub struct Interview {
     pub created_time: i64,
     pub updated_time: i64,
     pub address: String,
+    pub status: i32,
+    pub interview_time: i64,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
