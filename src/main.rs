@@ -94,6 +94,7 @@ fn build_rocket() -> Rocket<Build> {
         ])
         .mount("/manage/app/job/interview",routes![
             interview_controller::page,
-            interview_controller::add
+            interview_controller::add,
+            interview_controller::update
         ])
 }

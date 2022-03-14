@@ -10,6 +10,7 @@ use crate::diesel::prelude::*;
 use rust_wheel::config::db::config;
 use crate::model::diesel::dolphin::custom_dolphin_models::InterviewAdd;
 use crate::model::request::app::job::interview::add_interview_request::AddInterviewRequest;
+use crate::model::request::app::job::interview::edit_interview_request::EditInterviewRequest;
 
 pub fn interview_query<T>(request: &Json<InterviewRequest>) -> PaginationResponse<Vec<Interview>> {
     use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
@@ -39,4 +40,14 @@ pub fn add_interview(request: &Json<AddInterviewRequest>) {
         .on_conflict_do_nothing()
         .execute(&connection)
         .unwrap();
+}
+
+pub fn update_interview(request: &Json<EditInterviewRequest>) {
+    use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
+    let connection = config::establish_connection();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::interview::id.eq(request.id);
+    diesel::update(interview.filter(predicate))
+        .set((city.eq(&request.city)))
+        .get_result::<Interview>(&connection)
+        .expect("unable to update interview");
 }
