@@ -21,6 +21,7 @@ use biz::app::music::fav::fav_music_controller;
 use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::user::user_controller;
+use biz::common::sys_dict_controller;
 
 mod biz;
 mod model;
@@ -61,6 +62,9 @@ fn build_rocket() -> Rocket<Build> {
         .mount("/manage/home",routes![
             home_controller::overview,
             home_controller::trend_overview
+        ])
+        .mount("/manage/sys",routes![
+            sys_dict_controller::list
         ])
         .mount("/manage/app",routes![
             app_controller::page,
