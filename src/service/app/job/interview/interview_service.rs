@@ -25,7 +25,6 @@ pub fn interview_query<T>(request: &Json<InterviewRequest>) -> PaginationRespons
 }
 
 pub fn add_interview(request: &Json<AddInterviewRequest>) {
-    use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
     let connection = config::establish_connection();
     let current_time = get_current_millisecond();
     let app = InterviewAdd{
@@ -47,7 +46,7 @@ pub fn update_interview(request: &Json<EditInterviewRequest>) {
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::interview::id.eq(request.id);
     diesel::update(interview.filter(predicate))
-        .set((city.eq(&request.city)))
+        .set((city.eq(&request.city),company.eq(&request.company),address.eq(&request.address)))
         .get_result::<Interview>(&connection)
         .expect("unable to update interview");
 }
