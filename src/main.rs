@@ -63,7 +63,7 @@ fn build_rocket() -> Rocket<Build> {
             home_controller::overview,
             home_controller::trend_overview
         ])
-        .mount("/manage/sys",routes![
+        .mount("/manage/sys/dict",routes![
             sys_dict_controller::list
         ])
         .mount("/manage/app",routes![
