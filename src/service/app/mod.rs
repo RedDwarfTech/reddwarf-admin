@@ -3,3 +3,4 @@ pub mod cruise;
 pub mod app_service;
 pub mod cernitor;
 pub mod dict;
+pub mod job;
