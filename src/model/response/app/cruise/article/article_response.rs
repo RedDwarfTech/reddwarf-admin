@@ -1,7 +1,8 @@
 use chrono::{DateTime, Utc};
 use rocket::serde::Deserialize;
 use rocket::serde::Serialize;
-use crate::model::diesel::dolphin::dolphin_models::{Article, ArticleContent};
+use crate::model::diesel::dolphin::dolphin_models::{Article};
+use crate::model::diesel::dolphin::custom_dolphin_models::{ArticleContent};
 
 #[derive( Serialize, Queryable, Deserialize,Default, Clone)]
 pub struct ArticleResponse {

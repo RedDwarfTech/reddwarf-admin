@@ -2,6 +2,7 @@
 # see diesel.rs/guides/configuring-diesel-cli
 [print_schema]
 file = "src/model/diesel/dolphin/dolphin_schema.rs"
+with_docs = false
 
 # This will cause only the users and posts tables to be output
 filter = { only_tables = [
@@ -9,11 +10,12 @@ filter = { only_tables = [
     "admin_users",
     "article",
     "apps",
-    "article_content",
     "rss_sub_source",
     "trend",
     "users",
-    "domain"
+    "domain",
+    "interview"
 ] }
 
 # https://stackoverflow.com/questions/59228152/rust-diesel-cli-setting-up-multiple-env-files-for-different-environments
+

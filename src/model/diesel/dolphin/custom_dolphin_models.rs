@@ -1,6 +1,7 @@
 use rocket::serde::Serialize;
 use serde::Deserialize;
 use crate::model::diesel::dolphin::dolphin_schema::*;
+use crate::model::diesel::dolphin::custom_dolphin_schema::*;
 
 use chrono::NaiveDateTime;
 use chrono::DateTime;
@@ -36,4 +37,12 @@ pub struct AppAdd {
     pub app_abbr: String,
     pub app_id: i32,
     pub app_tag: Option<String>,
+}
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "article_content"]
+pub struct ArticleContent {
+    pub id: i64,
+    pub article_id: i64,
+    pub articleContent: String,
 }

@@ -29,6 +29,7 @@ table! {
         app_abbr -> Varchar,
         app_id -> Int4,
         app_tag -> Nullable<Varchar>,
+        auth_mode -> Int2,
     }
 }
 
@@ -47,15 +48,6 @@ table! {
         cover_image -> Nullable<Varchar>,
         channel_reputation -> Int4,
         editor_pick -> Nullable<Int4>,
-    }
-}
-
-table! {
-    article_content (id) {
-        id -> Int8,
-        article_id -> Int8,
-        #[sql_name = "article_content"]
-        articleContent -> Varchar,
     }
 }
 
@@ -82,6 +74,17 @@ table! {
         days_before_trigger -> Int4,
         notify_trigger_date -> Nullable<Timestamp>,
         expire_date_ms -> Nullable<Int8>,
+    }
+}
+
+table! {
+    interview (id) {
+        id -> Int8,
+        city -> Varchar,
+        company -> Varchar,
+        created_time -> Int8,
+        updated_time -> Int8,
+        address -> Varchar,
     }
 }
 
@@ -157,6 +160,7 @@ table! {
         register_time -> Int8,
         apple_iap_product_id -> Nullable<Varchar>,
         auto_renew_product_expire_time_ms -> Nullable<Int8>,
+        product_id -> Nullable<Int4>,
     }
 }
 
@@ -164,9 +168,9 @@ allow_tables_to_appear_in_same_query!(
     admin_users,
     apps,
     article,
-    article_content,
     dashboard,
     domain,
+    interview,
     rss_sub_source,
     trend,
     users,

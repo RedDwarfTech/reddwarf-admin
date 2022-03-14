@@ -42,6 +42,7 @@ pub struct App {
     pub app_abbr: String,
     pub app_id: i32,
     pub app_tag: Option<String>,
+    pub auth_mode: i16,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
@@ -60,14 +61,6 @@ pub struct Article {
     pub cover_image: Option<String>,
     pub channel_reputation: i32,
     pub editor_pick: Option<i32>,
-}
-
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "article_content"]
-pub struct ArticleContent {
-    pub id: i64,
-    pub article_id: i64,
-    pub articleContent: String,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
@@ -94,6 +87,17 @@ pub struct Domain {
     pub days_before_trigger: i32,
     pub notify_trigger_date: Option<NaiveDateTime>,
     pub expire_date_ms: Option<i64>,
+}
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "interview"]
+pub struct Interview {
+    pub id: i64,
+    pub city: String,
+    pub company: String,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub address: String,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
@@ -169,5 +173,6 @@ pub struct User {
     pub register_time: i64,
     pub apple_iap_product_id: Option<String>,
     pub auto_renew_product_expire_time_ms: Option<i64>,
+    pub product_id: Option<i32>,
 }
 
