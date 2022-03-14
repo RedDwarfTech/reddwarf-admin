@@ -1,9 +1,10 @@
+use regex::Regex;
 use rocket::response::content;
 use rocket::serde::json::Json;
-use regex::Regex;
 use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response};
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
-use crate::model::diesel::dolphin::dolphin_models::{Domain};
+
+use crate::model::diesel::dolphin::dolphin_models::Domain;
 use crate::model::request::app::cernitor::domain::add_domain_request::AddDomainRequest;
 use crate::model::request::app::cernitor::domain::domain_request::DomainRequest;
 use crate::model::request::app::cernitor::domain::edit_domain_request::EditDomainRequest;

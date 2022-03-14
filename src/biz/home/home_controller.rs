@@ -1,6 +1,7 @@
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
+
 use crate::model::request::home::trend_request::TrendRequest;
 use crate::service::home::home_service::{overview_query, trend_query};
 

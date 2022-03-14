@@ -1,7 +1,8 @@
+use num_traits::cast::ToPrimitive;
 use rocket::serde::Deserialize;
 use rocket::serde::Serialize;
+
 use crate::models::{Favorites, Music};
-use num_traits::cast::ToPrimitive;
 
 #[derive( Serialize, Queryable, Deserialize,Default, Clone)]
 pub struct FavMusicResponse{

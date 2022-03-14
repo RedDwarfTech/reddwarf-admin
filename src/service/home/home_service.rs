@@ -1,5 +1,6 @@
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::config::db::config;
+
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{Dashboard, Trend};
 

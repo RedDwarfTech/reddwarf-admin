@@ -3,11 +3,12 @@ use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::map_pagination_res;
-use rust_wheel::model::response::pagination_response::PaginationResponse;
-use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use rust_wheel::config::db::config;
+use rust_wheel::model::response::pagination_response::PaginationResponse;
+
 use crate::model::diesel::dolphin::custom_dolphin_models::ArticleContent;
-use crate::model::diesel::dolphin::dolphin_models::{Article};
+use crate::model::diesel::dolphin::dolphin_models::Article;
+use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
 
 pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Vec<Article>> {

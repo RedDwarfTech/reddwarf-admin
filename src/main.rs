@@ -1,31 +1,32 @@
 #[macro_use]
+extern crate diesel;
+#[macro_use]
 extern crate rocket;
 
-#[macro_use]
-extern crate diesel;
+use std::time::Duration;
+
+use futures::stream::{self, StreamExt};
+use rocket::{Build, Rocket};
+use rocket::tokio::time::Instant;
+use tokio::time;
+
+use biz::app::app_controller;
+use biz::app::cernitor::domain::domain_controller;
+use biz::app::cruise::article::article_controller;
+use biz::app::cruise::channel::channel_controller;
+use biz::app::dict::translate::translate_controller;
+use biz::app::dict::word::word_controller;
+use biz::app::job::interview::interview_controller;
+use biz::app::music::fav::fav_music_controller;
+use biz::common::health_controller;
+use biz::home::home_controller;
+use biz::user::user_controller;
 
 mod biz;
 mod model;
 mod service;
 mod models;
 mod test;
-
-use futures::stream::{self, StreamExt};
-use std::time::Duration;
-use rocket::{Build, Rocket};
-use rocket::tokio::time::Instant;
-use tokio::time;
-use biz::common::health_controller;
-use biz::home::home_controller;
-use biz::app::music::fav::fav_music_controller;
-use biz::app::cruise::article::article_controller;
-use biz::app::cruise::channel::channel_controller;
-use biz::user::user_controller;
-use biz::app::app_controller;
-use biz::app::cernitor::domain::domain_controller;
-use biz::app::dict::translate::translate_controller;
-use biz::app::dict::word::word_controller;
-use biz::app::job::interview::interview_controller;
 
 #[launch]
 #[tokio::main]

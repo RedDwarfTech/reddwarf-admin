@@ -1,7 +1,8 @@
 use diesel::ExpressionMethods;
-use crate::model::diesel::quark::quark_models::SysDict;
-use crate::diesel::prelude::*;
 use rust_wheel::config::db::config;
+
+use crate::diesel::prelude::*;
+use crate::model::diesel::quark::quark_models::SysDict;
 
 pub fn dict_query<T>() -> Vec<SysDict> {
     use crate::model::diesel::quark::quark_schema::sys_dict::dsl::*;

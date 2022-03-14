@@ -1,11 +1,9 @@
+use chrono::NaiveDateTime;
 use rocket::serde::Serialize;
 use serde::Deserialize;
-use crate::model::diesel::dolphin::dolphin_schema::*;
-use crate::model::diesel::dolphin::custom_dolphin_schema::*;
 
-use chrono::NaiveDateTime;
-use chrono::DateTime;
-use chrono::offset::Utc;
+use crate::model::diesel::dolphin::custom_dolphin_schema::*;
+use crate::model::diesel::dolphin::dolphin_schema::*;
 
 #[derive(Insertable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "domain"]

@@ -1,15 +1,16 @@
 use rocket::response::content;
 use rocket::serde::json::Json;
-use rust_wheel::common::query::pagination::{PaginateForQueryFragment};
+use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_pagination_res};
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
+
 use crate::diesel::prelude::*;
-use crate::model::request::user::user_request::UserRequest;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, User};
 use crate::model::request::user::password_request::PasswordRequest;
+use crate::model::request::user::user_request::UserRequest;
 
 pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User>> {
     use crate::model::diesel::dolphin::dolphin_schema::users::dsl::*;

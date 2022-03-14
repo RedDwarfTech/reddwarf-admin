@@ -1,6 +1,7 @@
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
+
 use crate::model::diesel::dolphin::dolphin_models::User;
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::request::user::user_request::UserRequest;
