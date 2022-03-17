@@ -33,7 +33,7 @@ pub struct AppAdd {
     pub online_status: Option<i32>,
     pub online_time: Option<i64>,
     pub app_abbr: String,
-    pub app_id: i32,
+    pub app_id: String,
     pub app_tag: Option<String>,
 }
 
@@ -46,7 +46,9 @@ pub struct InterviewAdd {
     pub created_time: i64,
     pub updated_time: i64,
     pub interview_time: i64,
-    pub status: i32
+    pub status: i32,
+    pub info_source: i32,
+    pub salary_range: String
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]

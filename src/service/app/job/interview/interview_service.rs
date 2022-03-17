@@ -34,7 +34,9 @@ pub fn add_interview(request: &Json<AddInterviewRequest>) {
         interview_time: current_time,
         company: request.company.to_string(),
         address: request.address.to_string(),
-        status: 1
+        status: 1,
+        info_source: 1,
+        salary_range: "9-15K".to_string()
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::interview::table)
         .values(&app)

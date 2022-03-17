@@ -45,7 +45,6 @@ async fn period_exec(){
         Some(((), interval))
     });
 
-    let now = Instant::now();
     forever.for_each(|_| async {}).await;
 }
 

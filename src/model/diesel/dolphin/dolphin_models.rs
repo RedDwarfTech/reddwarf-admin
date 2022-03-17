@@ -40,9 +40,10 @@ pub struct App {
     pub online_status: Option<i32>,
     pub online_time: Option<i64>,
     pub app_abbr: String,
-    pub app_id: i32,
+    pub app_id: String,
     pub app_tag: Option<String>,
     pub auth_mode: i16,
+    pub product_id: i32,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
@@ -100,6 +101,8 @@ pub struct Interview {
     pub address: String,
     pub status: i32,
     pub interview_time: i64,
+    pub info_source: i32,
+    pub salary_range: Option<String>,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
@@ -171,7 +174,7 @@ pub struct User {
     pub user_status: i32,
     pub last_login_time: Option<i64>,
     pub first_login_time: Option<i64>,
-    pub app_id: i32,
+    pub app_id: String,
     pub register_time: i64,
     pub apple_iap_product_id: Option<String>,
     pub auto_renew_product_expire_time_ms: Option<i64>,

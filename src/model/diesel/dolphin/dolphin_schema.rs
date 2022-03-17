@@ -27,9 +27,10 @@ table! {
         online_status -> Nullable<Int4>,
         online_time -> Nullable<Int8>,
         app_abbr -> Varchar,
-        app_id -> Int4,
+        app_id -> Varchar,
         app_tag -> Nullable<Varchar>,
         auth_mode -> Int2,
+        product_id -> Int4,
     }
 }
 
@@ -87,6 +88,8 @@ table! {
         address -> Varchar,
         status -> Int4,
         interview_time -> Int8,
+        info_source -> Int4,
+        salary_range -> Nullable<Varchar>,
     }
 }
 
@@ -158,7 +161,7 @@ table! {
         user_status -> Int4,
         last_login_time -> Nullable<Int8>,
         first_login_time -> Nullable<Int8>,
-        app_id -> Int4,
+        app_id -> Varchar,
         register_time -> Int8,
         apple_iap_product_id -> Nullable<Varchar>,
         auto_renew_product_expire_time_ms -> Nullable<Int8>,

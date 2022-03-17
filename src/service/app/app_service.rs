@@ -44,7 +44,7 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         online_status: None,
         online_time: None,
         app_tag: None,
-        app_id: app_db.app_id + 1,
+        app_id: app_db.app_id,
         app_abbr: request.appAbbr.to_string()
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::apps::table)
@@ -57,7 +57,7 @@ pub fn app_create(request: &Json<AddAppRequest>) {
 pub fn app_edit(request: &Json<EditAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId);
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId.to_string());
     diesel::update(apps.filter(predicate))
         .set((remark.eq(&request.remark)))
         .get_result::<App>(&connection)

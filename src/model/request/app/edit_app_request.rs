@@ -5,5 +5,5 @@ use rocket::serde::Serialize;
 #[allow(non_snake_case)]
 pub struct EditAppRequest {
     pub remark: String,
-    pub appId: i32
+    pub appId: String
 }
