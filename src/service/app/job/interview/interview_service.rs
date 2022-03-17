@@ -50,7 +50,7 @@ pub fn update_interview(request: &Json<EditInterviewRequest>) {
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::interview::id.eq(request.id);
     diesel::update(interview.filter(predicate))
-        .set((city.eq(&request.city),company.eq(&request.company),address.eq(&request.address)))
+        .set((city.eq(&request.city),status.eq(&request.status),company.eq(&request.company),address.eq(&request.address)))
         .get_result::<Interview>(&connection)
         .expect("unable to update interview");
 }

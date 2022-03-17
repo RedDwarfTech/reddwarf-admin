@@ -7,5 +7,6 @@ pub struct EditInterviewRequest {
     pub id: i64,
     pub city: String,
     pub company: String,
-    pub address: String
+    pub address: String,
+    pub status: i32
 }
