@@ -9,5 +9,6 @@ pub struct EditInterviewRequest {
     pub company: String,
     pub address: String,
     pub status: i32,
-    pub salary_range: String
+    pub salary_range: String,
+    pub job_link: String
 }

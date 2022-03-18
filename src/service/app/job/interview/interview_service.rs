@@ -58,7 +58,8 @@ pub fn update_interview(request: &Json<EditInterviewRequest>) {
             (city.eq(&request.city),
              status.eq(&request.status),
              company.eq(&request.company),
-                salary_range.eq(&request.salary_range),
+             salary_range.eq(&request.salary_range),
+             job_link.eq(&request.job_link),
              address.eq(&request.address))
         )
         .get_result::<Interview>(&connection)
