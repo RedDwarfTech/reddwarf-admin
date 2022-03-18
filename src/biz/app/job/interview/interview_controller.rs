@@ -8,6 +8,7 @@ use crate::model::request::app::job::interview::edit_interview_request::EditInte
 
 use crate::model::request::app::job::interview::interview_request::InterviewRequest;
 use crate::service::app::job::interview::interview_service::{add_interview, interview_query, update_interview};
+use log::{info, warn};
 
 #[post("/v1/page",data = "<request>")]
 pub fn page(request: Json<InterviewRequest>) -> content::Json<String> {
@@ -17,6 +18,7 @@ pub fn page(request: Json<InterviewRequest>) -> content::Json<String> {
 
 #[post("/v1/add",data = "<request>")]
 pub fn add(request: Json<AddInterviewRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
+    info!("user id:{}" , login_user_info.userId);
     let interviews = add_interview(&request,login_user_info);
     return box_rest_response(interviews);
 }
