@@ -87,9 +87,13 @@ table! {
         updated_time -> Int8,
         address -> Varchar,
         status -> Int4,
-        interview_time -> Int8,
+        interview_time -> Nullable<Int8>,
         info_source -> Int4,
         salary_range -> Nullable<Varchar>,
+        apply_time -> Nullable<Int8>,
+        apply_job -> Nullable<Varchar>,
+        user_id -> Nullable<Int8>,
+        job_link -> Nullable<Varchar>,
     }
 }
 

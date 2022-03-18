@@ -1,6 +1,7 @@
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
+use rust_wheel::model::user::login_user_info::LoginUserInfo;
 use crate::model::diesel::dolphin::dolphin_models::Interview;
 use crate::model::request::app::job::interview::add_interview_request::AddInterviewRequest;
 use crate::model::request::app::job::interview::edit_interview_request::EditInterviewRequest;
@@ -15,8 +16,8 @@ pub fn page(request: Json<InterviewRequest>) -> content::Json<String> {
 }
 
 #[post("/v1/add",data = "<request>")]
-pub fn add(request: Json<AddInterviewRequest>) -> content::Json<String> {
-    let interviews = add_interview(&request);
+pub fn add(request: Json<AddInterviewRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
+    let interviews = add_interview(&request,login_user_info);
     return box_rest_response(interviews);
 }
 

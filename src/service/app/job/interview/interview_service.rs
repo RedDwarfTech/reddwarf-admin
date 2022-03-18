@@ -8,6 +8,7 @@ use crate::model::diesel::dolphin::dolphin_models::Interview;
 use crate::model::request::app::job::interview::interview_request::InterviewRequest;
 use crate::diesel::prelude::*;
 use rust_wheel::config::db::config;
+use rust_wheel::model::user::login_user_info::LoginUserInfo;
 use crate::model::diesel::dolphin::custom_dolphin_models::InterviewAdd;
 use crate::model::request::app::job::interview::add_interview_request::AddInterviewRequest;
 use crate::model::request::app::job::interview::edit_interview_request::EditInterviewRequest;
@@ -24,7 +25,7 @@ pub fn interview_query<T>(request: &Json<InterviewRequest>) -> PaginationRespons
     return page_result;
 }
 
-pub fn add_interview(request: &Json<AddInterviewRequest>) {
+pub fn add_interview(request: &Json<AddInterviewRequest>,login_user_info: LoginUserInfo) {
     let connection = config::establish_connection();
     let current_time = get_current_millisecond();
     let app = InterviewAdd{
@@ -36,7 +37,11 @@ pub fn add_interview(request: &Json<AddInterviewRequest>) {
         address: request.address.to_string(),
         status: 4,
         info_source: 1,
-        salary_range: "9-15K".to_string()
+        salary_range: "9-15K".to_string(),
+        apply_time: 0,
+        apply_job: "Java开发工程师".to_string(),
+        user_id: login_user_info.userId,
+        job_link: "".to_string()
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::interview::table)
         .values(&app)

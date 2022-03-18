@@ -100,9 +100,13 @@ pub struct Interview {
     pub updated_time: i64,
     pub address: String,
     pub status: i32,
-    pub interview_time: i64,
+    pub interview_time: Option<i64>,
     pub info_source: i32,
     pub salary_range: Option<String>,
+    pub apply_time: Option<i64>,
+    pub apply_job: Option<String>,
+    pub user_id: Option<i64>,
+    pub job_link: Option<String>,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
