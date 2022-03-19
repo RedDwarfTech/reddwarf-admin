@@ -15,11 +15,12 @@ use crate::model::request::app::job::interview::edit_interview_request::EditInte
 
 pub fn interview_query<T>(request: &Json<InterviewRequest>,login_user_info: LoginUserInfo) -> PaginationResponse<Vec<Interview>> {
     use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::interview as interview_table;
     let connection = config::establish_connection();
-    let mut query = crate::model::diesel::dolphin::dolphin_schema::interview::table.into_boxed::<diesel::pg::Pg>();
-    query = query.filter(crate::model::diesel::dolphin::dolphin_schema::interview::user_id.eq(login_user_info.userId));
+    let mut query = interview_table::table.into_boxed::<diesel::pg::Pg>();
+    query = query.filter(interview_table::user_id.eq(login_user_info.userId));
     if let Some(query_company) = &request.company {
-        query = query.filter(crate::model::diesel::dolphin::dolphin_schema::interview::company.like(format!("{}{}{}","%",query_company.as_str(),"%")));
+        query = query.filter(interview_table::company.like(format!("{}{}{}","%",query_company.as_str(),"%")));
     }
     let query = query
         .order(created_time.desc())
