@@ -18,7 +18,7 @@ pub fn interview_query<T>(request: &Json<InterviewRequest>) -> PaginationRespons
     let connection = config::establish_connection();
     let mut query = crate::model::diesel::dolphin::dolphin_schema::interview::table.into_boxed::<diesel::pg::Pg>();
     if let Some(query_company) = &request.company {
-        query = query.filter(crate::model::diesel::dolphin::dolphin_schema::interview::company.eq(query_company));
+        query = query.filter(crate::model::diesel::dolphin::dolphin_schema::interview::company.like(format!("{}{}{}","%",query_company.as_str(),"%")));
     }
     let query = query
         .order(created_time.desc())
