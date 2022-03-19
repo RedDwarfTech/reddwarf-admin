@@ -161,6 +161,17 @@ pub struct Trend {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "user_devices"]
+pub struct UserDevice {
+    pub id: i64,
+    pub device_id: String,
+    pub device_name: Option<String>,
+    pub user_id: i64,
+    pub created_time: i64,
+    pub updated_time: i64,
+}
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "users"]
 pub struct User {
     pub id: i64,

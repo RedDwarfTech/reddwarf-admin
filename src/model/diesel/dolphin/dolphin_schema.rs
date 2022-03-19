@@ -149,6 +149,17 @@ table! {
 }
 
 table! {
+    user_devices (id) {
+        id -> Int8,
+        device_id -> Varchar,
+        device_name -> Nullable<Varchar>,
+        user_id -> Int8,
+        created_time -> Int8,
+        updated_time -> Int8,
+    }
+}
+
+table! {
     users (id) {
         id -> Int8,
         nickname -> Varchar,
@@ -182,5 +193,6 @@ allow_tables_to_appear_in_same_query!(
     interview,
     rss_sub_source,
     trend,
+    user_devices,
     users,
 );
