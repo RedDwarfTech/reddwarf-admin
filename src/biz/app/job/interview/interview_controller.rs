@@ -11,8 +11,8 @@ use crate::service::app::job::interview::interview_service::{add_interview, inte
 use log::{info, warn};
 
 #[post("/v1/page",data = "<request>")]
-pub fn page(request: Json<InterviewRequest>) -> content::Json<String> {
-    let interviews = interview_query::<Vec<Interview>>(&request);
+pub fn page(request: Json<InterviewRequest>, login_user_info: LoginUserInfo) -> content::Json<String> {
+    let interviews = interview_query::<Vec<Interview>>(&request,login_user_info);
     return box_rest_response(interviews);
 }
 

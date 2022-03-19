@@ -13,10 +13,11 @@ use crate::model::diesel::dolphin::custom_dolphin_models::InterviewAdd;
 use crate::model::request::app::job::interview::add_interview_request::AddInterviewRequest;
 use crate::model::request::app::job::interview::edit_interview_request::EditInterviewRequest;
 
-pub fn interview_query<T>(request: &Json<InterviewRequest>) -> PaginationResponse<Vec<Interview>> {
+pub fn interview_query<T>(request: &Json<InterviewRequest>,login_user_info: LoginUserInfo) -> PaginationResponse<Vec<Interview>> {
     use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
     let connection = config::establish_connection();
     let mut query = crate::model::diesel::dolphin::dolphin_schema::interview::table.into_boxed::<diesel::pg::Pg>();
+    query = query.filter(crate::model::diesel::dolphin::dolphin_schema::interview::user_id.eq(login_user_info.userId));
     if let Some(query_company) = &request.company {
         query = query.filter(crate::model::diesel::dolphin::dolphin_schema::interview::company.like(format!("{}{}{}","%",query_company.as_str(),"%")));
     }
