@@ -17,16 +17,19 @@ pub fn interview_query<T>(request: &Json<InterviewRequest>,login_user_info: Logi
     use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::interview as interview_table;
     let connection = config::establish_connection();
+    // https://stackoverflow.com/questions/65039754/rust-diesel-conditionally-filter-a-query
     let mut query = interview_table::table.into_boxed::<diesel::pg::Pg>();
     query = query.filter(interview_table::user_id.eq(login_user_info.userId));
     if let Some(query_company) = &request.company {
         query = query.filter(interview_table::company.like(format!("{}{}{}","%",query_company.as_str(),"%")));
     }
+    if let Some(query_city) = &request.city {
+        query = query.filter(interview_table::city.eq(query_city))
+    }
     let query = query
         .order(created_time.desc())
         .paginate(request.pageNum)
         .per_page(request.pageSize);
-
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Interview>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
