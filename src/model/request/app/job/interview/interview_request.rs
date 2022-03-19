@@ -5,5 +5,6 @@ use rocket::serde::Serialize;
 #[allow(non_snake_case)]
 pub struct InterviewRequest {
     pub pageNum: i64,
-    pub pageSize: i64
+    pub pageSize: i64,
+    pub queryCompany: Option<String>
 }

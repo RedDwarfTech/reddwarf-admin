@@ -16,11 +16,16 @@ use crate::model::request::app::job::interview::edit_interview_request::EditInte
 pub fn interview_query<T>(request: &Json<InterviewRequest>) -> PaginationResponse<Vec<Interview>> {
     use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
     let connection = config::establish_connection();
-    let query = interview.filter(id.gt(0))
+    let mut query = crate::model::diesel::dolphin::dolphin_schema::interview::table.into_boxed::<diesel::pg::Pg>();
+    if let Some(queryCompany) = &request.queryCompany {
+        query = query.filter(crate::model::diesel::dolphin::dolphin_schema::interview::company.eq(queryCompany));
+    }
+    let appendQuery = query
         .order(created_time.desc())
         .paginate(request.pageNum)
         .per_page(request.pageSize);
-    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Interview>(&connection);
+
+    let query_result: QueryResult<(Vec<_>, i64, i64)> = appendQuery.load_and_count_pages_total::<Interview>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
 }
