@@ -6,5 +6,5 @@ use rocket::serde::Serialize;
 pub struct InterviewRequest {
     pub pageNum: i64,
     pub pageSize: i64,
-    pub queryCompany: Option<String>
+    pub company: Option<String>
 }
