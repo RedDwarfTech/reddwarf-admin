@@ -10,6 +10,7 @@ use rocket::{Build, Rocket};
 use tokio::time;
 
 use biz::app::app_controller;
+use biz::app::product_controller;
 use biz::app::cernitor::domain::domain_controller;
 use biz::app::cruise::article::article_controller;
 use biz::app::cruise::channel::channel_controller;
@@ -63,6 +64,9 @@ fn build_rocket() -> Rocket<Build> {
         ])
         .mount("/manage/sys/dict",routes![
             sys_dict_controller::list
+        ])
+        .mount("/manage/product",routes![
+            product_controller::page
         ])
         .mount("/manage/app",routes![
             app_controller::page,

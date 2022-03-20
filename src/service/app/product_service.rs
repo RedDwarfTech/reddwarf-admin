@@ -26,7 +26,7 @@ pub fn product_query<T>(request: &Json<ProductRequest>) -> PaginationResponse<Ve
     return page_result;
 }
 
-pub fn app_create(request: &Json<AddAppRequest>) {
+pub fn product_create(request: &Json<AddAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let apps_record = apps.order(app_id.desc())
@@ -55,7 +55,7 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         .unwrap();
 }
 
-pub fn app_edit(request: &Json<EditAppRequest>) {
+pub fn product_edit(request: &Json<EditAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId.to_string());
@@ -65,7 +65,7 @@ pub fn app_edit(request: &Json<EditAppRequest>) {
         .expect("unable to update app");
 }
 
-pub fn app_detail(query_app_id: i32) -> App {
+pub fn product_detail(query_app_id: i32) -> App {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let app_result = apps.filter(id.eq(query_app_id))
