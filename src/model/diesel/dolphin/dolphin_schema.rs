@@ -98,6 +98,22 @@ table! {
 }
 
 table! {
+    products (id) {
+        id -> Int4,
+        product_name -> Varchar,
+        remark -> Nullable<Varchar>,
+        created_time -> Int8,
+        updated_time -> Nullable<Int8>,
+        user_count -> Nullable<Int4>,
+        online_status -> Nullable<Int4>,
+        online_time -> Nullable<Int8>,
+        product_abbr -> Varchar,
+        product_id -> Int4,
+        product_tag -> Nullable<Varchar>,
+    }
+}
+
+table! {
     rss_sub_source (id) {
         id -> Int8,
         sub_url -> Varchar,
@@ -191,6 +207,7 @@ allow_tables_to_appear_in_same_query!(
     dashboard,
     domain,
     interview,
+    products,
     rss_sub_source,
     trend,
     user_devices,

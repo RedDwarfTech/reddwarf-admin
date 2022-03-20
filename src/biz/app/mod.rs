@@ -4,3 +4,4 @@ pub mod app_controller;
 pub mod cernitor;
 pub mod dict;
 pub mod job;
+pub mod product_controller;
