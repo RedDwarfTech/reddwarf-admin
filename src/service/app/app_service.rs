@@ -18,7 +18,7 @@ pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> 
     let connection = config::establish_connection();
     let query = apps.filter(id.gt(0))
         .order(created_time.desc())
-        .paginate(request.pageNum)
+        .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<App>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);

@@ -28,7 +28,7 @@ pub fn interview_query<T>(request: &Json<InterviewRequest>,login_user_info: Logi
     }
     let query = query
         .order(created_time.desc())
-        .paginate(request.pageNum)
+        .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Interview>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
