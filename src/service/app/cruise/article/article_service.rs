@@ -12,6 +12,8 @@ use crate::model::request::app::cruise::article::article_request::ArticleRequest
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
 
 pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Vec<Article>> {
+    // when pagination with the big table
+    // using the estimate rows not the precise row count to speed the query
     use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
     let connection = config::establish_connection();
     let query = article
