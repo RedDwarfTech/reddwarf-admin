@@ -1,6 +1,7 @@
 use diesel::{ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
 use rocket::serde::json::Json;
-use rust_wheel::common::query::pagination::PaginateForQueryFragment;
+use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQueryFragment;
+use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQuerySource;
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::config::db::config;
@@ -19,9 +20,9 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     let query = article
         .filter(id.gt(0))
         .order(created_time.desc())
-        .paginate(request.pageNum,true)
+        .paginate_pg_big_table(request.pageNum, "article".parse().unwrap())
         .per_page(request.pageSize);
-    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Article>(&connection);
+    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.pg_big_table_load_and_count_pages_total::<Article>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
 }
