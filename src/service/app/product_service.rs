@@ -10,7 +10,6 @@ use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::AppAdd;
 use crate::model::diesel::dolphin::dolphin_models::{App, Product};
 use crate::model::request::app::add_app_request::AddAppRequest;
-use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::product_request::ProductRequest;
 
