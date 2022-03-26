@@ -17,8 +17,8 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>) -> PaginationResponse<Ve
     let query = rss_sub_source
         .filter(find_channel(&request.0))
         .order(created_time.desc())
-        .paginate(1,false)
-        .per_page(10);
+        .paginate(request.pageNum.unwrap_or(1),false)
+        .per_page(request.pageSize.unwrap_or(10));
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<RssSubSource>(&connection);
     let page_result = map_pagination_res(
         query_result,
