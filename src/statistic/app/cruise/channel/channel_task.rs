@@ -9,7 +9,7 @@ pub fn refresh_channel_reputation() {
     }
     for channel in channels {
         let result = channel_fav_count(&channel.id);
-        update_channel_reputation(result as i32, channel.id)
+        update_channel_reputation(result, channel.id)
     }
 }
 
