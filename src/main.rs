@@ -22,8 +22,10 @@ use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::user::user_controller;
 use biz::common::sys_dict_controller;
+use crate::statistic::app::cruise::channel::channel_task::refresh_channel_reputation;
 
 mod biz;
+mod statistic;
 mod model;
 mod service;
 mod models;
@@ -37,15 +39,11 @@ async fn rocket() -> _ {
 }
 
 async fn period_exec(){
-    let mut  interval = time::interval(Duration::from_millis(1000));
+    let mut  interval = time::interval(Duration::from_millis(25000));
     loop {
         interval.tick().await;
-        println!("swgewgewgewgewgwegwegew")
+        refresh_channel_reputation();
     }
-}
-
-async fn do_something() {
-    println!("do_something");
 }
 
 fn build_rocket() -> Rocket<Build> {

@@ -27,7 +27,6 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>) -> PaginationResponse<Ve
     return page_result;
 }
 
-
 fn find_channel(request: &ChannelRequest) -> Box<dyn BoxableExpression<crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::table, DB, SqlType=Bool> + '_> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     match request {

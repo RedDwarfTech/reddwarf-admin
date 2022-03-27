@@ -53,6 +53,21 @@ table! {
 }
 
 table! {
+    article_favorites (id) {
+        user_id -> Int8,
+        article_id -> Int8,
+        created_time -> Int8,
+        updated_time -> Int8,
+        fav_status -> Int4,
+        upvote_status -> Int4,
+        channel_id -> Int8,
+        read_status -> Int4,
+        read_time -> Nullable<Int8>,
+        id -> Int8,
+    }
+}
+
+table! {
     dashboard (id) {
         id -> Int4,
         app_count -> Int4,
@@ -204,6 +219,7 @@ allow_tables_to_appear_in_same_query!(
     admin_users,
     apps,
     article,
+    article_favorites,
     dashboard,
     domain,
     interview,
