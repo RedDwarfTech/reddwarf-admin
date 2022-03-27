@@ -3,6 +3,7 @@ use diesel::sql_types::Bool;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_res;
+use rust_wheel::common::util::time_util::{get_current_millisecond, get_minus_day_millisecond};
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
@@ -12,8 +13,9 @@ use crate::model::request::app::cruise::channel::channel_request::ChannelRequest
 pub fn get_refresh_channels() -> Vec<RssSubSource> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
+    let yesterday_of_curry = get_minus_day_millisecond(-1);
     let query = rss_sub_source
-        .filter(rep_latest_refresh_time.lt(1485))
+        .filter(rep_latest_refresh_time.lt(yesterday_of_curry))
         .order(rep_latest_refresh_time.asc())
         .limit(20);
     let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
@@ -24,8 +26,9 @@ pub fn update_channel_reputation(new_reputation: i64,req_channel_id: i64) {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
+    let current_time = get_current_millisecond();
     diesel::update(rss_sub_source.filter(predicate))
-        .set((reputation.eq(new_reputation)))
+        .set((reputation.eq(new_reputation),rep_latest_refresh_time.eq(current_time)))
         .get_result::<RssSubSource>(&connection)
         .expect("unable to update app");
 }
