@@ -37,8 +37,7 @@ async fn rocket() -> _ {
 }
 
 async fn period_exec(){
-    let interval = time::interval(Duration::from_millis(10));
-
+    let interval = time::interval(Duration::from_millis(1000));
     let forever = stream::unfold(interval, |mut interval| async {
         interval.tick().await;
         do_something().await;
@@ -49,7 +48,7 @@ async fn period_exec(){
 }
 
 async fn do_something() {
-    eprintln!("do_something");
+    println!("do_something");
 }
 
 fn build_rocket() -> Rocket<Build> {
