@@ -32,19 +32,16 @@ mod test;
 #[launch]
 #[tokio::main]
 async fn rocket() -> _ {
-    period_exec();
+    tokio::spawn(period_exec());
     build_rocket()
 }
 
 async fn period_exec(){
-    let interval = time::interval(Duration::from_millis(1000));
-    let forever = stream::unfold(interval, |mut interval| async {
+    let mut  interval = time::interval(Duration::from_millis(1000));
+    loop {
         interval.tick().await;
-        do_something().await;
-        Some(((), interval))
-    });
-
-    forever.for_each(|_| async {}).await;
+        println!("swgewgewgewgewgwegwegew")
+    }
 }
 
 async fn do_something() {
