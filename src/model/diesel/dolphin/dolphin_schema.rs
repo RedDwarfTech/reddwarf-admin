@@ -53,6 +53,14 @@ table! {
 }
 
 table! {
+    article_content (id) {
+        id -> Int8,
+        article_id -> Int8,
+        content -> Varchar,
+    }
+}
+
+table! {
     article_favorites (id) {
         user_id -> Int8,
         article_id -> Int8,
@@ -219,6 +227,7 @@ allow_tables_to_appear_in_same_query!(
     admin_users,
     apps,
     article,
+    article_content,
     article_favorites,
     dashboard,
     domain,

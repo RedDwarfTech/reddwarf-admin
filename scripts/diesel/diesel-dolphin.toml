@@ -9,6 +9,7 @@ filter = { only_tables = [
     "dashboard",
     "admin_users",
     "article",
+    "article_content",
     "apps",
     "rss_sub_source",
     "trend",
