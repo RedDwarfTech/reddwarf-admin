@@ -4,7 +4,6 @@ use rust_wheel::common::util::model_convert::box_rest_response;
 
 use crate::model::diesel::dolphin::dolphin_models::{App, Product};
 use crate::model::request::app::add_app_request::AddAppRequest;
-use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::product_request::ProductRequest;
 use crate::service::app::app_service::{app_create, app_detail, app_edit};

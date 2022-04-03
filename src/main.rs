@@ -72,7 +72,8 @@ fn build_rocket() -> Rocket<Build> {
             domain_controller::add
         ])
         .mount("/manage/app/cruise/channel", routes![
-            channel_controller::page
+            channel_controller::page,
+            channel_controller::editor_pick
         ])
         .mount("/manage/user",routes![
             user_controller::page,

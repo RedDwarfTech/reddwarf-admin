@@ -2,7 +2,6 @@ use chrono::NaiveDateTime;
 use rocket::serde::Serialize;
 use serde::Deserialize;
 
-use crate::model::diesel::dolphin::custom_dolphin_schema::*;
 use crate::model::diesel::dolphin::dolphin_schema::*;
 
 #[derive(Insertable,Debug,Serialize,Deserialize,Default)]
@@ -52,12 +51,4 @@ pub struct InterviewAdd {
     pub apply_job: String,
     pub user_id: i64,
     pub job_link: String
-}
-
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "article_content"]
-pub struct ArticleContent {
-    pub id: i64,
-    pub article_id: i64,
-    pub articleContent: String,
 }

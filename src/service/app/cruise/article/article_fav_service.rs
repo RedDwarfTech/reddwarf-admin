@@ -7,7 +7,7 @@ pub fn channel_fav_count(req_channel_id: &i64) -> i64 {
     use crate::model::diesel::dolphin::dolphin_schema::article_favorites::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::article_favorites::channel_id.eq(req_channel_id)
-        .and(crate::model::diesel::dolphin::dolphin_schema::article_favorites::fav_status.eq(1));
+        .and(crate::model::diesel::dolphin::dolphin_schema::article_favorites::upvote_status.eq(1));
     let query = article_favorites
         .filter(predicate);
     // https://stackoverflow.com/questions/71634411/how-to-do-a-count-query-when-using-rust-diesel

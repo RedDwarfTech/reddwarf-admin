@@ -65,6 +65,14 @@ pub struct Article {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "article_content"]
+pub struct ArticleContent {
+    pub id: i64,
+    pub article_id: i64,
+    pub content: String,
+}
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "article_favorites"]
 pub struct ArticleFavorite {
     pub user_id: i64,
