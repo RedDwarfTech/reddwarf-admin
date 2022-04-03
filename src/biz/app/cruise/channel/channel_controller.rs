@@ -17,7 +17,7 @@ pub fn page(request: Json<ChannelRequest>) -> content::Json<String> {
 /// why using put?
 /// https://coolshell.cn/articles/22173.html
 ///
-#[PUT("/v1/pick", data = "<request>")]
+#[put("/v1/pick", data = "<request>")]
 pub fn editor_pick(request: Json<PickChannelRequest>) -> content::Json<String> {
     editor_pick_channel(request.channelId);
     return box_rest_response("ok");
