@@ -20,6 +20,9 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, login_user_info: LoginUs
     if let Some(edit_pick_req) = &request.editorPick {
         query = query.filter(channel_table::editor_pick.eq(edit_pick_req));
     }
+    if let Some(minimal_rep_req) = &request.minimalReputation {
+        query = query.filter(channel_table::reputation.gt(minimal_rep_req));
+    }
     let query = query
         .order(created_time.desc())
         .paginate(request.pageNum.unwrap_or(1),false)
