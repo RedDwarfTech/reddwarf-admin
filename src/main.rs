@@ -60,20 +60,26 @@ fn build_rocket() -> Rocket<Build> {
             sys_dict_controller::list
         ])
         .mount("/manage/product",routes![
-            product_controller::page
+            product_controller::page,
+            product_controller::add,
+            product_controller::edit,
+            product_controller::get,
         ])
         .mount("/manage/app",routes![
             app_controller::page,
             app_controller::add,
-            app_controller::edit
+            app_controller::edit,
+            app_controller::detail,
         ])
         .mount("/manage/app/cernitor/domain",routes![
             domain_controller::page,
-            domain_controller::add
+            domain_controller::add,
+            domain_controller::edit,
         ])
         .mount("/manage/app/cruise/channel", routes![
             channel_controller::page,
-            channel_controller::editor_pick
+            channel_controller::editor_pick,
+            channel_controller::editor_unpick
         ])
         .mount("/manage/user",routes![
             user_controller::page,

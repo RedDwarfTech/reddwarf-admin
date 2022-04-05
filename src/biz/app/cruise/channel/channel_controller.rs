@@ -20,6 +20,12 @@ pub fn page(request: Json<ChannelRequest>, login_user_info: LoginUserInfo) -> co
 ///
 #[put("/v1/pick", data = "<request>")]
 pub fn editor_pick(request: Json<PickChannelRequest>) -> content::Json<String> {
-    editor_pick_channel(request.channelId);
+    editor_pick_channel(request.channelId, 1);
+    return box_rest_response("ok");
+}
+
+#[put("/v1/unpick", data = "<request>")]
+pub fn editor_unpick(request: Json<PickChannelRequest>) -> content::Json<String> {
+    editor_pick_channel(request.channelId, 0);
     return box_rest_response("ok");
 }

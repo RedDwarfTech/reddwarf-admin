@@ -27,7 +27,7 @@ pub fn edit(request: Json<EditAppRequest>) -> content::Json<String> {
 }
 
 #[put("/v1/detail/<id>")]
-pub fn get(id: i32) -> content::Json<String> {
+pub fn detail(id: i32) -> content::Json<String> {
     let app = app_detail(id);
     return box_rest_response(app);
 }

@@ -32,12 +32,12 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, login_user_info: LoginUs
     return page_result;
 }
 
-pub fn editor_pick_channel(req_channel_id: i64){
+pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
     diesel::update(rss_sub_source.filter(predicate))
-        .set((editor_pick.eq(1)))
+        .set((editor_pick.eq(editor_pick_status)))
         .get_result::<RssSubSource>(&connection)
         .expect("unable to update channel");
 }

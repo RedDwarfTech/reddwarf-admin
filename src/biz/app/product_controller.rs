@@ -7,7 +7,7 @@ use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::product_request::ProductRequest;
 use crate::service::app::app_service::{app_create, app_detail, app_edit};
-use crate::service::app::product_service::product_query;
+use crate::service::app::product_service::{product_create, product_detail, product_edit, product_query};
 
 #[post("/v1/page",data = "<request>")]
 pub fn page(request: Json<ProductRequest>) -> content::Json<String> {
@@ -17,18 +17,18 @@ pub fn page(request: Json<ProductRequest>) -> content::Json<String> {
 
 #[post("/v1/add",data = "<request>")]
 pub fn add(request: Json<AddAppRequest>) -> content::Json<String> {
-    app_create(&request);
+    product_create(&request);
     return box_rest_response("ok");
 }
 
 #[put("/v1/edit",data = "<request>")]
 pub fn edit(request: Json<EditAppRequest>) -> content::Json<String> {
-    app_edit(&request);
+    product_edit(&request);
     return box_rest_response("ok");
 }
 
 #[put("/v1/detail/<id>")]
 pub fn get(id: i32) -> content::Json<String> {
-    let app = app_detail(id);
+    let app = product_detail(id);
     return box_rest_response(app);
 }
