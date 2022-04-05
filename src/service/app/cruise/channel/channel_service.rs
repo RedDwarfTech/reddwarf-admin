@@ -5,17 +5,22 @@ use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
+use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 
 type DB = diesel::pg::Pg;
 
-pub fn channel_query<T>(request: &Json<ChannelRequest>) -> PaginationResponse<Vec<RssSubSource>> {
+pub fn channel_query<T>(request: &Json<ChannelRequest>, login_user_info: LoginUserInfo) -> PaginationResponse<Vec<RssSubSource>> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source as channel_table;
     let connection = config::establish_connection();
-    let query = rss_sub_source
-        .filter(find_channel(&request.0))
+    let mut query = channel_table::table.into_boxed::<diesel::pg::Pg>();
+    if let Some(edit_pick_req) = &request.editorPick {
+        query = query.filter(channel_table::editor_pick.eq(edit_pick_req));
+    }
+    let query = query
         .order(created_time.desc())
         .paginate(request.pageNum.unwrap_or(1),false)
         .per_page(request.pageSize.unwrap_or(10));
