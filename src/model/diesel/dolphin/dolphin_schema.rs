@@ -12,7 +12,26 @@ table! {
         level_type -> Nullable<Varchar>,
         phone_region -> Nullable<Varchar>,
         country_code -> Nullable<Int4>,
-        user_status -> Nullable<Varchar>,
+        user_status -> Nullable<Int4>,
+        user_name -> Nullable<Varchar>,
+    }
+}
+
+table! {
+    app_repo (id) {
+        id -> Int8,
+        app_name -> Varchar,
+        release_datetime -> Int8,
+        created_time -> Int8,
+        updated_time -> Int8,
+        linux_run -> Int4,
+        windows_run -> Int4,
+        macos_run -> Int4,
+        intro -> Varchar,
+        license -> Int4,
+        official_url -> Nullable<Varchar>,
+        source_url -> Nullable<Varchar>,
+        author -> Nullable<Varchar>,
     }
 }
 
@@ -225,6 +244,7 @@ table! {
 
 allow_tables_to_appear_in_same_query!(
     admin_users,
+    app_repo,
     apps,
     article,
     article_content,

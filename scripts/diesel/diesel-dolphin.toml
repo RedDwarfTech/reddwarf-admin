@@ -18,7 +18,8 @@ filter = { only_tables = [
     "interview",
     "user_devices",
     "products",
-    "article_favorites"
+    "article_favorites",
+    "app_repo"
 ] }
 
 # https://stackoverflow.com/questions/59228152/rust-diesel-cli-setting-up-multiple-env-files-for-different-environments
