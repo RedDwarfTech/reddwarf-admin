@@ -11,8 +11,8 @@ pub fn overview() -> content::Json<String> {
     return box_rest_response(dashboard);
 }
 
-#[post("/v1/trend/overview",data = "<request>")]
-pub fn trend_overview(request: Json<TrendRequest>) -> content::Json<String> {
+#[get("/v1/trend/overview")]
+pub fn trend_overview() -> content::Json<String> {
     let trends = trend_query();
     return box_rest_response(trends);
 }

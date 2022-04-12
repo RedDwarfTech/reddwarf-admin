@@ -1,4 +1,4 @@
-use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
 use rust_wheel::config::db::config;
 
 pub fn channel_fav_count(req_channel_id: &i64) -> i64 {

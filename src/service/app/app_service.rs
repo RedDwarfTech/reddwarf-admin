@@ -59,7 +59,7 @@ pub fn app_edit(request: &Json<EditAppRequest>) {
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId.to_string());
     diesel::update(apps.filter(predicate))
-        .set((remark.eq(&request.remark)))
+        .set(remark.eq(&request.remark))
         .get_result::<App>(&connection)
         .expect("unable to update app");
 }

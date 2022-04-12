@@ -17,6 +17,7 @@ use biz::app::cruise::channel::channel_controller;
 use biz::app::dict::translate::translate_controller;
 use biz::app::dict::word::word_controller;
 use biz::app::job::interview::interview_controller;
+use biz::app::gallery::repo_app_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::common::health_controller;
 use biz::home::home_controller;
@@ -103,5 +104,10 @@ fn build_rocket() -> Rocket<Build> {
             interview_controller::page,
             interview_controller::add,
             interview_controller::update
-        ])
+        ]).mount("manage/app/gallary/repoapp", routes![
+            repo_app_controller::page,
+            repo_app_controller::add,
+            repo_app_controller::edit,
+            repo_app_controller::detail,
+    ])
 }

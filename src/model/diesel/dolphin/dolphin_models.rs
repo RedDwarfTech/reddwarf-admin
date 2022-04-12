@@ -25,7 +25,26 @@ pub struct AdminUser {
     pub level_type: Option<String>,
     pub phone_region: Option<String>,
     pub country_code: Option<i32>,
-    pub user_status: Option<String>,
+    pub user_status: Option<i32>,
+    pub user_name: Option<String>,
+}
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "app_repo"]
+pub struct AppRepo {
+    pub id: i64,
+    pub app_name: String,
+    pub release_datetime: i64,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub linux_run: i32,
+    pub windows_run: i32,
+    pub macos_run: i32,
+    pub intro: String,
+    pub license: i32,
+    pub official_url: Option<String>,
+    pub source_url: Option<String>,
+    pub author: Option<String>,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]

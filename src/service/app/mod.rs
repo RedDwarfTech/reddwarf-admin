@@ -5,3 +5,4 @@ pub mod cernitor;
 pub mod dict;
 pub mod job;
 pub mod product_service;
+pub mod gallery;

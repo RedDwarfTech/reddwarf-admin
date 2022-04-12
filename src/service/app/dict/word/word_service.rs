@@ -8,14 +8,14 @@ use crate::model::diesel::dict::dict_models::{UserDict};
 use crate::model::request::app::dict::word::glossary_add_request::GlossaryAddRequest;
 use crate::model::request::app::dict::word::glossary_request::GlossaryRequest;
 
-pub fn glossary_query(request: &Json<GlossaryRequest>) -> Vec<UserDict> {
+pub fn glossary_query(_request: &Json<GlossaryRequest>) -> Vec<UserDict> {
     use crate::model::diesel::dict::dict_schema::user_dict::dsl::*;
     let connection = config::establish_dict_connection();
     let user_dicts:Vec<UserDict> = user_dict
         .limit(100)
         .load::<UserDict>(&connection)
         .expect("query user dict failed");
-    let words: Vec<String> = user_dicts
+    let _words: Vec<String> = user_dicts
         .iter()
         .map(|item| item.word.to_string())
         .collect();

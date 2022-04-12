@@ -1,5 +1,4 @@
-use diesel::{BoxableExpression, ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
-use diesel::sql_types::Bool;
+use diesel::{ ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_res;
@@ -10,9 +9,7 @@ use rust_wheel::model::user::login_user_info::LoginUserInfo;
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 
-type DB = diesel::pg::Pg;
-
-pub fn channel_query<T>(request: &Json<ChannelRequest>, login_user_info: LoginUserInfo) -> PaginationResponse<Vec<RssSubSource>> {
+pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginUserInfo) -> PaginationResponse<Vec<RssSubSource>> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source as channel_table;
     let connection = config::establish_connection();
@@ -40,18 +37,9 @@ pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
     diesel::update(rss_sub_source.filter(predicate))
-        .set((editor_pick.eq(editor_pick_status)))
+        .set(editor_pick.eq(editor_pick_status))
         .get_result::<RssSubSource>(&connection)
         .expect("unable to update channel");
 }
 
-fn find_channel(request: &ChannelRequest) -> Box<dyn BoxableExpression<crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::table, DB, SqlType=Bool> + '_> {
-    use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    match request {
-        ChannelRequest { editorPick, .. } if editorPick.unwrap_or(0) == 1 => Box::new(editor_pick.eq(editorPick)),
-        ChannelRequest { minimalReputation, ..} if minimalReputation.unwrap_or(0) > 0 => Box::new(reputation.gt(minimalReputation)),
-        ChannelRequest { excludeEditorPickChannel, ..} if excludeEditorPickChannel.unwrap_or(0) == 1 => Box::new(editor_pick.ne(excludeEditorPickChannel)),
-        _ => Box::new(editor_pick.eq(0))
-    }
-}
 
