@@ -168,6 +168,18 @@ pub struct Product {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "role"]
+pub struct Role {
+    pub id: i32,
+    pub name: String,
+    pub status: i32,
+    pub updated_time: i64,
+    pub created_time: i64,
+    pub remark: Option<String>,
+    pub is_deleted: Option<i32>,
+}
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "rss_sub_source"]
 pub struct RssSubSource {
     pub id: i64,

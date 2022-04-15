@@ -156,6 +156,18 @@ table! {
 }
 
 table! {
+    role (id) {
+        id -> Int4,
+        name -> Varchar,
+        status -> Int4,
+        updated_time -> Int8,
+        created_time -> Int8,
+        remark -> Nullable<Varchar>,
+        is_deleted -> Nullable<Int4>,
+    }
+}
+
+table! {
     rss_sub_source (id) {
         id -> Int8,
         sub_url -> Varchar,
@@ -253,6 +265,7 @@ allow_tables_to_appear_in_same_query!(
     domain,
     interview,
     products,
+    role,
     rss_sub_source,
     trend,
     user_devices,

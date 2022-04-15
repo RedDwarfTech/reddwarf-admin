@@ -19,7 +19,8 @@ filter = { only_tables = [
     "user_devices",
     "products",
     "article_favorites",
-    "app_repo"
+    "app_repo",
+    "role",
 ] }
 
 # https://stackoverflow.com/questions/59228152/rust-diesel-cli-setting-up-multiple-env-files-for-different-environments
