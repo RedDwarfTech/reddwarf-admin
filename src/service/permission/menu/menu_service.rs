@@ -1,3 +1,4 @@
+use crate::model::request::permission::menu::menu_request::MenuRequest;
 use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 use rocket::response::content;
 use rocket::serde::json::Json;
@@ -10,13 +11,13 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser};
-use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 
-pub fn menu_query<T>(request: &Json<RoleRequest>) -> PaginationResponse<Vec<MenuResource>> {
+pub fn menu_query<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<MenuResource>> {
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let connection = config::establish_connection();
-    let query = menu_resource.filter(id.gt(0))
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
+    let query = menu_resource.filter(&predicate)
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<MenuResource>(&connection);

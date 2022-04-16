@@ -161,6 +161,7 @@ pub struct MenuResource {
     pub updated_time: i64,
     pub remark: Option<String>,
     pub path: Option<String>,
+    pub parent_id: i32,
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]

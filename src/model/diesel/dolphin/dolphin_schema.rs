@@ -148,6 +148,7 @@ table! {
         updated_time -> Int8,
         remark -> Nullable<Varchar>,
         path -> Nullable<Varchar>,
+        parent_id -> Int4,
     }
 }
 
