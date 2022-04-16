@@ -8,18 +8,17 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::dolphin_models::{AdminUser, User};
+use crate::model::diesel::dolphin::dolphin_models::{AdminUser, Role};
 use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
-use crate::model::request::user::user_request::UserRequest;
 
-pub fn role_query<T>(request: &Json<RoleRequest>) -> PaginationResponse<Vec<User>> {
-    use crate::model::diesel::dolphin::dolphin_schema::users::dsl::*;
+pub fn role_query<T>(request: &Json<RoleRequest>) -> PaginationResponse<Vec<Role>> {
+    use crate::model::diesel::dolphin::dolphin_schema::role::dsl::*;
     let connection = config::establish_connection();
-    let query = users.filter(id.gt(0))
+    let query = role.filter(id.gt(0))
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
-    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<User>(&connection);
+    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Role>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
 }

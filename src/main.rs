@@ -4,8 +4,6 @@ extern crate diesel;
 extern crate rocket;
 
 use std::time::Duration;
-
-use futures::stream::{self, StreamExt};
 use rocket::{Build, Rocket};
 use tokio::time;
 
@@ -19,6 +17,7 @@ use biz::app::dict::word::word_controller;
 use biz::app::job::interview::interview_controller;
 use biz::app::gallery::repo_app_controller;
 use biz::app::music::fav::fav_music_controller;
+use biz::permission::role::role_controller;
 use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::user::user_controller;
@@ -104,10 +103,13 @@ fn build_rocket() -> Rocket<Build> {
             interview_controller::page,
             interview_controller::add,
             interview_controller::update
-        ]).mount("manage/app/gallary/repoapp", routes![
+        ]).mount("/manage/app/gallary/repoapp", routes![
             repo_app_controller::page,
             repo_app_controller::add,
             repo_app_controller::edit,
             repo_app_controller::detail,
-    ])
+        ]).mount("/manage/permission/role", routes![
+            role_controller::page,
+            role_controller::edit_role
+        ])
 }
