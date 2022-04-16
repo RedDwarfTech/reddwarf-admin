@@ -18,6 +18,7 @@ use biz::app::job::interview::interview_controller;
 use biz::app::gallery::repo_app_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::permission::role::role_controller;
+use biz::permission::user::admin_user_controller;
 use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::user::user_controller;
@@ -71,6 +72,10 @@ fn build_rocket() -> Rocket<Build> {
             app_controller::edit,
             app_controller::detail,
         ])
+        .mount("/manage/app/user",routes![
+            user_controller::page,
+            user_controller::edit_pwd
+        ])
         .mount("/manage/app/cernitor/domain",routes![
             domain_controller::page,
             domain_controller::add,
@@ -108,7 +113,7 @@ fn build_rocket() -> Rocket<Build> {
             role_controller::page,
             role_controller::edit_role
         ]).mount("/manage/permission/user",routes![
-            user_controller::page,
-            user_controller::edit_pwd
+            admin_user_controller::page,
+            admin_user_controller::edit_pwd
         ])
 }
