@@ -1,10 +1,11 @@
+use rust_wheel::model::response::pagination::Pagination;
 use crate::model::request::permission::menu::menu_request::MenuRequest;
 use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
-use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_pagination_res};
+use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response};
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
@@ -12,8 +13,9 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser};
 use crate::model::request::user::password_request::PasswordRequest;
+use crate::model::response::permission::menu::menu_response::MenuResponse;
 
-pub fn menu_query<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<MenuResource>> {
+pub fn menu_query<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<MenuResponse>> {
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
@@ -21,8 +23,53 @@ pub fn menu_query<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<Menu
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<MenuResource>(&connection);
-    let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
+    let menu_responses = find_sub_menu(&query_result.as_ref().unwrap().0);
+    let total = query_result.as_ref().unwrap().2;
+    let page_result = map_pagination_res_local(total, request.pageNum, request.pageSize,menu_responses);
     return page_result;
+}
+
+/**
+ * for the performance issue
+ * find the 2 level of tree 
+ */
+pub fn find_sub_menu(pmenus: &Vec<MenuResource>) -> Vec<MenuResponse>{
+    use diesel::pg::expression::dsl::any;
+    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
+    let connection = config::establish_connection();
+    let parent_ids: Vec<i32> = pmenus
+        .iter()
+        .map(|item| item.id)
+        .collect();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(any(parent_ids));
+    let menus = menu_resource.filter(&predicate)
+    .load::<MenuResource>(&connection)
+    .expect("Error find menu resource");
+    let mut menu_res_list = Vec::new();
+    for p_menu in pmenus {
+        let mut menu_res = MenuResponse::from(p_menu);
+        for submenu in &menus{
+            if submenu.parent_id == p_menu.id {
+                let menu_res_sub = MenuResponse::from(submenu);
+                menu_res.children.push(menu_res_sub);
+            }
+        }
+        menu_res_list.push(menu_res);
+    }
+    return menu_res_list;
+}
+
+pub fn map_pagination_res_local<U>(total: i64, page_num: i64,page_size: i64, data: Vec<U>) -> PaginationResponse<Vec<U>>{
+    let page_result = Pagination{
+        pageNum: page_num,
+        pageSize: page_size,
+        total: total
+    };
+    let resp = PaginationResponse{
+        pagination: page_result,
+        list: data
+    };
+    return resp;
 }
 
 pub fn menu_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
