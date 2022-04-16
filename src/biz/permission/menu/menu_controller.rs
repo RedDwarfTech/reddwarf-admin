@@ -4,7 +4,7 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
 
-use crate::model::diesel::dolphin::dolphin_models::{Role};
+use crate::model::diesel::dolphin::dolphin_models::{MenuResource};
 use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 
