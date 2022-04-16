@@ -140,6 +140,18 @@ table! {
 }
 
 table! {
+    menu_resource (id) {
+        id -> Int4,
+        name -> Varchar,
+        res_type -> Int4,
+        created_time -> Int8,
+        updated_time -> Int8,
+        remark -> Nullable<Varchar>,
+        path -> Nullable<Varchar>,
+    }
+}
+
+table! {
     products (id) {
         id -> Int4,
         product_name -> Varchar,
@@ -264,6 +276,7 @@ allow_tables_to_appear_in_same_query!(
     dashboard,
     domain,
     interview,
+    menu_resource,
     products,
     role,
     rss_sub_source,

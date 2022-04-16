@@ -152,6 +152,18 @@ pub struct Interview {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "menu_resource"]
+pub struct MenuResource {
+    pub id: i32,
+    pub name: String,
+    pub res_type: i32,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub remark: Option<String>,
+    pub path: Option<String>,
+}
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "products"]
 pub struct Product {
     pub id: i32,

@@ -19,6 +19,7 @@ use biz::app::gallery::repo_app_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::permission::role::role_controller;
 use biz::permission::user::admin_user_controller;
+use biz::permission::menu::menu_controller;
 use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::user::user_controller;
@@ -112,8 +113,11 @@ fn build_rocket() -> Rocket<Build> {
         ]).mount("/manage/permission/role", routes![
             role_controller::page,
             role_controller::edit_role
-        ]).mount("/manage/permission/user",routes![
+        ]).mount("/manage/permission/user", routes![
             admin_user_controller::page,
             admin_user_controller::edit_pwd
+        ]).mount("/manage/permission/menu", routes![
+            menu_controller::page,
+            menu_controller::edit_menu
         ])
 }
