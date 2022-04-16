@@ -81,10 +81,6 @@ fn build_rocket() -> Rocket<Build> {
             channel_controller::editor_pick,
             channel_controller::editor_unpick
         ])
-        .mount("/manage/user",routes![
-            user_controller::page,
-            user_controller::edit_pwd
-        ])
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page
         ])
@@ -111,5 +107,8 @@ fn build_rocket() -> Rocket<Build> {
         ]).mount("/manage/permission/role", routes![
             role_controller::page,
             role_controller::edit_role
+        ]).mount("/manage/permission/user",routes![
+            user_controller::page,
+            user_controller::edit_pwd
         ])
 }
