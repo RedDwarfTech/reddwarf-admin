@@ -38,20 +38,38 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
     (
       SELECT
         id,
-        name
-      FROM  menu_resource mr
+        name,
+        rss_type,
+        created_time,
+        updated_time,
+        remark,
+        path,
+        parent_id
+      FROM menu_resource mr
       WHERE id = 1
       UNION ALL
       SELECT
         origin.id,
-        sub_menus.name || ' > ' || origin.name
+        sub_menus.name || ' > ' || origin.name,
+        origin.res_type,
+        origin.created_time,
+        origin.updated_time,
+        origin.remark,
+        origin.path,
+        origin.parent_id
       FROM sub_menus
       JOIN menu_resource origin
       ON origin.parent_id = sub_menus.id
     )
     SELECT
-      id,
-      name
+        id,
+        name,
+        rss_type,
+        created_time,
+        updated_time,
+        remark,
+        path,
+        parent_id
     FROM sub_menus;
     ";
     let cte_menus = sql_query(cte_query_sub_menus)
