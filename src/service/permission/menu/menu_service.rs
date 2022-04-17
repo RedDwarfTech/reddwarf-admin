@@ -46,7 +46,7 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
         path,
         parent_id
       FROM menu_resource mr
-      WHERE id = 1
+      WHERE id = 0
       UNION ALL
       SELECT
         origin.id,
