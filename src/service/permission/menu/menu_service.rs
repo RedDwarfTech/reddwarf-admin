@@ -39,7 +39,7 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
       SELECT
         id,
         name,
-        rss_type,
+        res_type,
         created_time,
         updated_time,
         remark,
@@ -64,7 +64,7 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
     SELECT
         id,
         name,
-        rss_type,
+        res_type,
         created_time,
         updated_time,
         remark,
