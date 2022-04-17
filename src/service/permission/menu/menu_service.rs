@@ -22,15 +22,14 @@ use crate::model::response::permission::menu::menu_response::MenuResponse;
  * 
  * 
  */
-pub fn menu_query_full_tree<T>(request: &Json<MenuRequest>){
+pub fn menu_query_full_tree<T>(request: &Json<MenuRequest>) -> Vec<MenuResponse>{
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
     let root_menus = menu_resource.filter(&predicate)
         .load::<MenuResource>(&connection)
         .expect("Error find menu resource");
-
-
+    return find_sub_menu_cte_impl(&root_menus);
 }
 
 pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
