@@ -48,7 +48,12 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
       FROM sub_menus
       JOIN menu_resource origin
       ON origin.parent_id = sub_menus.id
-    ) ";
+    )
+    SELECT
+      id,
+      name
+    FROM sub_menus;
+    ";
     let cte_menus = sql_query(cte_query_sub_menus)
         .load::<MenuResource>(&connection)
         .expect("Error find menu resource");
