@@ -20,7 +20,10 @@ RUN apt-get update && apt-get install libpq5 curl -y
 COPY --from=builder /app/.env /app
 COPY --from=builder /app/settings.toml /app
 # COPY --from=builder /app/target/debug/* /app/
-COPY --from=builder /app/target/release/* /app/
+# 
+# only copy the execute file to minimal the image size
+# do not copy the release folder
+COPY --from=builder /app/target/release/reddwarf-admin /app/
 COPY --from=builder /app/Rocket.toml /app
 CMD ["./reddwarf-admin"]
 
