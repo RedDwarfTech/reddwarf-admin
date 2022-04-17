@@ -79,7 +79,7 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
 }
 
 /**
-* convert the list menu to tree recursive
+** convert the list menu to tree recursive
 **/
 pub fn convert_menu_to_tree(root_menus: &Vec<MenuResource>, sub_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
     let mut menu_res_list = Vec::new();
@@ -114,7 +114,7 @@ pub fn menu_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<MenuResource>(&connection);
-    let menu_responses = find_sub_menu(&query_result.as_ref().unwrap().0);
+    let menu_responses = find_sub_menu_cte_impl(&query_result.as_ref().unwrap().0);
     let total = query_result.as_ref().unwrap().2;
     let page_result = map_pagination_res_local(total, request.pageNum, request.pageSize,menu_responses);
     return page_result;
