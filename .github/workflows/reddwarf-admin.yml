@@ -17,14 +17,14 @@ jobs:
         username: ${{ secrets.ALIYUN_DOCKER_REPO_USER_NAME }}
         password: ${{ secrets.ALIYUN_DOCKER_REPO_USER_PASSWORD }}
         tags: ${{ github.sha }}
-        repository: reddwarf-pro/dolphin-admin
+        repository: reddwarf-pro/reddwarf-admin
         path: '.'
 
     - name: deploy to cluster
       uses: steebchen/kubectl@v2.0.0
       with: 
         config: ${{ secrets.KUBE_CONFIG_DATA }}
-        command: set image --record deployment/admin-service admin-service=${{ secrets.ALI_DOCKER_HUB_REGISTRY }}/reddwarf-pro/dolphin-admin:${{ github.sha }} -n reddwarf-pro
+        command: set image --record deployment/admin-service admin-service=${{ secrets.ALI_DOCKER_HUB_REGISTRY }}/reddwarf-pro/reddwarf-admin:${{ github.sha }} -n reddwarf-pro
 
     - name: verify deployment
       uses: steebchen/kubectl@v2.0.0
