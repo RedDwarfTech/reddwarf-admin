@@ -1,3 +1,4 @@
+use diesel::sql_query;
 use rust_wheel::model::response::pagination::Pagination;
 use crate::model::request::permission::menu::menu_request::MenuRequest;
 use crate::model::diesel::dolphin::dolphin_models::MenuResource;
@@ -15,7 +16,75 @@ use crate::model::diesel::dolphin::dolphin_models::{AdminUser};
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
 
-pub fn menu_query<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<MenuResponse>> {
+/**
+ * find all sub menu with PostgreSQL CTE(Common Table Expressions)
+ * 
+ * 
+ * 
+ */
+pub fn menu_query_full_tree<T>(request: &Json<MenuRequest>){
+    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
+    let connection = config::establish_connection();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
+    let root_menus = menu_resource.filter(&predicate)
+        .load::<MenuResource>(&connection)
+        .expect("Error find menu resource");
+
+
+}
+
+pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
+    let connection = config::establish_connection();
+    let cte_query_sub_menus = " with recursive sub_menus as
+    (
+      SELECT
+        id,
+        name
+      FROM  menu_resource mr
+      WHERE id = 1
+      UNION ALL
+      SELECT
+        origin.id,
+        sub_menus.name || ' > ' || origin.name
+      FROM sub_menus
+      JOIN menu_resource origin
+      ON origin.parent_id = sub_menus.id
+    ) ";
+    let cte_menus = sql_query(cte_query_sub_menus)
+        .load::<MenuResource>(&connection)
+        .expect("Error find menu resource");
+    return convert_menu_to_tree(root_menus, &cte_menus);
+}
+
+/**
+* convert the list menu to tree recursive
+**/
+pub fn convert_menu_to_tree(root_menus: &Vec<MenuResource>, sub_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
+    let mut menu_res_list = Vec::new();
+    for root_menu in root_menus {
+        let mut origin_menu_res_list = Vec::new();
+        let mut menu_res = MenuResponse::from(root_menu);
+        for sub_menu in sub_menus{
+            if sub_menu.parent_id == root_menu.id {
+                let menu_res_sub = MenuResponse::from(sub_menu);
+                menu_res.children.push(menu_res_sub);
+                origin_menu_res_list.push(sub_menu.clone());
+            }
+        }
+        if !menu_res.children.is_empty() {
+            menu_res.children = convert_menu_to_tree(&origin_menu_res_list, sub_menus);
+        }
+        menu_res_list.push(menu_res);
+    }
+    return menu_res_list;
+}
+
+/**
+ * this function query the menu tree for showing in table
+ * for the performance issue
+ * only query 2 level from current parent level
+ */
+pub fn menu_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<MenuResponse>> {
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
@@ -45,18 +114,7 @@ pub fn find_sub_menu(pmenus: &Vec<MenuResource>) -> Vec<MenuResponse>{
     let menus = menu_resource.filter(&predicate)
     .load::<MenuResource>(&connection)
     .expect("Error find menu resource");
-    let mut menu_res_list = Vec::new();
-    for p_menu in pmenus {
-        let mut menu_res = MenuResponse::from(p_menu);
-        for submenu in &menus{
-            if submenu.parent_id == p_menu.id {
-                let menu_res_sub = MenuResponse::from(submenu);
-                menu_res.children.push(menu_res_sub);
-            }
-        }
-        menu_res_list.push(menu_res);
-    }
-    return menu_res_list;
+    return convert_menu_to_tree(pmenus,&menus);
 }
 
 pub fn map_pagination_res_local<U>(total: i64, page_num: i64,page_size: i64, data: Vec<U>) -> PaginationResponse<Vec<U>>{

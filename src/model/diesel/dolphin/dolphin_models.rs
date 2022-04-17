@@ -151,7 +151,7 @@ pub struct Interview {
     pub job_link: Option<String>,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "menu_resource"]
 pub struct MenuResource {
     pub id: i32,
