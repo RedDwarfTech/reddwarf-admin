@@ -52,3 +52,12 @@ pub struct InterviewAdd {
     pub user_id: i64,
     pub job_link: String
 }
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "role_permission"]
+pub struct RolePermissionAdd {
+    pub role_id: Option<i32>,
+    pub permission_id: Option<i32>,
+    pub created_time: Option<i64>,
+    pub updated_time: Option<i64>,
+}

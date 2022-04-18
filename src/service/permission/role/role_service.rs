@@ -5,11 +5,13 @@ use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_pagination_res};
 use rust_wheel::common::util::security_util::get_sha;
+use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::dolphin_models::{AdminUser, Role};
+use crate::model::diesel::dolphin::custom_dolphin_models::RolePermissionAdd;
+use crate::model::diesel::dolphin::dolphin_models::{AdminUser, Role, RolePermission};
 use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 
@@ -29,8 +31,22 @@ pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<Stri
     use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
     let connection = config::establish_connection();
     diesel::delete(role_permission.filter(role_id.eq(request.roleId))).execute(&connection);
-
-
+    // add the new permission record
+    let mut role_permission_rec = Vec::new();
+    let current_time = get_current_millisecond();
+    for menu_id in &request.menuIds {
+        let rec = RolePermissionAdd{
+            role_id: Option::from(request.roleId),
+            permission_id: Option::from(*menu_id),
+            created_time: Option::from(current_time),
+            updated_time: Option::from(current_time)
+        };
+        role_permission_rec.push(rec);
+    }
+    diesel::insert_into(role_permission)
+        .values(&role_permission_rec)
+        .execute(&connection)
+        .unwrap();
     return box_rest_response("ok");
 }
 
