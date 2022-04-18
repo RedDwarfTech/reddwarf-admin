@@ -120,25 +120,6 @@ pub fn menu_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec
     return page_result;
 }
 
-/**
- * for the performance issue
- * find the 2 level of tree 
- */
-pub fn find_sub_menu(pmenus: &Vec<MenuResource>) -> Vec<MenuResponse>{
-    use diesel::pg::expression::dsl::any;
-    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
-    let connection = config::establish_connection();
-    let parent_ids: Vec<i32> = pmenus
-        .iter()
-        .map(|item| item.id)
-        .collect();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(any(parent_ids));
-    let menus = menu_resource.filter(&predicate)
-    .load::<MenuResource>(&connection)
-    .expect("Error find menu resource");
-    return convert_menu_to_tree(pmenus,&menus);
-}
-
 pub fn map_pagination_res_local<U>(total: i64, page_num: i64,page_size: i64, data: Vec<U>) -> PaginationResponse<Vec<U>>{
     let page_result = Pagination{
         pageNum: page_num,

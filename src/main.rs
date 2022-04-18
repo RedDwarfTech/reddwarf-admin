@@ -112,7 +112,8 @@ fn build_rocket() -> Rocket<Build> {
             repo_app_controller::detail,
         ]).mount("/manage/permission/role", routes![
             role_controller::page,
-            role_controller::edit_role
+            role_controller::edit_role,
+            role_controller::edit_role_menu_bind,
         ]).mount("/manage/permission/user", routes![
             admin_user_controller::page,
             admin_user_controller::edit_pwd

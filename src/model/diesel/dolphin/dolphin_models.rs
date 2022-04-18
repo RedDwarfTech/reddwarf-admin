@@ -10,7 +10,7 @@ use crate::model::diesel::dolphin::dolphin_schema::*;
 use chrono::NaiveDateTime;
 use chrono::DateTime;
 use chrono::offset::Utc;
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "admin_users"]
 pub struct AdminUser {
     pub id: i64,
@@ -29,7 +29,7 @@ pub struct AdminUser {
     pub user_name: Option<String>,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "app_repo"]
 pub struct AppRepo {
     pub id: i64,
@@ -47,7 +47,7 @@ pub struct AppRepo {
     pub author: Option<String>,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "apps"]
 pub struct App {
     pub id: i32,
@@ -65,7 +65,7 @@ pub struct App {
     pub product_id: i32,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "article"]
 pub struct Article {
     pub id: i64,
@@ -83,7 +83,7 @@ pub struct Article {
     pub editor_pick: Option<i32>,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "article_content"]
 pub struct ArticleContent {
     pub id: i64,
@@ -91,7 +91,7 @@ pub struct ArticleContent {
     pub content: String,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "article_favorites"]
 pub struct ArticleFavorite {
     pub user_id: i64,
@@ -106,7 +106,7 @@ pub struct ArticleFavorite {
     pub id: i64,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "dashboard"]
 pub struct Dashboard {
     pub id: i32,
@@ -114,7 +114,7 @@ pub struct Dashboard {
     pub user_count: i32,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "domain"]
 pub struct Domain {
     pub id: i64,
@@ -132,7 +132,7 @@ pub struct Domain {
     pub expire_date_ms: Option<i64>,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "interview"]
 pub struct Interview {
     pub id: i64,
@@ -164,7 +164,7 @@ pub struct MenuResource {
     pub parent_id: i32,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "products"]
 pub struct Product {
     pub id: i32,
@@ -180,7 +180,7 @@ pub struct Product {
     pub product_tag: Option<String>,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "role"]
 pub struct Role {
     pub id: i32,
@@ -192,7 +192,17 @@ pub struct Role {
     pub is_deleted: Option<i32>,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "role_permission"]
+pub struct RolePermission {
+    pub id: i64,
+    pub role_id: Option<i32>,
+    pub permission_id: Option<i32>,
+    pub created_time: Option<i64>,
+    pub updated_time: Option<i64>,
+}
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "rss_sub_source"]
 pub struct RssSubSource {
     pub id: i64,
@@ -231,7 +241,7 @@ pub struct RssSubSource {
     pub creator: i64,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "trend"]
 pub struct Trend {
     pub id: i64,
@@ -243,7 +253,7 @@ pub struct Trend {
     pub incre_num: i32,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "user_devices"]
 pub struct UserDevice {
     pub id: i64,
@@ -254,7 +264,7 @@ pub struct UserDevice {
     pub updated_time: i64,
 }
 
-#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "users"]
 pub struct User {
     pub id: i64,

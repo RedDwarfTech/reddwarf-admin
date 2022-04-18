@@ -181,6 +181,16 @@ table! {
 }
 
 table! {
+    role_permission (id) {
+        id -> Int8,
+        role_id -> Nullable<Int4>,
+        permission_id -> Nullable<Int4>,
+        created_time -> Nullable<Int8>,
+        updated_time -> Nullable<Int8>,
+    }
+}
+
+table! {
     rss_sub_source (id) {
         id -> Int8,
         sub_url -> Varchar,
@@ -280,6 +290,7 @@ allow_tables_to_appear_in_same_query!(
     menu_resource,
     products,
     role,
+    role_permission,
     rss_sub_source,
     trend,
     user_devices,

@@ -1,3 +1,4 @@
+use crate::model::request::permission::role::role_menu_bind_request::RoleMenuBindRequest;
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
@@ -21,6 +22,16 @@ pub fn role_query<T>(request: &Json<RoleRequest>) -> PaginationResponse<Vec<Role
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Role>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
+}
+
+pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<String> {
+    // delete the legacy record
+    use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
+    let connection = config::establish_connection();
+    diesel::delete(role_permission.filter(role_id.eq(request.roleId))).execute(&connection);
+
+
+    return box_rest_response("ok");
 }
 
 pub fn role_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
