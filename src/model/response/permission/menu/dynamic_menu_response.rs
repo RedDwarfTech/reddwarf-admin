@@ -10,11 +10,10 @@ pub struct DynamicMenuResponse {
     pub res_type: i32,
     pub created_time: i64,
     pub updated_time: i64,
-    pub icon: String,
-    pub component: String,
+    pub component: Option<String>,
     pub path: String,
     pub parent_id: i32,
-    pub children: Vec<DynamicMenuResponse>
+    pub routes: Vec<DynamicMenuResponse>
 }
 
 impl Default for DynamicMenuResponse {
@@ -25,11 +24,11 @@ impl Default for DynamicMenuResponse {
             res_type: 0,
             created_time: 0,
             updated_time: 0,
-            icon: "smile".to_string(),
+            component: None,
             path: "/welcome".to_string(),
             parent_id: 0,
-            children: vec![],
-            component: "./Welcome".to_string()
+            routes: vec![],
+
         }
     }
 }
@@ -42,11 +41,10 @@ impl From<&MenuResource> for DynamicMenuResponse {
             res_type: 0,
             created_time: 0,
             updated_time: 0,
-            icon: "smile".to_string(),
-            path: "/welcome".to_string(),
+            path: p.path.to_string(),
             parent_id: p.parent_id,
-            children: vec![],
-            component: "./Welcome".to_string()
+            routes: vec![],
+            component: p.component.clone()
         }
     }
 }

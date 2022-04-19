@@ -160,8 +160,9 @@ pub struct MenuResource {
     pub created_time: i64,
     pub updated_time: i64,
     pub remark: Option<String>,
-    pub path: Option<String>,
+    pub path: String,
     pub parent_id: i32,
+    pub component: Option<String>,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]

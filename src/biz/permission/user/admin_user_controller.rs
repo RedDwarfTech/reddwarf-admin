@@ -1,4 +1,4 @@
-use crate::model::diesel::dolphin::dolphin_models::{AdminUser, MenuResource};
+use crate::model::diesel::dolphin::dolphin_models::{AdminUser};
 use crate::service::permission::user::admin_user_service::{admin_password_edit, admin_user_menus};
 use crate::service::permission::user::admin_user_service::admin_user_query;
 use rocket::response::content;

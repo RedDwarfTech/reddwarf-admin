@@ -147,8 +147,9 @@ table! {
         created_time -> Int8,
         updated_time -> Int8,
         remark -> Nullable<Varchar>,
-        path -> Nullable<Varchar>,
+        path -> Varchar,
         parent_id -> Int4,
+        component -> Nullable<Varchar>,
     }
 }
 
