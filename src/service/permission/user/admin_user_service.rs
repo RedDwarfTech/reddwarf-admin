@@ -62,12 +62,27 @@ pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuRespon
     if menus.is_empty() {
         return Vec::new();
     }
-    let mut response_menus = Vec::new();
-    for single_menu in menus {
-        let menu_resp = DynamicMenuResponse::from(&single_menu);
-        response_menus.push(menu_resp);
+    return convert_menu_to_tree(&menus,&menus);
+}
+
+pub fn convert_menu_to_tree(root_menus: &Vec<MenuResource>, sub_menus: &Vec<MenuResource>) -> Vec<DynamicMenuResponse>{
+    let mut menu_res_list = Vec::new();
+    for root_menu in root_menus {
+        let mut origin_menu_res_list = Vec::new();
+        let mut menu_res = DynamicMenuResponse::from(root_menu);
+        for sub_menu in sub_menus{
+            if sub_menu.parent_id == root_menu.id {
+                let menu_res_sub = DynamicMenuResponse::from(sub_menu);
+                menu_res.routes.push(menu_res_sub);
+                origin_menu_res_list.push(sub_menu.clone());
+            }
+        }
+        if !menu_res.routes.is_empty() {
+            menu_res.routes = convert_menu_to_tree(&origin_menu_res_list, sub_menus);
+        }
+        menu_res_list.push(menu_res);
     }
-    return response_menus;
+    return menu_res_list;
 }
 
 pub fn admin_password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {

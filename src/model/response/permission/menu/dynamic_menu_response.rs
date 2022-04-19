@@ -28,7 +28,6 @@ impl Default for DynamicMenuResponse {
             path: "/welcome".to_string(),
             parent_id: 0,
             routes: vec![],
-
         }
     }
 }
