@@ -254,6 +254,16 @@ table! {
 }
 
 table! {
+    user_role (id) {
+        id -> Int4,
+        user_id -> Int8,
+        role_id -> Int4,
+        created_time -> Int8,
+        updated_time -> Int8,
+    }
+}
+
+table! {
     users (id) {
         id -> Int8,
         nickname -> Varchar,
@@ -295,5 +305,6 @@ allow_tables_to_appear_in_same_query!(
     rss_sub_source,
     trend,
     user_devices,
+    user_role,
     users,
 );

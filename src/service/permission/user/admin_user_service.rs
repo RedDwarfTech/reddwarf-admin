@@ -1,3 +1,4 @@
+use diesel::dsl::any;
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
@@ -6,9 +7,10 @@ use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
+use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::dolphin_models::{AdminUser};
+use crate::model::diesel::dolphin::dolphin_models::{AdminUser, MenuResource, RolePermission, UserRole};
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::request::user::user_request::UserRequest;
 
@@ -21,6 +23,42 @@ pub fn admin_user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Ve
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<AdminUser>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
+}
+
+pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<MenuResource> {
+    use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
+    let connection = config::establish_connection();
+    // get user roles
+    let roles = user_role.filter(user_id.eq(login_user_info.userId))
+        .load::<UserRole>(&connection)
+        .expect("load user role failed");
+    if roles.is_empty(){
+        return Vec::new();
+    }
+    // get roles permission
+    let role_ids: Vec<i32> = roles
+        .iter()
+        .map(|item| item.role_id)
+        .collect();
+    use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::role_permission as role_permission_schema;
+    let role_permissions = role_permission.filter(role_permission_schema::dsl::role_id.eq(any(role_ids)))
+        .load::<RolePermission>(&connection)
+        .expect("load role permission failed");
+    if role_permissions.is_empty() {
+        return Vec::new();
+    }
+    // get user menus
+    let permission_ids: Vec<i32> = role_permissions
+        .iter()
+        .map(|item|item.permission_id)
+        .collect();
+    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::menu_resource as menu_resource_schema;
+    let menus = menu_resource.filter(menu_resource_schema::dsl::id.eq(any(permission_ids)))
+        .load::<MenuResource>(&connection)
+        .expect("load menus failed");
+    return menus;
 }
 
 pub fn admin_password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {

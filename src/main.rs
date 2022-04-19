@@ -116,7 +116,8 @@ fn build_rocket() -> Rocket<Build> {
             role_controller::edit_role_menu_bind,
         ]).mount("/manage/permission/user", routes![
             admin_user_controller::page,
-            admin_user_controller::edit_pwd
+            admin_user_controller::edit_pwd,
+            admin_user_controller::get_user_menu,
         ]).mount("/manage/permission/menu", routes![
             menu_controller::page_tree,
             menu_controller::menu_tree,

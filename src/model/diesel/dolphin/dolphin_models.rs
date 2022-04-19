@@ -266,6 +266,16 @@ pub struct UserDevice {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "user_role"]
+pub struct UserRole {
+    pub id: i32,
+    pub user_id: i64,
+    pub role_id: i32,
+    pub created_time: i64,
+    pub updated_time: i64,
+}
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "users"]
 pub struct User {
     pub id: i64,

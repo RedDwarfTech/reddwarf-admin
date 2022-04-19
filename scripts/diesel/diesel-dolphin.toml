@@ -22,7 +22,8 @@ filter = { only_tables = [
     "app_repo",
     "role",
     "menu_resource",
-    "role_permission"
+    "role_permission",
+    "user_role"
 ] }
 
 # https://stackoverflow.com/questions/59228152/rust-diesel-cli-setting-up-multiple-env-files-for-different-environments
