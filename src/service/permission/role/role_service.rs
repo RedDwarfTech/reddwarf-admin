@@ -8,7 +8,6 @@ use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
-
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::RolePermissionAdd;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, Role};
@@ -30,7 +29,6 @@ pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<Stri
     // delete the legacy record
     use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
     let connection = config::establish_connection();
-
     connection.build_transaction()
         .repeatable_read()
         .run::<_, diesel::result::Error, _>(||{
