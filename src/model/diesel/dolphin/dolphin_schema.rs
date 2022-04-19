@@ -183,10 +183,11 @@ table! {
 table! {
     role_permission (id) {
         id -> Int8,
-        role_id -> Nullable<Int4>,
-        permission_id -> Nullable<Int4>,
-        created_time -> Nullable<Int8>,
-        updated_time -> Nullable<Int8>,
+        role_id -> Int4,
+        permission_id -> Int4,
+        created_time -> Int8,
+        updated_time -> Int8,
+        permission_type -> Int4,
     }
 }
 

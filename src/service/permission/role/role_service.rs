@@ -38,10 +38,11 @@ pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<Stri
             let current_time = get_current_millisecond();
             for menu_id in &request.menuIds {
                 let rec = RolePermissionAdd{
-                    role_id: Option::from(request.roleId),
-                    permission_id: Option::from(*menu_id),
-                    created_time: Option::from(current_time),
-                    updated_time: Option::from(current_time)
+                    role_id: request.roleId,
+                    permission_id: *menu_id,
+                    created_time: current_time,
+                    updated_time: current_time,
+                    permission_type: 1
                 };
                 role_permission_rec.push(rec);
             }

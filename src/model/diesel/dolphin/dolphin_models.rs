@@ -196,10 +196,11 @@ pub struct Role {
 #[table_name = "role_permission"]
 pub struct RolePermission {
     pub id: i64,
-    pub role_id: Option<i32>,
-    pub permission_id: Option<i32>,
-    pub created_time: Option<i64>,
-    pub updated_time: Option<i64>,
+    pub role_id: i32,
+    pub permission_id: i32,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub permission_type: i32,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
