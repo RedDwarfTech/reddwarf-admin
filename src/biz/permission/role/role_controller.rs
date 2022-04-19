@@ -15,7 +15,7 @@ pub fn page(request: Json<RoleRequest>) -> content::Json<String> {
     return box_rest_response(roles);
 }
 
-#[post("/v1/role/menu",data = "<request>")]
+#[put("/v1/role/menu",data = "<request>")]
 pub fn edit_role_menu_bind(request: Json<RoleMenuBindRequest>) -> content::Json<String> {
     return edit_role_menu(&request);
 }
