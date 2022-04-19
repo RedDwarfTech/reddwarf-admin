@@ -13,6 +13,7 @@ use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, MenuResource, RolePermission, UserRole};
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::request::user::user_request::UserRequest;
+use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenuResponse;
 
 pub fn admin_user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<AdminUser>> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
@@ -25,7 +26,7 @@ pub fn admin_user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Ve
     return page_result;
 }
 
-pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<MenuResource> {
+pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuResponse> {
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
     let connection = config::establish_connection();
     // get user roles
@@ -58,7 +59,15 @@ pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<MenuResource> {
     let menus = menu_resource.filter(menu_resource_schema::dsl::id.eq(any(permission_ids)))
         .load::<MenuResource>(&connection)
         .expect("load menus failed");
-    return menus;
+    if menus.is_empty() {
+        return Vec::new();
+    }
+    let mut response_menus = Vec::new();
+    for single_menu in menus {
+        let menu_resp = DynamicMenuResponse::from(&single_menu);
+        response_menus.push(menu_resp);
+    }
+    return response_menus;
 }
 
 pub fn admin_password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
