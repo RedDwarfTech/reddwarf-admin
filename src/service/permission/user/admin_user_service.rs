@@ -1,4 +1,5 @@
 use diesel::dsl::any;
+use diesel::expression::AsExpression;
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
@@ -62,7 +63,19 @@ pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuRespon
     if menus.is_empty() {
         return Vec::new();
     }
-    return convert_menu_to_tree(&menus,&menus);
+    let root_menus = get_root_menus(&menus);
+    return convert_menu_to_tree(&root_menus,&menus);
+}
+
+pub fn get_root_menus(menus: &Vec<MenuResource>) -> Vec<MenuResource>{
+    let mut root_menus = Vec::new();
+    let ids:Vec<i32> = menus.iter().map(|item| item.id).collect();
+    for menu in menus {
+        if !ids.contains(&menu.parent_id){
+            root_menus.push(menu.clone());
+        }
+    }
+    return root_menus;
 }
 
 pub fn convert_menu_to_tree(root_menus: &Vec<MenuResource>, sub_menus: &Vec<MenuResource>) -> Vec<DynamicMenuResponse>{
