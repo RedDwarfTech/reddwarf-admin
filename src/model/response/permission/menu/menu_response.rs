@@ -14,6 +14,7 @@ pub struct MenuResponse {
     pub path: Option<String>,
     pub parent_id: i32,
     pub sort: i32,
+    pub checked: bool,
     pub children: Vec<MenuResponse>
 }
 
@@ -29,6 +30,7 @@ impl Default for MenuResponse {
             path: None,
             parent_id: 0,
             sort: 0,
+            checked: false,
             children: vec![]
         }
     }
@@ -46,6 +48,7 @@ impl From<&MenuResource> for MenuResponse {
             path: None,
             parent_id: p.parent_id,
             sort: p.sort,
+            checked: false,
             children: vec![]
         }
     }
