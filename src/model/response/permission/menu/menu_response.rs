@@ -13,6 +13,7 @@ pub struct MenuResponse {
     pub remark: Option<String>,
     pub path: Option<String>,
     pub parent_id: i32,
+    pub sort: i32,
     pub children: Vec<MenuResponse>
 }
 
@@ -27,6 +28,7 @@ impl Default for MenuResponse {
             remark: None,
             path: None,
             parent_id: 0,
+            sort: 0,
             children: vec![]
         }
     }
@@ -43,6 +45,7 @@ impl From<&MenuResource> for MenuResponse {
             remark: None,
             path: None,
             parent_id: p.parent_id,
+            sort: p.sort,
             children: vec![]
         }
     }
