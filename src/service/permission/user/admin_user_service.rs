@@ -26,7 +26,7 @@ pub fn admin_user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Ve
     return page_result;
 }
 
-pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuResponse> {
+pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource> {
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
     let connection = config::establish_connection();
     // get user roles
@@ -62,6 +62,11 @@ pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuRespon
     if menus.is_empty() {
         return Vec::new();
     }
+    return menus;
+}
+
+pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuResponse> {
+    let menus = admin_user_menus_list(login_user_info);
     let root_menus = get_root_menus(&menus);
     return convert_menu_to_tree(&root_menus,&menus);
 }
