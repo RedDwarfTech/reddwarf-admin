@@ -44,7 +44,8 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
         updated_time,
         remark,
         path,
-        parent_id
+        parent_id,
+        sort
       FROM menu_resource mr
       WHERE id = 5
       UNION ALL
@@ -56,7 +57,8 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
         origin.updated_time,
         origin.remark,
         origin.path,
-        origin.parent_id
+        origin.parent_id,
+        origin.sort
       FROM sub_menus
       JOIN menu_resource origin
       ON origin.parent_id = sub_menus.id
@@ -69,8 +71,10 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
         updated_time,
         remark,
         path,
-        parent_id
-    FROM sub_menus;
+        parent_id,
+        sort
+    FROM sub_menus
+    ORDER BY sort ASC;
     ";
     let cte_menus = sql_query(cte_query_sub_menus)
         .load::<MenuResource>(&connection)
