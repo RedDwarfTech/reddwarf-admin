@@ -28,19 +28,17 @@ pub fn edit_role_menu_bind(request: Json<RoleMenuBindRequest>) -> content::Json<
 
 #[post("/v1/role/menu",data = "<request>")]
 pub fn get_role_menu_tree(request: Json<MenuRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
-    let menu_responses:Vec<MenuResponse> = menu_query_full_tree::<Vec<MenuResource>>(&request);
+    let mut menu_responses:Vec<MenuResponse> = menu_query_full_tree::<Vec<MenuResource>>(&request);
     let menu_vec:Vec<DynamicMenuResponse> = admin_user_menus(login_user_info);
-    let mut menu_response_privilege = Vec::new();
-    for mut menu_res in menu_responses {
-        let ids:Vec<i32> = menu_vec.iter()
-            .map(|item| item.id)
-            .collect();
+    let ids:Vec<i32> = menu_vec.iter()
+        .map(|item| item.id)
+        .collect();
+    for mut menu_res in menu_responses.iter_mut() {
         if ids.contains(&menu_res.id){
             menu_res.checked = true;
         }
-        menu_response_privilege.push(menu_res);
     }
-    return box_rest_response(menu_response_privilege);
+    return box_rest_response(menu_responses);
 }
 
 #[post("/v1/role/edit",data = "<request>")]
