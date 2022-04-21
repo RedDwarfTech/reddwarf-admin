@@ -30,11 +30,9 @@ pub fn edit_role_menu_bind(request: Json<RoleMenuBindRequest>) -> content::Json<
 pub fn get_role_menu_tree(request: Json<MenuRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
     let mut menu_responses:Vec<MenuResponse> = menu_query_full_tree::<Vec<MenuResource>>(&request);
     let menu_vec:Vec<DynamicMenuResponse> = admin_user_menus(login_user_info);
-    let ids:Vec<i32> = menu_vec.iter()
-        .map(|item| item.id)
-        .collect();
     for mut menu_res in menu_responses.iter_mut() {
-        if ids.contains(&menu_res.id){
+       let contains= menu_vec.iter().find(|&&m| m.id == menu_res.id);
+        if contains.is_some(){
             menu_res.checked = true;
         }
     }
