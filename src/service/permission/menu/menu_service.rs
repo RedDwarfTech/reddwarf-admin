@@ -27,6 +27,7 @@ pub fn menu_query_full_tree<T>(request: &Json<MenuRequest>) -> Vec<MenuResponse>
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
     let root_menus = menu_resource.filter(&predicate)
+        .order(sort.asc())
         .load::<MenuResource>(&connection)
         .expect("Error find menu resource");
     return find_sub_menu_cte_impl(&root_menus);
