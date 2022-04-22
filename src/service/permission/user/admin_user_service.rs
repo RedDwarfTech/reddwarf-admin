@@ -10,7 +10,8 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::dolphin_models::{AdminUser, MenuResource, RolePermission, UserRole};
+use crate::model::diesel::dolphin::dolphin_models::{AdminUser, MenuResource, RolePermission, User, UserRole};
+use crate::model::diesel::dolphin::dolphin_schema::article_favorites::user_id;
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::request::user::user_request::UserRequest;
 use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenuResponse;
@@ -64,6 +65,15 @@ pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource
         return Vec::new();
     }
     return menus;
+}
+
+pub fn user_roles(login_user_info: LoginUserInfo) -> Vec<UserRole>{
+    use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
+    let connection = config::establish_connection();
+    let user_roles = user_role.filter(user_id.eq(login_user_info.userId))
+        .load::<UserRole>(&connection)
+        .expect("get user role failed");
+    return user_roles;
 }
 
 pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuResponse> {
