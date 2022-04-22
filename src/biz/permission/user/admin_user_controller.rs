@@ -27,8 +27,8 @@ pub fn get_user_menu(login_user_info: LoginUserInfo) -> content::Json<String> {
     return box_rest_response(menu_vec);
 }
 
-#[get("/v1/roles")]
-pub fn get_user_roles(login_user_info: LoginUserInfo) -> content::Json<String> {
-    let user_roles = user_roles(login_user_info);
+#[get("/v1/roles?<user_id>")]
+pub fn get_user_roles(user_id: i64,login_user_info: LoginUserInfo) -> content::Json<String> {
+    let user_roles = user_roles(user_id);
     return box_rest_response(user_roles);
 }

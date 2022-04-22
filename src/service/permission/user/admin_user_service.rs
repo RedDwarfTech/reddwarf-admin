@@ -67,10 +67,10 @@ pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource
     return menus;
 }
 
-pub fn user_roles(login_user_info: LoginUserInfo) -> Vec<UserRole>{
+pub fn user_roles(filter_user_id:i64) -> Vec<UserRole>{
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
     let connection = config::establish_connection();
-    let user_roles = user_role.filter(user_id.eq(login_user_info.userId))
+    let user_roles = user_role.filter(user_id.eq(filter_user_id))
         .load::<UserRole>(&connection)
         .expect("get user role failed");
     return user_roles;
