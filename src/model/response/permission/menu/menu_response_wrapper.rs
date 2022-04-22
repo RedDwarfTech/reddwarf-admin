@@ -1,6 +1,5 @@
 use rocket::serde::Deserialize;
 use rocket::serde::Serialize;
-use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
 
 #[derive(Deserialize, Serialize)]

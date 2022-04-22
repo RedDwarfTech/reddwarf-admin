@@ -1,5 +1,5 @@
 use crate::model::request::permission::role::role_menu_bind_request::RoleMenuBindRequest;
-use crate::service::permission::role::role_service::edit_role_menu;
+use crate::service::permission::role::role_service::{edit_role_menu, role_query_list};
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
@@ -9,16 +9,21 @@ use crate::model::diesel::dolphin::dolphin_models::{MenuResource, Role};
 use crate::model::request::permission::menu::menu_request::MenuRequest;
 use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
-use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenuResponse;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
 use crate::model::response::permission::menu::menu_response_wrapper::MenuResponseWrapper;
 use crate::service::permission::menu::menu_service::menu_query_full_tree;
 use crate::service::permission::role::role_service::{role_edit, role_query};
-use crate::service::permission::user::admin_user_service::{admin_user_menus, admin_user_menus_list};
+use crate::service::permission::user::admin_user_service::{admin_user_menus_list};
 
 #[post("/v1/page",data = "<request>")]
 pub fn page(request: Json<RoleRequest>) -> content::Json<String> {
     let roles = role_query::<Vec<Role>>(&request);
+    return box_rest_response(roles);
+}
+
+#[get("/v1/list")]
+pub fn list() -> content::Json<String> {
+    let roles = role_query_list();
     return box_rest_response(roles);
 }
 

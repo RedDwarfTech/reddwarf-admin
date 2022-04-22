@@ -25,6 +25,15 @@ pub fn role_query<T>(request: &Json<RoleRequest>) -> PaginationResponse<Vec<Role
     return page_result;
 }
 
+pub fn role_query_list() -> Vec<Role> {
+    use crate::model::diesel::dolphin::dolphin_schema::role::dsl::*;
+    let connection = config::establish_connection();
+    let query = role.filter(id.gt(0))
+        .load::<Role>(&connection)
+        .expect("query admin user failed");
+    return query;
+}
+
 pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<String> {
     // delete the legacy record
     use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
