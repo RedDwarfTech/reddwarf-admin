@@ -36,8 +36,8 @@ pub fn edit_role_menu_bind(request: Json<RoleMenuBindRequest>) -> content::Json<
 pub fn get_role_menu_tree(request: Json<MenuRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
     let menu_responses:Vec<MenuResponse> = menu_query_full_tree::<Vec<MenuResource>>(&request);
     let menu_vec:Vec<MenuResource> = admin_user_menus_list(login_user_info);
-    let ids:Vec<i32> = menu_vec.iter()
-        .map(|item| item.id)
+    let ids:Vec<String> = menu_vec.iter()
+        .map(|item| item.tree_id_path.to_string())
         .collect();
     let menu_wrapper = MenuResponseWrapper{
         menus: menu_responses,

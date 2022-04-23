@@ -6,7 +6,7 @@ use crate::model::response::permission::menu::menu_response::MenuResponse;
 #[allow(non_snake_case)]
 pub struct MenuResponseWrapper {
     pub menus: Vec<MenuResponse>,
-    pub checked_keys: Vec<i32>
+    pub checked_keys: Vec<String>
 }
 
 impl Default for MenuResponseWrapper {
