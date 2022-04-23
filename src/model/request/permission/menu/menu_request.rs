@@ -6,5 +6,6 @@ use rocket::serde::Serialize;
 pub struct MenuRequest {
     pub pageNum: i64,
     pub pageSize: i64,
-    pub parentId: i32
+    pub parentId: i32,
+    pub roleId: i32
 }

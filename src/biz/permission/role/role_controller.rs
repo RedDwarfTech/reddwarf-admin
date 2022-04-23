@@ -13,7 +13,7 @@ use crate::model::response::permission::menu::menu_response::MenuResponse;
 use crate::model::response::permission::menu::menu_response_wrapper::MenuResponseWrapper;
 use crate::service::permission::menu::menu_service::menu_query_full_tree;
 use crate::service::permission::role::role_service::{role_edit, role_query};
-use crate::service::permission::user::admin_user_service::{admin_user_menus_list};
+use crate::service::permission::user::admin_user_service::{admin_user_menus_list, role_menu_list};
 
 #[post("/v1/page",data = "<request>")]
 pub fn page(request: Json<RoleRequest>) -> content::Json<String> {
@@ -33,9 +33,9 @@ pub fn edit_role_menu_bind(request: Json<RoleMenuBindRequest>) -> content::Json<
 }
 
 #[post("/v1/role/menu",data = "<request>")]
-pub fn get_role_menu_tree(request: Json<MenuRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
+pub fn get_role_menu_tree(request: Json<MenuRequest>) -> content::Json<String> {
     let menu_responses:Vec<MenuResponse> = menu_query_full_tree::<Vec<MenuResource>>(&request);
-    let menu_vec:Vec<MenuResource> = admin_user_menus_list(login_user_info);
+    let menu_vec:Vec<MenuResource> = role_menu_list(request.roleId);
     let ids:Vec<String> = menu_vec.iter()
         .map(|item| item.tree_id_path.to_string())
         .collect();

@@ -29,6 +29,35 @@ pub fn admin_user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Ve
     return page_result;
 }
 
+pub fn role_menu_list(filter_role_id: i32) -> Vec<MenuResource> {
+    let connection = config::establish_connection();
+    use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::role_permission as role_permission_schema;
+    let role_permissions = role_permission.filter(role_permission_schema::dsl::role_id.eq(filter_role_id))
+        .load::<RolePermission>(&connection)
+        .expect("load role permission failed");
+    if role_permissions.is_empty() {
+        return Vec::new();
+    }
+    // get user menus
+    let permission_ids: Vec<i32> = role_permissions
+        .iter()
+        .map(|item|item.permission_id)
+        .collect();
+    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::menu_resource as menu_resource_schema;
+    let menu_predicate = menu_resource_schema::dsl::id.eq(any(permission_ids))
+        .and(menu_resource_schema::dsl::parent_id.ne(0));
+    let menus = menu_resource.filter(menu_predicate)
+        .order(sort.asc())
+        .load::<MenuResource>(&connection)
+        .expect("load menus failed");
+    if menus.is_empty() {
+        return Vec::new();
+    }
+    return menus;
+}
+
 pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource> {
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
     let connection = config::establish_connection();
