@@ -165,6 +165,7 @@ pub struct MenuResource {
     pub component: Option<String>,
     pub sort: i32,
     pub name_zh: String,
+    pub tree_id_path: String,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]

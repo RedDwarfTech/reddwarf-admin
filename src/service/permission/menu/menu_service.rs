@@ -48,7 +48,8 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
         path,
         parent_id,
         sort,
-        component
+        component,
+        tree_id_path
       FROM menu_resource mr
       WHERE id = 5
       UNION ALL
@@ -63,7 +64,8 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
         origin.path,
         origin.parent_id,
         origin.sort,
-        origin.component
+        origin.component,
+        origin.tree_id_path
       FROM sub_menus
       JOIN menu_resource origin
       ON origin.parent_id = sub_menus.id
@@ -79,7 +81,8 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
         path,
         parent_id,
         sort,
-        component
+        component,
+        tree_id_path
     FROM sub_menus
     ORDER BY sort ASC;
     ";
