@@ -151,6 +151,7 @@ table! {
         parent_id -> Int4,
         component -> Nullable<Varchar>,
         sort -> Int4,
+        name_zh -> Varchar,
     }
 }
 

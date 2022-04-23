@@ -7,6 +7,7 @@ use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 pub struct MenuResponse {
     pub id: i32,
     pub name: String,
+    pub name_zh: String,
     pub res_type: i32,
     pub created_time: i64,
     pub updated_time: i64,
@@ -23,6 +24,7 @@ impl Default for MenuResponse {
         MenuResponse {
             id: 0,
             name: "".to_string(),
+            name_zh: "".to_string(),
             res_type: 0,
             created_time: 0,
             updated_time: 0,
@@ -41,6 +43,7 @@ impl From<&MenuResource> for MenuResponse {
         Self {
             id: p.id,
             name: p.name.to_string(),
+            name_zh: p.name_zh.to_string(),
             res_type: 0,
             created_time: 0,
             updated_time: 0,
