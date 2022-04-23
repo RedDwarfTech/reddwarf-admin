@@ -17,7 +17,7 @@ pub fn page_tree(request: Json<MenuRequest>) -> content::Json<String> {
 
 #[post("/v1/tree",data = "<request>")]
 pub fn menu_tree(request: Json<MenuRequest>) -> content::Json<String> {
-    let roles = menu_query_full_tree::<Vec<MenuResource>>(&request);
+    let roles = menu_query_full_tree::<Vec<MenuResource>>(request.parentId);
     return box_rest_response(roles);
 }
 

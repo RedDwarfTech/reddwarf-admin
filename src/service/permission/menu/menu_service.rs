@@ -13,6 +13,7 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser};
+use crate::model::request::permission::menu::role_menu_request::RoleMenuRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
 
@@ -22,10 +23,10 @@ use crate::model::response::permission::menu::menu_response::MenuResponse;
  * 
  * 
  */
-pub fn menu_query_full_tree<T>(request: &Json<MenuRequest>) -> Vec<MenuResponse>{
+pub fn menu_query_full_tree<T>(filter_parent_id: i32) -> Vec<MenuResponse>{
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let connection = config::establish_connection();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(filter_parent_id);
     let root_menus = menu_resource.filter(&predicate)
         .order(sort.asc())
         .load::<MenuResource>(&connection)

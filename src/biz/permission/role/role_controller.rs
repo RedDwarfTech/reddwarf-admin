@@ -7,6 +7,7 @@ use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::model::diesel::dolphin::dolphin_models::{MenuResource, Role};
 use crate::model::request::permission::menu::menu_request::MenuRequest;
+use crate::model::request::permission::menu::role_menu_request::RoleMenuRequest;
 use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
@@ -33,8 +34,8 @@ pub fn edit_role_menu_bind(request: Json<RoleMenuBindRequest>) -> content::Json<
 }
 
 #[post("/v1/role/menu",data = "<request>")]
-pub fn get_role_menu_tree(request: Json<MenuRequest>) -> content::Json<String> {
-    let menu_responses:Vec<MenuResponse> = menu_query_full_tree::<Vec<MenuResource>>(&request);
+pub fn get_role_menu_tree(request: Json<RoleMenuRequest>) -> content::Json<String> {
+    let menu_responses:Vec<MenuResponse> = menu_query_full_tree::<Vec<MenuResource>>(request.parentId);
     let menu_vec:Vec<MenuResource> = role_menu_list(request.roleId);
     let ids:Vec<String> = menu_vec.iter()
         .map(|item| item.tree_id_path.to_string())
