@@ -131,9 +131,9 @@ pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuRespon
 
 pub fn get_root_menus(menus: &Vec<MenuResource>) -> Vec<MenuResource>{
     let mut root_menus = Vec::new();
-    let ids:Vec<i32> = menus.iter().map(|item| item.id).collect();
     for menu in menus {
-        if !ids.contains(&menu.parent_id){
+        let split_path:Vec<String> = menu.tree_id_path.split("-").map(|s|s.to_string()).collect();
+        if split_path.len() == 2 {
             root_menus.push(menu.clone());
         }
     }
