@@ -55,7 +55,7 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
       SELECT
         origin.id,
         origin.name,
-        origin.name_zh
+        origin.name_zh,
         origin.res_type,
         origin.created_time,
         origin.updated_time,
