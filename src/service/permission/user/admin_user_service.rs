@@ -5,15 +5,17 @@ use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_pagination_res};
 use rust_wheel::common::util::security_util::get_sha;
+use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::dolphin_models::{AdminUser, MenuResource, RolePermission, User, UserRole};
-use crate::model::diesel::dolphin::dolphin_schema::article_favorites::user_id;
+use crate::model::diesel::dolphin::custom_dolphin_models::UserRoleAdd;
+use crate::model::diesel::dolphin::dolphin_models::{AdminUser, MenuResource, RolePermission, UserRole};
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::request::user::user_request::UserRequest;
+use crate::model::request::user::user_role_request::UserRoleRequest;
 use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenuResponse;
 
 pub fn admin_user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<AdminUser>> {
@@ -74,6 +76,49 @@ pub fn user_roles(filter_user_id:i64) -> Vec<UserRole>{
         .load::<UserRole>(&connection)
         .expect("get user role failed");
     return user_roles;
+}
+
+pub fn save_user_roles_impl(request:Json<UserRoleRequest>) -> content::Json<String>{
+    use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
+    let connection = config::establish_connection();
+    let transaction_result = connection.build_transaction()
+        .repeatable_read()
+        .run::<_, diesel::result::Error, _>(||{
+           let delete_result = diesel::delete(user_role.filter(user_id.eq(request.userId))).execute(&connection);
+           match delete_result {
+            Ok(_v) => {
+                let mut user_role_rec = Vec::new();
+                let current_time = get_current_millisecond();
+                for new_role_id in &request.roleIds {
+                    let rec = UserRoleAdd{
+                        user_id: request.userId,
+                        role_id: *new_role_id,
+                        created_time: current_time,
+                        updated_time: current_time,
+                    };
+                    user_role_rec.push(rec);
+                }
+                diesel::insert_into(user_role)
+                    .values(&user_role_rec)
+                    .execute(&connection)
+                    .unwrap();
+                Ok(())
+            },
+            Err(e) =>{
+                error!("delete user role error:{}",e.to_string());
+                Ok(())
+            },
+           }
+        });
+    match transaction_result {
+        Ok(_v) => {
+            
+        },
+        Err(e) =>{
+            error!("error:{}",e.to_string());
+        },
+    }
+    return box_rest_response("ok");
 }
 
 pub fn admin_user_menus(login_user_info: LoginUserInfo) -> Vec<DynamicMenuResponse> {

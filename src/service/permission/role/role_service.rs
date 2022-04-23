@@ -38,29 +38,45 @@ pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<Stri
     // delete the legacy record
     use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
     let connection = config::establish_connection();
-    connection.build_transaction()
+    let transaction_result = connection.build_transaction()
         .repeatable_read()
         .run::<_, diesel::result::Error, _>(||{
-            diesel::delete(role_permission.filter(role_id.eq(request.roleId))).execute(&connection);
-            // add the new permission record
-            let mut role_permission_rec = Vec::new();
-            let current_time = get_current_millisecond();
-            for menu_id in &request.menuIds {
-                let rec = RolePermissionAdd{
-                    role_id: request.roleId,
-                    permission_id: *menu_id,
-                    created_time: current_time,
-                    updated_time: current_time,
-                    permission_type: 1
-                };
-                role_permission_rec.push(rec);
-            }
-            diesel::insert_into(role_permission)
-                .values(&role_permission_rec)
-                .execute(&connection)
-                .unwrap();
-            Ok(())
+           let delete_result = diesel::delete(role_permission.filter(role_id.eq(request.roleId))).execute(&connection);
+           match delete_result {
+            Ok(_v) => {
+                // add the new permission record
+                let mut role_permission_rec = Vec::new();
+                let current_time = get_current_millisecond();
+                for menu_id in &request.menuIds {
+                    let rec = RolePermissionAdd{
+                        role_id: request.roleId,
+                        permission_id: *menu_id,
+                        created_time: current_time,
+                        updated_time: current_time,
+                        permission_type: 1
+                    };
+                    role_permission_rec.push(rec);
+                }
+                diesel::insert_into(role_permission)
+                    .values(&role_permission_rec)
+                    .execute(&connection)
+                    .unwrap();
+                Ok(())
+            },
+            Err(e) =>{
+                error!("delete permission error:{}",e.to_string());
+                Ok(())
+            },
+           }
         });
+    match transaction_result {
+        Ok(_v) => {
+            
+        },
+        Err(e) =>{
+            error!("error:{}",e.to_string());
+        },
+    }
     return box_rest_response("ok");
 }
 

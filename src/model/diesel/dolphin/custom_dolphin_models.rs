@@ -62,3 +62,12 @@ pub struct RolePermissionAdd {
     pub updated_time: i64,
     pub permission_type: i32,
 }
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "user_role"]
+pub struct UserRoleAdd {
+    pub user_id: i64,
+    pub role_id: i32,
+    pub created_time: i64,
+    pub updated_time: i64,
+}
