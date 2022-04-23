@@ -32,7 +32,7 @@ impl Default for MenuResponse {
             path: None,
             parent_id: 0,
             sort: 0,
-            disableCheckbox: true,
+            disableCheckbox: false,
             children: vec![]
         }
     }
@@ -51,7 +51,7 @@ impl From<&MenuResource> for MenuResponse {
             path: None,
             parent_id: p.parent_id,
             sort: p.sort,
-            disableCheckbox: true,
+            disableCheckbox: false,
             children: vec![]
         }
     }
