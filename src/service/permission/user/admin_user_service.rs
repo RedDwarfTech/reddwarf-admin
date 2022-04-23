@@ -59,7 +59,9 @@ pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource
         .collect();
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource as menu_resource_schema;
-    let menus = menu_resource.filter(menu_resource_schema::dsl::id.eq(any(permission_ids)))
+    let menu_predicate = menu_resource_schema::dsl::id.eq(any(permission_ids))
+        .and(menu_resource_schema::dsl::parent_id.ne(0));
+    let menus = menu_resource.filter(menu_predicate)
         .order(sort.asc())
         .load::<MenuResource>(&connection)
         .expect("load menus failed");
