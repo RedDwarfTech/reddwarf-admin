@@ -1,7 +1,4 @@
 use diesel::sql_query;
-use rust_wheel::model::response::pagination::Pagination;
-use crate::model::request::permission::menu::menu_request::MenuRequest;
-use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
@@ -9,11 +6,13 @@ use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response};
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
+use rust_wheel::model::response::pagination::Pagination;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::dolphin_models::{AdminUser};
-use crate::model::request::permission::menu::role_menu_request::RoleMenuRequest;
+use crate::model::diesel::dolphin::dolphin_models::AdminUser;
+use crate::model::diesel::dolphin::dolphin_models::MenuResource;
+use crate::model::request::permission::menu::menu_request::MenuRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
 
@@ -159,9 +158,9 @@ pub fn menu_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
         .load::<AdminUser>(&connection)
         .expect("query admin user failed");
     let single_user = take(db_admin_user,0).unwrap();
-    let pwd_salt = single_user.salt.unwrap();
+    let pwd_salt = single_user.salt;
     let sha_password = get_sha(String::from(&request.oldPassword), &pwd_salt);
-    if sha_password.eq(&single_user.pwd.unwrap().as_str()){
+    if sha_password.eq(&single_user.pwd.as_str()){
         let new_password = get_sha(String::from(&request.newPassword),&pwd_salt);
         diesel::update(admin_users.filter(predicate))
             .set(pwd.eq(new_password))

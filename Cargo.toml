@@ -25,3 +25,5 @@ regex = "1.5"
 
 # reddwarf public component
 rust_wheel = { git = "https://github.com/jiangxiaoqiang/rust_wheel.git" }
+
+rand = "0.8.5"

@@ -1,4 +1,3 @@
-use crate::model::request::permission::role::role_menu_bind_request::RoleMenuBindRequest;
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
@@ -8,9 +7,11 @@ use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
+
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::RolePermissionAdd;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, Role};
+use crate::model::request::permission::role::role_menu_bind_request::RoleMenuBindRequest;
 use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 
@@ -91,9 +92,9 @@ pub fn role_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
         .load::<AdminUser>(&connection)
         .expect("query admin user failed");
     let single_user = take(db_admin_user,0).unwrap();
-    let pwd_salt = single_user.salt.unwrap();
+    let pwd_salt = single_user.salt;
     let sha_password = get_sha(String::from(&request.oldPassword), &pwd_salt);
-    if sha_password.eq(&single_user.pwd.unwrap().as_str()){
+    if sha_password.eq(&single_user.pwd.as_str()){
         let new_password = get_sha(String::from(&request.newPassword),&pwd_salt);
         diesel::update(admin_users.filter(predicate))
             .set(pwd.eq(new_password))

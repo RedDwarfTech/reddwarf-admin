@@ -14,19 +14,19 @@ use chrono::offset::Utc;
 #[table_name = "admin_users"]
 pub struct AdminUser {
     pub id: i64,
-    pub nickname: Option<String>,
+    pub nickname: String,
     pub avatar_url: Option<String>,
-    pub phone: Option<String>,
-    pub updated_time: Option<i64>,
-    pub created_time: Option<i64>,
-    pub salt: Option<String>,
-    pub pwd: Option<String>,
+    pub phone: String,
+    pub updated_time: i64,
+    pub created_time: i64,
+    pub salt: String,
+    pub pwd: String,
     pub sex: Option<i32>,
     pub level_type: Option<String>,
     pub phone_region: Option<String>,
     pub country_code: Option<i32>,
-    pub user_status: Option<i32>,
-    pub user_name: Option<String>,
+    pub user_status: i32,
+    pub user_name: String,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]

@@ -4,26 +4,28 @@ extern crate diesel;
 extern crate rocket;
 
 use std::time::Duration;
+
 use rocket::{Build, Rocket};
 use tokio::time;
 
 use biz::app::app_controller;
-use biz::app::product_controller;
 use biz::app::cernitor::domain::domain_controller;
 use biz::app::cruise::article::article_controller;
 use biz::app::cruise::channel::channel_controller;
 use biz::app::dict::translate::translate_controller;
 use biz::app::dict::word::word_controller;
-use biz::app::job::interview::interview_controller;
 use biz::app::gallery::repo_app_controller;
+use biz::app::job::interview::interview_controller;
 use biz::app::music::fav::fav_music_controller;
+use biz::app::product_controller;
+use biz::common::health_controller;
+use biz::common::sys_dict_controller;
+use biz::home::home_controller;
+use biz::permission::menu::menu_controller;
 use biz::permission::role::role_controller;
 use biz::permission::user::admin_user_controller;
-use biz::permission::menu::menu_controller;
-use biz::common::health_controller;
-use biz::home::home_controller;
 use biz::user::user_controller;
-use biz::common::sys_dict_controller;
+
 use crate::statistic::app::cruise::channel::channel_task::refresh_channel_reputation;
 
 mod biz;
@@ -121,7 +123,8 @@ fn build_rocket() -> Rocket<Build> {
             admin_user_controller::edit_pwd,
             admin_user_controller::get_user_menu,
             admin_user_controller::get_user_roles,
-            admin_user_controller::save_user_roles
+            admin_user_controller::save_user_roles,
+            admin_user_controller::add
         ]).mount("/manage/permission/menu", routes![
             menu_controller::page_tree,
             menu_controller::menu_tree,

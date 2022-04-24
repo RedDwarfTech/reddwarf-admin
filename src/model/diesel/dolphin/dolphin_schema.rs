@@ -1,19 +1,19 @@
 table! {
     admin_users (id) {
         id -> Int8,
-        nickname -> Nullable<Varchar>,
+        nickname -> Varchar,
         avatar_url -> Nullable<Varchar>,
-        phone -> Nullable<Varchar>,
-        updated_time -> Nullable<Int8>,
-        created_time -> Nullable<Int8>,
-        salt -> Nullable<Varchar>,
-        pwd -> Nullable<Varchar>,
+        phone -> Varchar,
+        updated_time -> Int8,
+        created_time -> Int8,
+        salt -> Varchar,
+        pwd -> Varchar,
         sex -> Nullable<Int4>,
         level_type -> Nullable<Varchar>,
         phone_region -> Nullable<Varchar>,
         country_code -> Nullable<Int4>,
-        user_status -> Nullable<Int4>,
-        user_name -> Nullable<Varchar>,
+        user_status -> Int4,
+        user_name -> Varchar,
     }
 }
 

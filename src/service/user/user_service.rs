@@ -34,9 +34,9 @@ pub fn password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
         .load::<AdminUser>(&connection)
         .expect("query admin user failed");
     let single_user = take(db_admin_user,0).unwrap();
-    let pwd_salt = single_user.salt.unwrap();
+    let pwd_salt = single_user.salt;
     let sha_password = get_sha(String::from(&request.oldPassword), &pwd_salt);
-    if sha_password.eq(&single_user.pwd.unwrap().as_str()){
+    if sha_password.eq(&single_user.pwd.as_str()){
         let new_password = get_sha(String::from(&request.newPassword),&pwd_salt);
         diesel::update(admin_users.filter(predicate))
             .set(pwd.eq(new_password))
