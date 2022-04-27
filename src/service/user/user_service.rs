@@ -6,6 +6,7 @@ use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
+use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, User};
@@ -23,12 +24,11 @@ pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User
     return page_result;
 }
 
-pub fn password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
+pub fn password_edit(request: &Json<PasswordRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     // verify legacy password
-    let request_user_name:String = String::from(&request.userName);
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::admin_users::phone.eq(request_user_name);
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::admin_users::id.eq(login_user_info.userId);
     let db_admin_user = admin_users.filter(&predicate)
         .limit(1)
         .load::<AdminUser>(&connection)

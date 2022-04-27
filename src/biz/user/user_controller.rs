@@ -1,6 +1,7 @@
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
+use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::model::diesel::dolphin::dolphin_models::User;
 use crate::model::request::user::password_request::PasswordRequest;
@@ -14,6 +15,6 @@ pub fn page(request: Json<UserRequest>) -> content::Json<String> {
 }
 
 #[post("/v1/pwd/edit",data = "<request>")]
-pub fn edit_pwd(request: Json<PasswordRequest>) -> content::Json<String> {
-    return password_edit(&request);
+pub fn edit_pwd(request: Json<PasswordRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
+    return password_edit(&request, login_user_info);
 }
