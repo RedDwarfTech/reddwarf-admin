@@ -14,9 +14,13 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     // when pagination with the big table
     // using the estimate rows not the precise row count to speed the query
     use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
     let connection = config::establish_connection();
-    let query = article
-        .filter(id.gt(0))
+    let mut query = article_table::table.into_boxed::<diesel::pg::Pg>();
+    if let Some(max_offset) = &request.maxOffset {
+        query = query.filter(article_table::id.lt(max_offset));
+    }
+    let query = query
         .order(created_time.desc())
         .paginate_pg_big_table(request.pageNum, "article".parse().unwrap())
         .per_page(request.pageSize);
