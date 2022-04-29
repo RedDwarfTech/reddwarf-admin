@@ -1,16 +1,18 @@
-use diesel::{ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::dsl::any;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQueryFragment;
 use rust_wheel::common::util::collection_util::take;
+use rust_wheel::common::util::model_convert::map_pagination_from_list;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
-use crate::model::diesel::dolphin::dolphin_models::{Article, ArticleContent};
+use crate::model::diesel::dolphin::dolphin_models::{Article, ArticleContent, RssSubSource};
 use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
 
-pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Vec<Article>> {
+pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Vec<ArticleResponse>> {
     // when pagination with the big table
     // using the estimate rows not the precise row count to speed the query
     use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
@@ -25,8 +27,27 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
         .paginate_pg_big_table(request.pageNum, "article".parse().unwrap())
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.pg_big_table_load_and_count_pages_total::<Article>(&connection);
-    let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
+    let article_response = append_channel_name(&query_result.as_ref().unwrap().0, &connection);
+    let total = query_result.as_ref().unwrap().2;
+    let page_result = map_pagination_from_list(article_response, request.pageNum, request.pageSize, total);
     return page_result;
+}
+
+pub fn append_channel_name(articles: &Vec<Article>, connection:&PgConnection) -> Vec<ArticleResponse>{
+    use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
+    let channelIds:Vec<i64> = articles.iter()
+        .map(|item| item.sub_source_id)
+        .collect();
+    let channels = rss_sub_source.filter(id.eq(any(channelIds)))
+        .load::<RssSubSource>(connection)
+        .expect("query rss sub source failed");
+    let mut article_res = Vec::new();
+    for article in articles {
+        let mut article_response = ArticleResponse::from(article);
+        article_response.channel_name = "ddd".parse().unwrap();
+        article_res.push(article_response);
+    }
+    return article_res;
 }
 
 pub fn article_detail_query(filter_article_id: i64) -> ArticleResponse {

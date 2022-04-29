@@ -21,6 +21,7 @@ pub struct ArticleResponse {
     pub channel_reputation: i32,
     pub editor_pick: Option<i32>,
     pub content: String,
+    pub channel_name: String
 }
 
 impl ArticleResponse {
@@ -39,7 +40,30 @@ impl ArticleResponse {
             cover_image: None,
             channel_reputation: 0,
             editor_pick: None,
-            content: article_content.content
+            content: article_content.content,
+            channel_name: "".to_string()
+        }
+    }
+}
+
+impl From<&Article> for ArticleResponse {
+    fn from(p: &Article) -> Self {
+        Self {
+            id: 0,
+            user_id: 0,
+            title: p.title.to_string(),
+            author: p.author.to_string(),
+            guid: "".to_string(),
+            created_time: 0,
+            updated_time: 0,
+            link: None,
+            pub_time: None,
+            sub_source_id: p.sub_source_id,
+            cover_image: None,
+            channel_reputation: 0,
+            editor_pick: None,
+            content: "".to_string(),
+            channel_name: "".to_string()
         }
     }
 }
