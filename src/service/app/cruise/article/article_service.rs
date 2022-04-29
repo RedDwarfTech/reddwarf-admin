@@ -4,7 +4,6 @@ use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQueryFragment;
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::map_pagination_from_list;
-use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
@@ -35,16 +34,19 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
 
 pub fn append_channel_name(articles: &Vec<Article>, connection:&PgConnection) -> Vec<ArticleResponse>{
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let channelIds:Vec<i64> = articles.iter()
+    let channel_ids:Vec<i64> = articles.iter()
         .map(|item| item.sub_source_id)
         .collect();
-    let channels = rss_sub_source.filter(id.eq(any(channelIds)))
+    let channels = rss_sub_source.filter(id.eq(any(channel_ids)))
         .load::<RssSubSource>(connection)
         .expect("query rss sub source failed");
     let mut article_res = Vec::new();
     for article in articles {
+        let channel_name = channels.iter().filter(|channel|channel.id==article.sub_source_id)
+            .map(|channel|channel.sub_name.to_string())
+            .collect::<String>();
         let mut article_response = ArticleResponse::from(article);
-        article_response.channel_name = "ddd".parse().unwrap();
+        article_response.channel_name = channel_name;
         article_res.push(article_response);
     }
     return article_res;
