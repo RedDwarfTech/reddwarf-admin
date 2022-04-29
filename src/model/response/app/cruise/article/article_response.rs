@@ -49,12 +49,12 @@ impl ArticleResponse {
 impl From<&Article> for ArticleResponse {
     fn from(p: &Article) -> Self {
         Self {
-            id: 0,
+            id: p.id,
             user_id: 0,
             title: p.title.to_string(),
             author: p.author.to_string(),
             guid: "".to_string(),
-            created_time: 0,
+            created_time: p.created_time,
             updated_time: 0,
             link: None,
             pub_time: None,
