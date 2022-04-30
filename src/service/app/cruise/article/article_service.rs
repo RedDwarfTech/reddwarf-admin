@@ -21,6 +21,9 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     if let Some(max_offset) = &request.maxOffset {
         query = query.filter(article_table::id.lt(max_offset));
     }
+    if let Some(channel_id) = &request.channelId {
+        query = query.filter(article_table::sub_source_id.eq(channel_id));
+    }
     let query = query
         .order(created_time.desc())
         .paginate_pg_big_table(request.pageNum, "article".parse().unwrap())
