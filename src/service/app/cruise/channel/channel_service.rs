@@ -5,6 +5,7 @@ use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
+
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 
@@ -17,7 +18,7 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
         query = query.filter(channel_table::editor_pick.eq(edit_pick_req));
     }
     if let Some(minimal_rep_req) = &request.minimalReputation {
-        query = query.filter(channel_table::reputation.gt(minimal_rep_req));
+        query = query.filter(channel_table::reputation.ge(minimal_rep_req));
     }
     //if let Some(filter_tag) = &request.tag {
     //    query = query.filter(channel_table::tags.eq('j'));
