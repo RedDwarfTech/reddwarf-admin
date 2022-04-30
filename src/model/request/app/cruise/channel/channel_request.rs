@@ -9,5 +9,6 @@ pub struct ChannelRequest {
     pub pageSize: Option<i64>,
     pub editorPick: Option<i32>,
     pub minimalReputation: Option<i64>,
-    pub excludeEditorPickChannel: Option<i32>
+    pub excludeEditorPickChannel: Option<i32>,
+    pub tag: Option<String>
 }

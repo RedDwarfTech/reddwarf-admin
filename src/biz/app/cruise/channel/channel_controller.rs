@@ -6,7 +6,9 @@ use rust_wheel::model::user::login_user_info::LoginUserInfo;
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 use crate::model::request::app::cruise::channel::pick_channel_request::PickChannelRequest;
+use crate::model::request::app::cruise::channel::tag_channel_request::TagChannelRequest;
 use crate::service::app::cruise::channel::channel_service::{channel_query, editor_pick_channel};
+use crate::service::app::cruise::channel::channel_service::update_channel_tags;
 
 #[post("/v1/page", data = "<request>")]
 pub fn page(request: Json<ChannelRequest>, login_user_info: LoginUserInfo) -> content::Json<String> {
@@ -27,5 +29,11 @@ pub fn editor_pick(request: Json<PickChannelRequest>) -> content::Json<String> {
 #[put("/v1/unpick", data = "<request>")]
 pub fn editor_unpick(request: Json<PickChannelRequest>) -> content::Json<String> {
     editor_pick_channel(request.channelId, 0);
+    return box_rest_response("ok");
+}
+
+#[put("/v1/tags", data = "<request>")]
+pub fn tags(request: Json<TagChannelRequest>) -> content::Json<String> {
+    update_channel_tags(request.channelId, request.tags.to_string());
     return box_rest_response("ok");
 }

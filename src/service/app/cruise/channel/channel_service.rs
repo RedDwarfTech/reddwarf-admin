@@ -1,11 +1,10 @@
-use diesel::{ ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::{ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
-
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 
@@ -20,6 +19,9 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
     if let Some(minimal_rep_req) = &request.minimalReputation {
         query = query.filter(channel_table::reputation.gt(minimal_rep_req));
     }
+    //if let Some(filter_tag) = &request.tag {
+    //    query = query.filter(channel_table::tags.eq('j'));
+    //}
     let query = query
         .order(created_time.desc())
         .paginate(request.pageNum.unwrap_or(1),false)
@@ -42,4 +44,16 @@ pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){
         .expect("unable to update channel");
 }
 
+pub fn update_channel_tags(req_channel_id: i64, new_tags: String){
+    use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
+    let connection = config::establish_connection();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
+    let santas_address: serde_json::Value = serde_json::from_str(r#"{
+        "street": "Article Circle Expressway 1",
+    }"#).unwrap();
+    diesel::update(rss_sub_source.filter(predicate))
+        .set(tags.eq(&santas_address))
+        .get_result::<RssSubSource>(&connection)
+        .expect("unable to update channel");
+}
 

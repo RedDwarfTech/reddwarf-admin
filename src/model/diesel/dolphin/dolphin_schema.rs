@@ -2,7 +2,7 @@ table! {
     admin_users (id) {
         id -> Int8,
         nickname -> Varchar,
-        avatar_url -> Nullable<Varchar>,
+        avatar_url -> Varchar,
         phone -> Varchar,
         updated_time -> Int8,
         created_time -> Int8,
@@ -210,7 +210,6 @@ table! {
         next_trigger_time -> Nullable<Timestamp>,
         sub_name -> Varchar,
         last_trigger_time -> Nullable<Timestamptz>,
-        tags -> Nullable<Array<Int4>>,
         source_url -> Nullable<Varchar>,
         sub_type -> Nullable<Varchar>,
         intro -> Nullable<Varchar>,
@@ -231,6 +230,7 @@ table! {
         dynamic_interval -> Int4,
         local_icon_url -> Nullable<Varchar>,
         creator -> Int8,
+        tags -> Jsonb,
     }
 }
 

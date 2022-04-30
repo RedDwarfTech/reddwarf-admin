@@ -3,19 +3,26 @@
 #![allow(unused)]
 #![allow(clippy::all)]
 
+use std::fmt::Write;
+
+use chrono::DateTime;
+use chrono::NaiveDateTime;
+use chrono::offset::Utc;
+use diesel::deserialize::FromSql;
+use diesel::pg::Pg;
+use diesel::pg::types::sql_types::Jsonb;
+use diesel::serialize::{Output, ToSql};
 use rocket::serde::Serialize;
 use serde::Deserialize;
+
 use crate::model::diesel::dolphin::dolphin_schema::*;
 
-use chrono::NaiveDateTime;
-use chrono::DateTime;
-use chrono::offset::Utc;
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "admin_users"]
 pub struct AdminUser {
     pub id: i64,
     pub nickname: String,
-    pub avatar_url: Option<String>,
+    pub avatar_url: String,
     pub phone: String,
     pub updated_time: i64,
     pub created_time: i64,
@@ -207,7 +214,7 @@ pub struct RolePermission {
     pub permission_type: i32,
 }
 
-#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[derive(Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "rss_sub_source"]
 pub struct RssSubSource {
     pub id: i64,
@@ -223,7 +230,6 @@ pub struct RssSubSource {
     pub next_trigger_time: Option<NaiveDateTime>,
     pub sub_name: String,
     pub last_trigger_time: Option<DateTime<Utc>>,
-    pub tags: Option<Vec<i32>>,
     pub source_url: Option<String>,
     pub sub_type: Option<String>,
     pub intro: Option<String>,
@@ -244,6 +250,7 @@ pub struct RssSubSource {
     pub dynamic_interval: i32,
     pub local_icon_url: Option<String>,
     pub creator: i64,
+    pub tags: serde_json::Value,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
@@ -303,4 +310,3 @@ pub struct User {
     pub auto_renew_product_expire_time_ms: Option<i64>,
     pub product_id: Option<i32>,
 }
-
