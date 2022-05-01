@@ -37,7 +37,7 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
 }
 
 pub fn update_channel(request: Json<UpdateChannelRequest>){
-    if let Some(filter_tag) = &request.tag {
+    if let Some(filter_tag) = &request.tags {
         update_channel_tags(request.channelId,filter_tag.to_string())
     }
 }
