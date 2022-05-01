@@ -7,13 +7,20 @@ use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 use crate::model::request::app::cruise::channel::pick_channel_request::PickChannelRequest;
 use crate::model::request::app::cruise::channel::tag_channel_request::TagChannelRequest;
-use crate::service::app::cruise::channel::channel_service::{channel_query, editor_pick_channel};
+use crate::model::request::app::cruise::channel::update_channel_request::UpdateChannelRequest;
+use crate::service::app::cruise::channel::channel_service::{channel_query, editor_pick_channel, update_channel};
 use crate::service::app::cruise::channel::channel_service::update_channel_tags;
 
 #[post("/v1/page", data = "<request>")]
 pub fn page(request: Json<ChannelRequest>, login_user_info: LoginUserInfo) -> content::Json<String> {
     let channels = channel_query::<Vec<RssSubSource>>(&request, login_user_info);
     return box_rest_response(channels);
+}
+
+#[put("/v1/update", data = "<request>")]
+pub fn update(request: Json<UpdateChannelRequest>) -> content::Json<String> {
+    update_channel(request);
+    return box_rest_response("ok");
 }
 
 ///

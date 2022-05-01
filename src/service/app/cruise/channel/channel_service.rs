@@ -8,6 +8,7 @@ use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
+use crate::model::request::app::cruise::channel::update_channel_request::UpdateChannelRequest;
 
 pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginUserInfo) -> PaginationResponse<Vec<RssSubSource>> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
@@ -35,6 +36,12 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
     return page_result;
 }
 
+pub fn update_channel(request: Json<UpdateChannelRequest>){
+    if let Some(filter_tag) = &request.tag {
+        update_channel_tags(request.channelId,filter_tag.to_string())
+    }
+}
+
 pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
@@ -49,11 +56,10 @@ pub fn update_channel_tags(req_channel_id: i64, new_tags: String){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
-    let santas_address: serde_json::Value = serde_json::from_str(r#"{
-        "street": "Article Circle Expressway 1",
-    }"#).unwrap();
+    let tag_str = format!("{}{}{}", "r#",new_tags, "#");
+    let tag_db_str: serde_json::Value = serde_json::from_str(&*tag_str).unwrap();
     diesel::update(rss_sub_source.filter(predicate))
-        .set(tags.eq(&santas_address))
+        .set(tags.eq(&tag_db_str))
         .get_result::<RssSubSource>(&connection)
         .expect("unable to update channel");
 }
