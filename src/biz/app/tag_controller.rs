@@ -6,7 +6,7 @@ use crate::model::diesel::dolphin::dolphin_models::App;
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
-use crate::model::request::app::tag_request::TagRequest;
+use crate::model::request::app::tag_list_request::TagListRequest;
 use crate::service::app::tag_service::{tag_create, tag_detail, tag_edit, tag_query, tag_query_list};
 
 #[post("/v1/page",data = "<request>")]
@@ -16,7 +16,7 @@ pub fn page(request: Json<AppRequest>) -> content::Json<String> {
 }
 
 #[post("/v1/list",data = "<request>")]
-pub fn list(request: Json<TagRequest>) -> content::Json<String> {
+pub fn list(request: Json<TagListRequest>) -> content::Json<String> {
     let apps = tag_query_list(&request);
     return box_rest_response(apps);
 }

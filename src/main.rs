@@ -76,7 +76,7 @@ fn build_rocket() -> Rocket<Build> {
             app_controller::edit,
             app_controller::detail,
         ])
-        .mount("/manage/tags",routes![
+        .mount("/manage/app/tags",routes![
             tag_controller::list,
             tag_controller::page,
             tag_controller::add,

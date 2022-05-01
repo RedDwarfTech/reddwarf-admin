@@ -12,7 +12,7 @@ use crate::model::diesel::dolphin::dolphin_models::{App, Tag};
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
-use crate::model::request::app::tag_request::TagRequest;
+use crate::model::request::app::tag_list_request::TagListRequest;
 
 pub fn tag_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
@@ -26,7 +26,7 @@ pub fn tag_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> 
     return page_result;
 }
 
-pub fn tag_query_list(_request: &Json<TagRequest>) -> Vec<Tag> {
+pub fn tag_query_list(_request: &Json<TagListRequest>) -> Vec<Tag> {
     use crate::model::diesel::dolphin::dolphin_schema::tags::dsl::*;
     let connection = config::establish_connection();
     let tags_record = tags.order(app_id.desc())
