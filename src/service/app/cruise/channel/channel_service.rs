@@ -57,8 +57,7 @@ pub fn update_channel_tags(req_channel_id: i64, new_tags: String){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
-    let tag_str = format!("{}{}{}", "r#",new_tags, "#");
-    let tag_db_str: serde_json::Value = serde_json::from_str(&*tag_str).unwrap();
+    let tag_db_str: serde_json::Value = serde_json::from_str(&*new_tags).unwrap_or_default();
     diesel::update(rss_sub_source.filter(predicate))
         .set(tags.eq(&tag_db_str))
         .get_result::<RssSubSource>(&connection)

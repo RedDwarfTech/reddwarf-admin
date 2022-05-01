@@ -60,7 +60,7 @@ curl 'http://127.0.0.1:8000/manage/app/cruise/channel/v1/update' \
   -H 'x-request-id: b0359bf6-010f-4b2a-9475-c166ff97b3c9' \
   -H 'app-id: b0359bf6-010f-4b2a-9475-c166ff97b3c9' \
   -H 'user-id: b0359bf6-010f-4b2a-9475-c166ff97b3c9' \
-  --data-raw '{"channelId":4767,"tags":"[\"DEVELOPER\"]"}' \
+  --data-raw '{"channelId":4767,"tags":[{"code":"DEVELOPER"}]}' \
   --compressed
 ```
 
