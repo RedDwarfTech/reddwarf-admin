@@ -96,7 +96,8 @@ fn build_rocket() -> Rocket<Build> {
             channel_controller::page,
             channel_controller::editor_pick,
             channel_controller::editor_unpick,
-            channel_controller::tags
+            channel_controller::tags,
+            channel_controller::update
         ])
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page
