@@ -18,6 +18,7 @@ use biz::app::gallery::repo_app_controller;
 use biz::app::job::interview::interview_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::app::product_controller;
+use biz::app::tag_controller;
 use biz::common::health_controller;
 use biz::common::sys_dict_controller;
 use biz::home::home_controller;
@@ -75,6 +76,13 @@ fn build_rocket() -> Rocket<Build> {
             app_controller::edit,
             app_controller::detail,
         ])
+        .mount("/manage/tags",routes![
+            tag_controller::list,
+            tag_controller::page,
+            tag_controller::add,
+            tag_controller::edit,
+            tag_controller::detail,
+        ])
         .mount("/manage/app/user",routes![
             user_controller::page,
             user_controller::edit_pwd
@@ -87,7 +95,8 @@ fn build_rocket() -> Rocket<Build> {
         .mount("/manage/app/cruise/channel", routes![
             channel_controller::page,
             channel_controller::editor_pick,
-            channel_controller::editor_unpick
+            channel_controller::editor_unpick,
+            channel_controller::tags
         ])
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page

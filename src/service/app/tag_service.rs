@@ -8,12 +8,13 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::AppAdd;
-use crate::model::diesel::dolphin::dolphin_models::App;
+use crate::model::diesel::dolphin::dolphin_models::{App, Tag};
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
+use crate::model::request::app::tag_request::TagRequest;
 
-pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> {
+pub fn tag_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let query = apps.filter(id.gt(0))
@@ -25,7 +26,16 @@ pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> 
     return page_result;
 }
 
-pub fn app_create(request: &Json<AddAppRequest>) {
+pub fn tag_query_list(_request: &Json<TagRequest>) -> Vec<Tag> {
+    use crate::model::diesel::dolphin::dolphin_schema::tags::dsl::*;
+    let connection = config::establish_connection();
+    let tags_record = tags.order(app_id.desc())
+        .load::<Tag>(&connection)
+        .expect("query tags failed");
+    return tags_record;
+}
+
+pub fn tag_create(request: &Json<AddAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let apps_record = apps.order(app_id.desc())
@@ -54,7 +64,7 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         .unwrap();
 }
 
-pub fn app_edit(request: &Json<EditAppRequest>) {
+pub fn tag_edit(request: &Json<EditAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId.to_string());
@@ -64,7 +74,7 @@ pub fn app_edit(request: &Json<EditAppRequest>) {
         .expect("unable to update app");
 }
 
-pub fn app_detail(query_app_id: i32) -> App {
+pub fn tag_detail(query_app_id: i32) -> App {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let app_result = apps.filter(id.eq(query_app_id))
