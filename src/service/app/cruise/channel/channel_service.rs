@@ -31,7 +31,7 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
         .paginate(request.pageNum.unwrap_or(1),false)
         .per_page(request.pageSize.unwrap_or(10));
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<RssSubSource>(&connection);
-    let page_result = map_pagination_res(query_result, request.pageNum.unwrap_or(1), request.pageNum.unwrap_or(10));
+    let page_result = map_pagination_res(query_result, request.pageNum.unwrap_or(1), request.pageSize.unwrap_or(10));
     return page_result;
 }
 
