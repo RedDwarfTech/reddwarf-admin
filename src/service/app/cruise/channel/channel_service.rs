@@ -20,9 +20,12 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
     if let Some(minimal_rep_req) = &request.minimalReputation {
         query = query.filter(channel_table::reputation.ge(minimal_rep_req));
     }
-    //if let Some(filter_tag) = &request.tag {
-    //    query = query.filter(channel_table::tags.eq('j'));
-    //}
+    if let Some(filter_tag) = &request.tag {
+        let format_tags: serde_json::Value = serde_json::from_str(r#"{
+            "street": "Article Circle Expressway 1"
+        }"#).unwrap();
+        query = query.filter(channel_table::tags.eq(format_tags));
+    }
     let query = query
         .order(created_time.desc())
         .paginate(request.pageNum.unwrap_or(1),false)

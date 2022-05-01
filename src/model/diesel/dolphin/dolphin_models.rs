@@ -3,20 +3,13 @@
 #![allow(unused)]
 #![allow(clippy::all)]
 
-use std::fmt::Write;
-
-use chrono::DateTime;
-use chrono::NaiveDateTime;
-use chrono::offset::Utc;
-use diesel::deserialize::FromSql;
-use diesel::pg::Pg;
-use diesel::pg::types::sql_types::Jsonb;
-use diesel::serialize::{Output, ToSql};
 use rocket::serde::Serialize;
 use serde::Deserialize;
-
 use crate::model::diesel::dolphin::dolphin_schema::*;
 
+use chrono::NaiveDateTime;
+use chrono::DateTime;
+use chrono::offset::Utc;
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "admin_users"]
 pub struct AdminUser {
@@ -214,7 +207,7 @@ pub struct RolePermission {
     pub permission_type: i32,
 }
 
-#[derive(Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "rss_sub_source"]
 pub struct RssSubSource {
     pub id: i64,
@@ -251,6 +244,20 @@ pub struct RssSubSource {
     pub local_icon_url: Option<String>,
     pub creator: i64,
     pub tags: serde_json::Value,
+}
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "tags"]
+pub struct Tag {
+    pub id: i32,
+    pub tag_name: String,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub app_id: i32,
+    pub remark: Option<String>,
+    pub group: i32,
+    pub tag_type: String,
+    pub code: String,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
@@ -310,3 +317,4 @@ pub struct User {
     pub auto_renew_product_expire_time_ms: Option<i64>,
     pub product_id: Option<i32>,
 }
+

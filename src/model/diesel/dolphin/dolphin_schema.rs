@@ -235,6 +235,20 @@ table! {
 }
 
 table! {
+    tags (id) {
+        id -> Int4,
+        tag_name -> Varchar,
+        created_time -> Int8,
+        updated_time -> Int8,
+        app_id -> Int4,
+        remark -> Nullable<Varchar>,
+        group -> Int4,
+        tag_type -> Varchar,
+        code -> Varchar,
+    }
+}
+
+table! {
     trend (id) {
         id -> Int8,
         trend_item -> Int4,
@@ -307,6 +321,7 @@ allow_tables_to_appear_in_same_query!(
     role,
     role_permission,
     rss_sub_source,
+    tags,
     trend,
     user_devices,
     user_role,
