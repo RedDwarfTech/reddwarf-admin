@@ -38,7 +38,8 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
 
 pub fn update_channel(request: Json<UpdateChannelRequest>){
     if let Some(filter_tag) = &request.tags {
-        update_channel_tags(request.channelId,filter_tag.to_string())
+        let tag_json = serde_json::to_string(filter_tag);
+        update_channel_tags(request.channelId,tag_json.unwrap().to_string())
     }
 }
 
