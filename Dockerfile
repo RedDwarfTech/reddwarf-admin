@@ -5,6 +5,7 @@ FROM rust:1.54-alpine as builder
 WORKDIR /app
 COPY . /app
 RUN rustup default stable
+RUN apk update && apk add --no-cache libpq musl-dev pkgconfig openssl-dev postgresql-dev
 RUN cargo build --release
 # RUN cargo build
 
@@ -16,7 +17,7 @@ ENV ROCKET_ADDRESS=0.0.0.0
 # ENV ROCKET_PORT=11014
 # https://stackoverflow.com/questions/69153048/error-while-loading-shared-libraries-libpq-so-5-cannot-open-shared-object-file
 # https://unix.stackexchange.com/questions/668754/what-is-libpq-so-5-and-how-to-make-it-avaliable/668755
-RUN apk update && apk add libpq curl
+RUN apk update && apk add --no-cache libpq curl
 COPY --from=builder /app/.env /app
 COPY --from=builder /app/settings.toml /app
 # COPY --from=builder /app/target/debug/* /app/
