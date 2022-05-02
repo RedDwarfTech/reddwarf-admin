@@ -16,7 +16,7 @@ ENV ROCKET_ADDRESS=0.0.0.0
 # ENV ROCKET_PORT=11014
 # https://stackoverflow.com/questions/69153048/error-while-loading-shared-libraries-libpq-so-5-cannot-open-shared-object-file
 # https://unix.stackexchange.com/questions/668754/what-is-libpq-so-5-and-how-to-make-it-avaliable/668755
-RUN apk update && apk add libpq5 curl -y
+RUN apk update && apk add libpq curl
 COPY --from=builder /app/.env /app
 COPY --from=builder /app/settings.toml /app
 # COPY --from=builder /app/target/debug/* /app/
