@@ -1,5 +1,3 @@
-
-
 切换到Alpine镜像后，Kubernetes启动Pod提示错误：
 
 ```
@@ -16,8 +14,6 @@ Back-off restarting failed container
 ```
 
 这样容器就不会退出，可以登录进入容器查看进程运行情况。登录后，确实没有找到主进程。手工运行主进程：
-
-
 
 ```bash
 /app # ./reddwarf-admin 
@@ -58,24 +54,4 @@ Segmentation fault (core dumped)
 /app # 
 ```
 
-
-
 主进程运行时提示段错误导致此问题。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -157,6 +157,17 @@ table! {
 }
 
 table! {
+    org (id) {
+        id -> Int4,
+        parent_id -> Int4,
+        created_time -> Int8,
+        updated_time -> Int8,
+        org_name -> Varchar,
+        sort -> Int4,
+    }
+}
+
+table! {
     products (id) {
         id -> Int4,
         product_name -> Varchar,
@@ -317,6 +328,7 @@ allow_tables_to_appear_in_same_query!(
     domain,
     interview,
     menu_resource,
+    org,
     products,
     role,
     role_permission,

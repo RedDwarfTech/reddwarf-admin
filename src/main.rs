@@ -25,6 +25,7 @@ use biz::home::home_controller;
 use biz::permission::menu::menu_controller;
 use biz::permission::role::role_controller;
 use biz::permission::user::admin_user_controller;
+use biz::permission::org::org_controller;
 use biz::user::user_controller;
 
 use crate::statistic::app::cruise::channel::channel_task::refresh_channel_reputation;
@@ -139,5 +140,9 @@ fn build_rocket() -> Rocket<Build> {
             menu_controller::page_tree,
             menu_controller::menu_tree,
             menu_controller::edit_menu
+        ]).mount("/manage/permission/org", routes![
+            org_controller::page_tree,
+            org_controller::org_tree,
+            org_controller::edit_org
         ])
 }

@@ -169,6 +169,17 @@ pub struct MenuResource {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "org"]
+pub struct Org {
+    pub id: i32,
+    pub parent_id: i32,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub org_name: String,
+    pub sort: i32,
+}
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "products"]
 pub struct Product {
     pub id: i32,
