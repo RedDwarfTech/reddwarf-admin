@@ -10,7 +10,7 @@ RUN cargo build --release
 # RUN cargo build
 
 # Prod stage
-FROM alpine:3.15
+FROM alpine:3.12
 LABEL maintainer="jiangtingqiang@gmail.com"
 WORKDIR /app
 ENV ROCKET_ADDRESS=0.0.0.0
