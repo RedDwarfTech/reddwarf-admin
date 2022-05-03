@@ -128,7 +128,7 @@ pub fn org_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<MenuResource>(&connection);
-    let menu_responses = find_sub_menu_cte_impl(&query_result.as_ref().unwrap().0);
+    let menu_responses = find_sub_org_cte_impl(&query_result.as_ref().unwrap().0);
     let total = query_result.as_ref().unwrap().2;
     let page_result = map_pagination_res_local(total, request.pageNum, request.pageSize,menu_responses);
     return page_result;

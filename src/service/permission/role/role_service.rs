@@ -84,7 +84,6 @@ pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<Stri
 pub fn role_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
-    // verify legacy password
     let request_user_name:String = String::from(&request.userName);
     let predicate = crate::model::diesel::dolphin::dolphin_schema::admin_users::phone.eq(request_user_name);
     let db_admin_user = admin_users.filter(&predicate)
