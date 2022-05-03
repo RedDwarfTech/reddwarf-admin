@@ -107,4 +107,5 @@ pub struct MenuResourceAdd {
     pub sort: i32,
     pub name_zh: String,
     pub tree_id_path: String,
+    pub code: String
 }

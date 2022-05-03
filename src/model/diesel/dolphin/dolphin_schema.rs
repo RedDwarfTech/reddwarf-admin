@@ -153,6 +153,7 @@ table! {
         sort -> Int4,
         name_zh -> Varchar,
         tree_id_path -> Varchar,
+        code -> Varchar,
     }
 }
 

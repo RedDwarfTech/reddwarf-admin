@@ -190,7 +190,8 @@ pub fn menu_add(request: &Json<AddMenuRequest>) -> content::Json<String> {
         component: None,
         sort: 0,
         name_zh: "".to_string(),
-        tree_id_path: "".to_string()
+        tree_id_path: "".to_string(),
+        code: request.code.to_string()
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::menu_resource::table)
         .values(&new_menu_resource)
