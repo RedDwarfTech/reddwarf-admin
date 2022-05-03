@@ -30,10 +30,10 @@ pub fn org_query_full_tree<T>(filter_parent_id: i32) -> Vec<MenuResponse>{
         .order(sort.asc())
         .load::<MenuResource>(&connection)
         .expect("Error find menu resource");
-    return find_sub_menu_cte_impl(&root_menus);
+    return find_sub_org_cte_impl(&root_menus);
 }
 
-pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
+pub fn find_sub_org_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
     let connection = config::establish_connection();
     let cte_query_sub_menus = " with recursive sub_menus as
     (
