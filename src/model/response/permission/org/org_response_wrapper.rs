@@ -1,7 +1,7 @@
 use rocket::serde::Deserialize;
 use rocket::serde::Serialize;
 
-use crate::model::response::permission::menu::menu_response::MenuResponse;
+use crate::model::response::permission::org::org_response::OrgResponse;
 
 #[derive(Deserialize, Serialize)]
 #[allow(non_snake_case)]

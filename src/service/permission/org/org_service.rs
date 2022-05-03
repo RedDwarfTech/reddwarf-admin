@@ -6,15 +6,12 @@ use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_pagination_from_list};
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
-use rust_wheel::model::response::pagination::Pagination;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, Org};
-use crate::model::diesel::dolphin::dolphin_models::MenuResource;
-use crate::model::request::permission::menu::menu_request::MenuRequest;
+use crate::model::request::permission::org::org_request::OrgRequest;
 use crate::model::request::user::password_request::PasswordRequest;
-use crate::model::response::permission::menu::menu_response::MenuResponse;
 use crate::model::response::permission::org::org_response::OrgResponse;
 
 /**
@@ -24,10 +21,10 @@ use crate::model::response::permission::org::org_response::OrgResponse;
  * 
  */
 pub fn org_query_full_tree<T>(filter_parent_id: i32) -> Vec<OrgResponse>{
-    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::org::dsl::*;
     let connection = config::establish_connection();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(filter_parent_id);
-    let root_menus = menu_resource.filter(&predicate)
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::org::parent_id.eq(filter_parent_id);
+    let root_menus = org.filter(&predicate)
         .order(sort.asc())
         .load::<Org>(&connection)
         .expect("Error find menu resource");
@@ -106,11 +103,11 @@ pub fn convert_org_to_tree(root_menus: &Vec<Org>, sub_menus: &Vec<Org>) -> Vec<O
  * for the performance issue
  * only query 2 level from current parent level
  */
-pub fn org_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<OrgResponse>> {
-    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
+pub fn org_query_tree<T>(request: &Json<OrgRequest>) -> PaginationResponse<Vec<OrgResponse>> {
+    use crate::model::diesel::dolphin::dolphin_schema::org::dsl::*;
     let connection = config::establish_connection();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
-    let query = menu_resource.filter(&predicate)
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::org::parent_id.eq(request.parentId);
+    let query = org.filter(&predicate)
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Org>(&connection);
