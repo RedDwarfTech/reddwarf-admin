@@ -6,5 +6,8 @@ use rocket::serde::Serialize;
 pub struct AddMenuRequest {
     pub code: String,
     pub name: String,
+    pub nameZh: String,
+    pub path: String,
+    pub component: String,
     pub parentId: i32,
 }

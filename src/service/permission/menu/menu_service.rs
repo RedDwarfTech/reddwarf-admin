@@ -175,11 +175,11 @@ pub fn menu_add(request: &Json<AddMenuRequest>) -> content::Json<String> {
         created_time: current_time,
         updated_time: current_time,
         remark: None,
-        path: "/demo".to_string(),
+        path: request.path.to_string(),
         parent_id: request.parentId,
-        component: None,
+        component: Option::from(request.component.to_string()),
         sort: 0,
-        name_zh: "".to_string(),
+        name_zh: request.nameZh.to_string(),
         tree_id_path: "".to_string(),
         code: request.code.to_string()
     };
