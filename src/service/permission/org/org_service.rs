@@ -3,7 +3,7 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
-use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response};
+use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_pagination_from_list};
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination::Pagination;
@@ -130,21 +130,8 @@ pub fn org_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<MenuResource>(&connection);
     let menu_responses = find_sub_org_cte_impl(&query_result.as_ref().unwrap().0);
     let total = query_result.as_ref().unwrap().2;
-    let page_result = map_pagination_res_local(total, request.pageNum, request.pageSize,menu_responses);
+    let page_result = map_pagination_from_list( menu_responses,request.pageNum, request.pageSize,total);
     return page_result;
-}
-
-pub fn map_pagination_res_local<U>(total: i64, page_num: i64,page_size: i64, data: Vec<U>) -> PaginationResponse<Vec<U>>{
-    let page_result = Pagination{
-        pageNum: page_num,
-        pageSize: page_size,
-        total: total
-    };
-    let resp = PaginationResponse{
-        pagination: page_result,
-        list: data
-    };
-    return resp;
 }
 
 pub fn org_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
