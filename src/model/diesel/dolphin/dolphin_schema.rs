@@ -165,6 +165,7 @@ table! {
         updated_time -> Int8,
         org_name -> Varchar,
         sort -> Int4,
+        tree_id_path -> Varchar,
     }
 }
 

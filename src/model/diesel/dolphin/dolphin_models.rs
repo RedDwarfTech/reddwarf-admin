@@ -178,6 +178,7 @@ pub struct Org {
     pub updated_time: i64,
     pub org_name: String,
     pub sort: i32,
+    pub tree_id_path: String,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
