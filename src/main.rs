@@ -20,12 +20,12 @@ use biz::app::music::fav::fav_music_controller;
 use biz::app::product_controller;
 use biz::app::tag_controller;
 use biz::common::health_controller;
-use biz::common::sys_dict_controller;
 use biz::home::home_controller;
 use biz::permission::menu::menu_controller;
 use biz::permission::org::org_controller;
 use biz::permission::role::role_controller;
 use biz::permission::user::admin_user_controller;
+use biz::system::dict::sys_dict_controller;
 use biz::user::user_controller;
 
 use crate::statistic::app::cruise::channel::channel_task::refresh_channel_reputation;
@@ -64,7 +64,8 @@ fn build_rocket() -> Rocket<Build> {
             home_controller::trend_overview
         ])
         .mount("/manage/sys/dict",routes![
-            sys_dict_controller::list
+            sys_dict_controller::list,
+            sys_dict_controller::page,
         ])
         .mount("/manage/product",routes![
             product_controller::page,
