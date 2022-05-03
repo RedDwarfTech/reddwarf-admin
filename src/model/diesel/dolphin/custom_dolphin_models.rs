@@ -1,8 +1,11 @@
-use chrono::{NaiveDateTime};
+use chrono::NaiveDateTime;
 use rocket::serde::Serialize;
 use serde::Deserialize;
 
 use crate::model::diesel::dolphin::dolphin_schema::*;
+
+/// why we need the custom models
+/// https://stackoverflow.com/questions/70547237/what-is-the-best-way-to-handle-the-id-when-insert-record-using-rust-diesel
 
 #[derive(Insertable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "domain"]
@@ -88,4 +91,20 @@ pub struct AdminUserAdd {
     pub country_code: Option<i32>,
     pub user_status: i32,
     pub user_name: String,
+}
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "menu_resource"]
+pub struct MenuResourceAdd {
+    pub name: String,
+    pub res_type: i32,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub remark: Option<String>,
+    pub path: String,
+    pub parent_id: i32,
+    pub component: Option<String>,
+    pub sort: i32,
+    pub name_zh: String,
+    pub tree_id_path: String,
 }

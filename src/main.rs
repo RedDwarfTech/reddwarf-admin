@@ -23,9 +23,9 @@ use biz::common::health_controller;
 use biz::common::sys_dict_controller;
 use biz::home::home_controller;
 use biz::permission::menu::menu_controller;
+use biz::permission::org::org_controller;
 use biz::permission::role::role_controller;
 use biz::permission::user::admin_user_controller;
-use biz::permission::org::org_controller;
 use biz::user::user_controller;
 
 use crate::statistic::app::cruise::channel::channel_task::refresh_channel_reputation;
@@ -36,6 +36,7 @@ mod model;
 mod service;
 mod models;
 mod test;
+mod common;
 
 #[launch]
 #[tokio::main]

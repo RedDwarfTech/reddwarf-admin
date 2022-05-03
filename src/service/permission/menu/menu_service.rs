@@ -5,13 +5,17 @@ use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response};
 use rust_wheel::common::util::security_util::get_sha;
+use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination::Pagination;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
+use crate::common::enums::resource_type::ResourceType;
 use crate::diesel::prelude::*;
+use crate::model::diesel::dolphin::custom_dolphin_models::MenuResourceAdd;
 use crate::model::diesel::dolphin::dolphin_models::AdminUser;
 use crate::model::diesel::dolphin::dolphin_models::MenuResource;
+use crate::model::request::permission::menu::add_menu_request::AddMenuRequest;
 use crate::model::request::permission::menu::menu_request::MenuRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
@@ -169,5 +173,29 @@ pub fn menu_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
     }else{
         return box_error_rest_response("", "00100100064007".parse().unwrap(), "old password did not match".parse().unwrap());
     }
+    return box_rest_response("ok");
+}
+
+pub fn menu_add(request: &Json<AddMenuRequest>) -> content::Json<String> {
+    let connection = config::establish_connection();
+    let current_time = get_current_millisecond();
+    let new_menu_resource = MenuResourceAdd{
+        name: request.name.to_string(),
+        res_type: ResourceType::MENU as i32,
+        created_time: current_time,
+        updated_time: current_time,
+        remark: None,
+        path: "/demo".to_string(),
+        parent_id: request.parentId,
+        component: None,
+        sort: 0,
+        name_zh: "".to_string(),
+        tree_id_path: "".to_string()
+    };
+    diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::menu_resource::table)
+        .values(&new_menu_resource)
+        .on_conflict_do_nothing()
+        .execute(&connection)
+        .unwrap();
     return box_rest_response("ok");
 }
