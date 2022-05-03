@@ -140,7 +140,8 @@ fn build_rocket() -> Rocket<Build> {
         ]).mount("/manage/permission/menu", routes![
             menu_controller::page_tree,
             menu_controller::menu_tree,
-            menu_controller::edit_menu
+            menu_controller::edit_menu,
+            menu_controller::add_menu
         ]).mount("/manage/permission/org", routes![
             org_controller::page_tree,
             org_controller::org_tree,
