@@ -14,6 +14,7 @@ table! {
         country_code -> Nullable<Int4>,
         user_status -> Int4,
         user_name -> Varchar,
+        org_id -> Int4,
     }
 }
 

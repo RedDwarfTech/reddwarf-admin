@@ -6,4 +6,5 @@ use rocket::serde::Serialize;
 pub struct AddUserRequest {
     pub userName: String,
     pub phone: String,
+    pub orgId: i32
 }

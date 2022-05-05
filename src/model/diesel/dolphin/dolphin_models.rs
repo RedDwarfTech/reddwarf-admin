@@ -27,6 +27,7 @@ pub struct AdminUser {
     pub country_code: Option<i32>,
     pub user_status: i32,
     pub user_name: String,
+    pub org_id: i32,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]

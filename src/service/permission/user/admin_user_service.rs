@@ -140,7 +140,8 @@ pub fn add_admin_user(request: Json<AddUserRequest>) -> content::Json<String> {
         phone_region: None,
         country_code: None,
         user_status: 1,
-        user_name: request.userName.to_string()
+        user_name: request.userName.to_string(),
+        org_id: request.orgId
     };
     diesel::insert_into(admin_users)
         .values(&new_admin_user)
