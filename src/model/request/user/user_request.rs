@@ -6,5 +6,6 @@ use rocket::serde::Serialize;
 pub struct UserRequest {
     pub app: Option<i32>,
     pub pageNum: i64,
-    pub pageSize: i64
+    pub pageSize: i64,
+    pub user_name: Option<String>
 }

@@ -20,14 +20,15 @@ use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::request::user::user_request::UserRequest;
 use crate::model::request::user::user_role_request::UserRoleRequest;
 use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenuResponse;
-use crate::model::response::permission::user::admin_user_response::AdminUserResponse;
 
 pub fn admin_user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<AdminUser>> {
-    use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
-    use crate::model::diesel::dolphin::dolphin_schema::org as org_table;
+    use crate::model::diesel::dolphin::dolphin_schema::admin_users as admin_user_table;
     let connection = config::establish_connection();
-    let query = admin_users
-        .filter(id.gt(0))
+    let mut query = admin_user_table::table.into_boxed::<diesel::pg::Pg>();
+    if let Some(filter_user_name) = &request.user_name {
+        query = query.filter(admin_user_table::user_name.eq(filter_user_name));
+    }
+    let query = query
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<AdminUser>(&connection);
