@@ -8,6 +8,7 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::model::diesel::dolphin::dolphin_models::{Article, ArticleContent, RssSubSource};
+use crate::model::diesel::dolphin::dolphin_schema::article_favorites::channel_id;
 use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
 
@@ -21,8 +22,8 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     if let Some(max_offset) = &request.maxOffset {
         query = query.filter(article_table::id.lt(max_offset));
     }
-    if let Some(channel_id) = &request.channelId {
-        query = query.filter(article_table::sub_source_id.eq(channel_id));
+    if let Some(req_channel_id) = &request.channelId {
+        query = query.filter(article_table::sub_source_id.eq(req_channel_id));
     }
     let query = query
         .order(created_time.desc())
@@ -72,3 +73,15 @@ pub fn article_detail_query(filter_article_id: i64) -> ArticleResponse {
     let article_response = ArticleResponse::new(article_result, single_content);
     return article_response;
 }
+
+pub fn get_article_count_by_channel_id(req_channel_id: &i64) -> i64 {
+    use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
+    let connection = config::establish_connection();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::article::sub_source_id.eq(req_channel_id);
+    let query = article
+        .filter(predicate);
+    let query_result = query.count().get_result(&connection);
+    return query_result.unwrap_or(0);
+}
+
+

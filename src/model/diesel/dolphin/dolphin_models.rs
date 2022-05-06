@@ -258,6 +258,8 @@ pub struct RssSubSource {
     pub local_icon_url: Option<String>,
     pub creator: i64,
     pub tags: serde_json::Value,
+    pub article_count: i64,
+    pub article_count_latest_refresh_time: i64,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]

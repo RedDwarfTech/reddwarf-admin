@@ -245,6 +245,8 @@ table! {
         local_icon_url -> Nullable<Varchar>,
         creator -> Int8,
         tags -> Jsonb,
+        article_count -> Int8,
+        article_count_latest_refresh_time -> Int8,
     }
 }
 

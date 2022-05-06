@@ -28,7 +28,7 @@ use biz::permission::user::admin_user_controller;
 use biz::system::dict::sys_dict_controller;
 use biz::user::user_controller;
 
-use crate::statistic::app::cruise::channel::channel_task::refresh_channel_reputation;
+use crate::statistic::app::cruise::channel::channel_task::{refresh_channel_article_count, refresh_channel_rep, refresh_channel_reputation};
 
 mod biz;
 mod statistic;
@@ -41,16 +41,9 @@ mod common;
 #[launch]
 #[tokio::main]
 async fn rocket() -> _ {
-    tokio::spawn(period_exec());
+    tokio::spawn(refresh_channel_rep());
+    tokio::spawn(refresh_channel_article_count());
     build_rocket()
-}
-
-async fn period_exec(){
-    let mut  interval = time::interval(Duration::from_millis(25000));
-    loop {
-        interval.tick().await;
-        refresh_channel_reputation();
-    }
 }
 
 fn build_rocket() -> Rocket<Build> {
