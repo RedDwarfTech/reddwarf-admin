@@ -3,10 +3,7 @@ extern crate diesel;
 #[macro_use]
 extern crate rocket;
 
-use std::time::Duration;
-
 use rocket::{Build, Rocket};
-use tokio::time;
 
 use biz::app::app_controller;
 use biz::app::cernitor::domain::domain_controller;
@@ -28,7 +25,7 @@ use biz::permission::user::admin_user_controller;
 use biz::system::dict::sys_dict_controller;
 use biz::user::user_controller;
 
-use crate::statistic::app::cruise::channel::channel_task::{refresh_channel_article_count, refresh_channel_rep, refresh_channel_reputation};
+use crate::statistic::app::cruise::channel::channel_task::{refresh_channel_article_count, refresh_channel_rep};
 
 mod biz;
 mod statistic;

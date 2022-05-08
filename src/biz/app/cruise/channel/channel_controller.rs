@@ -41,6 +41,6 @@ pub fn editor_unpick(request: Json<PickChannelRequest>) -> content::Json<String>
 
 #[put("/v1/tags", data = "<request>")]
 pub fn tags(request: Json<TagChannelRequest>) -> content::Json<String> {
-    update_channel_tags(request.channelId, request.tags.to_string());
+    update_channel_tags(&request.channelId, request.tags.to_string());
     return box_rest_response("ok");
 }

@@ -5,7 +5,9 @@ use rocket::serde::Serialize;
 #[allow(non_snake_case)]
 pub struct UpdateChannelRequest {
     pub channelId: i64,
-    pub tags: Option<Vec<Tag>>
+    pub tags: Option<Vec<Tag>>,
+    pub commentRss: i32,
+    pub partOutput: i32
 }
 
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]

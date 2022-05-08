@@ -247,6 +247,8 @@ table! {
         tags -> Jsonb,
         article_count -> Int8,
         article_count_latest_refresh_time -> Int8,
+        comment_rss -> Int4,
+        part_output -> Int4,
     }
 }
 

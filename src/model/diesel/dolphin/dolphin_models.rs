@@ -260,6 +260,8 @@ pub struct RssSubSource {
     pub tags: serde_json::Value,
     pub article_count: i64,
     pub article_count_latest_refresh_time: i64,
+    pub comment_rss: i32,
+    pub part_output: i32,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]

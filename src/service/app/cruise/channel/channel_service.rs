@@ -42,8 +42,19 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
 pub fn update_channel(request: Json<UpdateChannelRequest>){
     if let Some(filter_tag) = &request.tags {
         let tag_json = serde_json::to_string(filter_tag);
-        update_channel_tags(request.channelId,tag_json.unwrap().to_string())
+        update_channel_tags(&request.channelId,tag_json.unwrap().to_string())
     }
+    update_channel_impl(&request);  
+}
+
+pub fn update_channel_impl(request: &Json<UpdateChannelRequest>){
+    use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
+    let connection = config::establish_connection();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(request.channelId);
+    diesel::update(rss_sub_source.filter(predicate))
+        .set((comment_rss.eq(&request.commentRss),part_output.eq(&request.partOutput)))
+        .get_result::<RssSubSource>(&connection)
+        .expect("unable to update channel");
 }
 
 pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){
@@ -56,7 +67,7 @@ pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){
         .expect("unable to update channel");
 }
 
-pub fn update_channel_tags(req_channel_id: i64, new_tags: String){
+pub fn update_channel_tags(req_channel_id: &i64, new_tags: String){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);

@@ -8,7 +8,6 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::model::diesel::dolphin::dolphin_models::{Article, ArticleContent, RssSubSource};
-use crate::model::diesel::dolphin::dolphin_schema::article_favorites::channel_id;
 use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
 
