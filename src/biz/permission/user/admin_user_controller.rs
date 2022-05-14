@@ -5,7 +5,7 @@ use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::model::diesel::dolphin::dolphin_models::AdminUser;
 use crate::model::request::user::add_user_request::AddUserRequest;
-use crate::model::request::user::password_request::PasswordRequest;
+use crate::model::request::user::admin_pwd_edit_request::AdminPwdEditRequest;
 use crate::model::request::user::user_request::UserRequest;
 use crate::model::request::user::user_role_request::UserRoleRequest;
 use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenuResponse;
@@ -19,8 +19,8 @@ pub fn page(request: Json<UserRequest>) -> content::RawJson<String> {
 }
 
 #[post("/v1/pwd/edit",data = "<request>")]
-pub fn edit_pwd(request: Json<PasswordRequest>) -> content::RawJson<String> {
-    return admin_password_edit(&request);
+pub fn edit_pwd(request: Json<AdminPwdEditRequest>,login_user_info: LoginUserInfo) -> content::RawJson<String> {
+    return admin_password_edit(&request, login_user_info);
 }
 
 #[get("/v1/menus")]

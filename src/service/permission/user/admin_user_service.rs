@@ -16,7 +16,7 @@ use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::{AdminUserAdd, UserRoleAdd};
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, MenuResource, RolePermission, UserRole};
 use crate::model::request::user::add_user_request::AddUserRequest;
-use crate::model::request::user::password_request::PasswordRequest;
+use crate::model::request::user::admin_pwd_edit_request::AdminPwdEditRequest;
 use crate::model::request::user::user_request::UserRequest;
 use crate::model::request::user::user_role_request::UserRoleRequest;
 use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenuResponse;
@@ -234,12 +234,11 @@ pub fn convert_menu_to_tree(root_menus: &Vec<MenuResource>, sub_menus: &Vec<Menu
     return menu_res_list;
 }
 
-pub fn admin_password_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
+pub fn admin_password_edit(request: &Json<AdminPwdEditRequest>,login_user_info: LoginUserInfo) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     // verify legacy password
-    let request_user_name:String = String::from(&request.userName);
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::admin_users::phone.eq(request_user_name);
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::admin_users::id.eq(login_user_info.userId);
     let db_admin_user = admin_users.filter(&predicate)
         .limit(1)
         .load::<AdminUser>(&connection)
