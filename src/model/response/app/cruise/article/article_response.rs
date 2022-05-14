@@ -35,7 +35,7 @@ impl ArticleResponse {
             created_time: article.created_time,
             updated_time: article.updated_time,
             link: None,
-            pub_time: None,
+            pub_time: article.pub_time,
             sub_source_id: article.sub_source_id,
             cover_image: None,
             channel_reputation: 0,
