@@ -12,5 +12,6 @@ pub struct ChannelRequest {
     pub excludeEditorPickChannel: Option<i32>,
     pub tag: Option<String>,
     pub subStatus: Option<i16>,
-    pub isTag: Option<i32>
+    pub isTag: Option<i32>,
+    pub sub_name: Option<String>
 }

@@ -7,6 +7,7 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
+use crate::diesel::TextExpressionMethods;
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 use crate::model::request::app::cruise::channel::update_channel_request::UpdateChannelRequest;
@@ -33,6 +34,9 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
             let format_tags: serde_json::Value = serde_json::from_str(r#"[]"#).unwrap();
             query = query.filter(channel_table::tags.eq(format_tags));
         }
+    }
+    if let Some(channel_sub_name) = &request.sub_name {
+        query = query.filter(channel_table::sub_name.like(format!("{}{}{}","%",channel_sub_name.as_str(),"%")));
     }
     if let Some(current_sub_status) = &request.subStatus {
         query = query.filter(channel_table::sub_status.eq(current_sub_status));
