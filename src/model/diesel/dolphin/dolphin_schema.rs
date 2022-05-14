@@ -215,7 +215,7 @@ table! {
         sub_url -> Varchar,
         created_time -> Int8,
         updated_time -> Int8,
-        sub_status -> Int2,
+        sub_status -> Int4,
         rss_type -> Varchar,
         standard_type -> Varchar,
         standard_version -> Varchar,

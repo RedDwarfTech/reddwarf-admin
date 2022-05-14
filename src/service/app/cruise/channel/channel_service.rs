@@ -64,7 +64,7 @@ pub fn update_channel_impl(request: &Json<UpdateChannelRequest>){
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(request.channelId);
     diesel::update(rss_sub_source.filter(predicate))
-        .set((comment_rss.eq(&request.commentRss),part_output.eq(&request.partOutput)))
+        .set((comment_rss.eq(&request.commentRss),part_output.eq(&request.partOutput),sub_status.eq(&request.subStatus)))
         .get_result::<RssSubSource>(&connection)
         .expect("unable to update channel");
 }

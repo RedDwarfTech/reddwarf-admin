@@ -228,7 +228,7 @@ pub struct RssSubSource {
     pub sub_url: String,
     pub created_time: i64,
     pub updated_time: i64,
-    pub sub_status: i16,
+    pub sub_status: i32,
     pub rss_type: String,
     pub standard_type: String,
     pub standard_version: String,
