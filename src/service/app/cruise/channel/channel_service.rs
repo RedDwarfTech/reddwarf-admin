@@ -1,4 +1,5 @@
 use diesel::{ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
+use num_traits::ToPrimitive;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_res;
@@ -28,7 +29,7 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
         query = query.filter(channel_table::tags.eq(format_tags));
     }
     if let Some(is_channel_tagged) = &request.isTag {
-        if is_channel_tagged == 0 {
+        if is_channel_tagged.to_i32().unwrap() == 0 {
             let format_tags: serde_json::Value = serde_json::from_str(r#"[]"#).unwrap();
             query = query.filter(channel_table::tags.eq(format_tags));
         }
