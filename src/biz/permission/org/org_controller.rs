@@ -8,18 +8,18 @@ use crate::model::response::permission::org::org_response::OrgResponse;
 use crate::service::permission::org::org_service::{org_edit, org_query_full_tree, org_query_tree};
 
 #[post("/v1/page",data = "<request>")]
-pub fn page_tree(request: Json<OrgRequest>) -> content::Json<String> {
+pub fn page_tree(request: Json<OrgRequest>) -> content::RawJson<String> {
     let roles = org_query_tree::<Vec<OrgResponse>>(&request);
     return box_rest_response(roles);
 }
 
 #[post("/v1/tree",data = "<request>")]
-pub fn org_tree(request: Json<OrgRequest>) -> content::Json<String> {
+pub fn org_tree(request: Json<OrgRequest>) -> content::RawJson<String> {
     let roles = org_query_full_tree::<Vec<OrgResponse>>(request.parentId);
     return box_rest_response(roles);
 }
 
 #[post("/v1/org/edit",data = "<request>")]
-pub fn edit_org(request: Json<PasswordRequest>) -> content::Json<String> {
+pub fn edit_org(request: Json<PasswordRequest>) -> content::RawJson<String> {
     return org_edit(&request);
 }

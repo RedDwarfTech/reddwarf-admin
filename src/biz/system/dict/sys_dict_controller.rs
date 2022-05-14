@@ -5,13 +5,13 @@ use crate::model::diesel::quark::quark_models::SysDict;
 use crate::service::sys::sys_dict_service::{dict_page_query, dict_query};
 
 #[get("/v1/list")]
-pub fn list() -> content::Json<String> {
+pub fn list() -> content::RawJson<String> {
     let dicts = dict_query::<Vec<SysDict>>();
     return box_rest_response(dicts);
 }
 
 #[get("/v1/page")]
-pub fn page() -> content::Json<String> {
+pub fn page() -> content::RawJson<String> {
     let dicts = dict_page_query::<Vec<SysDict>>();
     return box_rest_response(dicts);
 }

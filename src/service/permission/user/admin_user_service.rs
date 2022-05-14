@@ -116,7 +116,7 @@ pub fn user_roles(filter_user_id:i64) -> Vec<UserRole>{
     return user_roles;
 }
 
-pub fn add_admin_user(request: Json<AddUserRequest>) -> content::Json<String> {
+pub fn add_admin_user(request: Json<AddUserRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     let admin_users_result = admin_users.filter(user_name.eq(request.userName.to_string()))
@@ -154,7 +154,7 @@ pub fn add_admin_user(request: Json<AddUserRequest>) -> content::Json<String> {
     return box_rest_response("ok");
 }
 
-pub fn save_user_roles_impl(request:Json<UserRoleRequest>) -> content::Json<String>{
+pub fn save_user_roles_impl(request:Json<UserRoleRequest>) -> content::RawJson<String>{
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
     let connection = config::establish_connection();
     let transaction_result = connection.build_transaction()
@@ -234,7 +234,7 @@ pub fn convert_menu_to_tree(root_menus: &Vec<MenuResource>, sub_menus: &Vec<Menu
     return menu_res_list;
 }
 
-pub fn admin_password_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
+pub fn admin_password_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     // verify legacy password

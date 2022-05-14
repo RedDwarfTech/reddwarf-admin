@@ -11,23 +11,23 @@ use crate::service::permission::menu::menu_service::menu_edit;
 use crate::service::permission::menu::menu_service::menu_query_tree;
 
 #[post("/v1/page",data = "<request>")]
-pub fn page_tree(request: Json<MenuRequest>) -> content::Json<String> {
+pub fn page_tree(request: Json<MenuRequest>) -> content::RawJson<String> {
     let roles = menu_query_tree::<Vec<MenuResource>>(&request);
     return box_rest_response(roles);
 }
 
 #[post("/v1/tree",data = "<request>")]
-pub fn menu_tree(request: Json<MenuRequest>) -> content::Json<String> {
+pub fn menu_tree(request: Json<MenuRequest>) -> content::RawJson<String> {
     let roles = menu_query_full_tree::<Vec<MenuResource>>(request.parentId);
     return box_rest_response(roles);
 }
 
 #[post("/v1/menu/edit",data = "<request>")]
-pub fn edit_menu(request: Json<PasswordRequest>) -> content::Json<String> {
+pub fn edit_menu(request: Json<PasswordRequest>) -> content::RawJson<String> {
     return menu_edit(&request);
 }
 
 #[put("/v1/menu/add",data = "<request>")]
-pub fn add_menu(request: Json<AddMenuRequest>) -> content::Json<String> {
+pub fn add_menu(request: Json<AddMenuRequest>) -> content::RawJson<String> {
     return menu_add(&request);
 }

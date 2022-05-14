@@ -24,7 +24,7 @@ pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User
     return page_result;
 }
 
-pub fn password_edit(request: &Json<PasswordRequest>,login_user_info: LoginUserInfo) -> content::Json<String> {
+pub fn password_edit(request: &Json<PasswordRequest>,login_user_info: LoginUserInfo) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     // verify legacy password

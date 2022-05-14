@@ -11,13 +11,13 @@ use crate::model::request::app::cernitor::domain::edit_domain_request::EditDomai
 use crate::service::app::cernitor::domain::domain_service::{add_domain, domain_query, edit_domain};
 
 #[post("/v1/page", data = "<request>")]
-pub fn page(request: Json<DomainRequest>) -> content::Json<String> {
+pub fn page(request: Json<DomainRequest>) -> content::RawJson<String> {
     let domains_info = domain_query::<Vec<Domain>>(&request);
     return box_rest_response(domains_info);
 }
 
 #[post("/v1/add", data = "<request>")]
-pub fn add(request: Json<AddDomainRequest>, login_user_info: LoginUserInfo) -> content::Json<String> {
+pub fn add(request: Json<AddDomainRequest>, login_user_info: LoginUserInfo) -> content::RawJson<String> {
     let domain_regex = Regex::new(r"").unwrap();
     if !domain_regex.is_match(&request.domainUrl) {
         return box_error_rest_response("failed", "00100100064008".parse().unwrap(), "domain url format error".parse().unwrap());
@@ -27,7 +27,7 @@ pub fn add(request: Json<AddDomainRequest>, login_user_info: LoginUserInfo) -> c
 }
 
 #[post("/v1/edit", data = "<request>")]
-pub fn edit(request: Json<EditDomainRequest>, login_user_info: LoginUserInfo) -> content::Json<String> {
+pub fn edit(request: Json<EditDomainRequest>, login_user_info: LoginUserInfo) -> content::RawJson<String> {
     let domain_regex = Regex::new(r"").unwrap();
     if !domain_regex.is_match(&request.domainUrl) {
         return box_error_rest_response("failed", "00100100064008".parse().unwrap(), "domain url format error".parse().unwrap());

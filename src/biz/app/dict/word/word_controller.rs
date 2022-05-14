@@ -7,13 +7,13 @@ use crate::model::request::app::dict::word::glossary_request::GlossaryRequest;
 use crate::service::app::dict::word::word_service::{glossary_add, glossary_query};
 
 #[post("/v1/glossary/list",data = "<request>")]
-pub fn glossary(request: Json<GlossaryRequest>) -> content::Json<String> {
+pub fn glossary(request: Json<GlossaryRequest>) -> content::RawJson<String> {
     let dicts = glossary_query(&request);
     return box_rest_response(dicts);
 }
 
 #[post("/v1/glossary/add",data = "<request>")]
-pub fn add_glossary(request: Json<GlossaryAddRequest>) -> content::Json<String> {
+pub fn add_glossary(request: Json<GlossaryAddRequest>) -> content::RawJson<String> {
     glossary_add(&request);
     return box_rest_response("ok");
 }

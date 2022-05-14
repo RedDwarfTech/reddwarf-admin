@@ -15,24 +15,24 @@ use crate::service::permission::role::role_service::{role_edit, role_query};
 use crate::service::permission::user::admin_user_service::role_menu_list;
 
 #[post("/v1/page",data = "<request>")]
-pub fn page(request: Json<RoleRequest>) -> content::Json<String> {
+pub fn page(request: Json<RoleRequest>) -> content::RawJson<String> {
     let roles = role_query::<Vec<Role>>(&request);
     return box_rest_response(roles);
 }
 
 #[get("/v1/list")]
-pub fn list() -> content::Json<String> {
+pub fn list() -> content::RawJson<String> {
     let roles = role_query_list();
     return box_rest_response(roles);
 }
 
 #[put("/v1/role/menu",data = "<request>")]
-pub fn edit_role_menu_bind(request: Json<RoleMenuBindRequest>) -> content::Json<String> {
+pub fn edit_role_menu_bind(request: Json<RoleMenuBindRequest>) -> content::RawJson<String> {
     return edit_role_menu(&request);
 }
 
 #[post("/v1/role/menu",data = "<request>")]
-pub fn get_role_menu_tree(request: Json<RoleMenuRequest>) -> content::Json<String> {
+pub fn get_role_menu_tree(request: Json<RoleMenuRequest>) -> content::RawJson<String> {
     let menu_responses:Vec<MenuResponse> = menu_query_full_tree::<Vec<MenuResource>>(request.parentId);
     let menu_vec:Vec<MenuResource> = role_menu_list(request.roleId);
     let ids:Vec<String> = menu_vec.iter()
@@ -46,6 +46,6 @@ pub fn get_role_menu_tree(request: Json<RoleMenuRequest>) -> content::Json<Strin
 }
 
 #[post("/v1/role/edit",data = "<request>")]
-pub fn edit_role(request: Json<PasswordRequest>) -> content::Json<String> {
+pub fn edit_role(request: Json<PasswordRequest>) -> content::RawJson<String> {
     return role_edit(&request);
 }

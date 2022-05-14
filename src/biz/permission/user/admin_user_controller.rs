@@ -13,34 +13,34 @@ use crate::service::permission::user::admin_user_service::{add_admin_user, admin
 use crate::service::permission::user::admin_user_service::admin_user_query;
 
 #[post("/v1/page",data = "<request>")]
-pub fn page(request: Json<UserRequest>) -> content::Json<String> {
+pub fn page(request: Json<UserRequest>) -> content::RawJson<String> {
     let users = admin_user_query::<Vec<AdminUser>>(&request);
     return box_rest_response(users);
 }
 
 #[post("/v1/pwd/edit",data = "<request>")]
-pub fn edit_pwd(request: Json<PasswordRequest>) -> content::Json<String> {
+pub fn edit_pwd(request: Json<PasswordRequest>) -> content::RawJson<String> {
     return admin_password_edit(&request);
 }
 
 #[get("/v1/menus")]
-pub fn get_user_menu(login_user_info: LoginUserInfo) -> content::Json<String> {
+pub fn get_user_menu(login_user_info: LoginUserInfo) -> content::RawJson<String> {
     let menu_vec:Vec<DynamicMenuResponse> = admin_user_menus(login_user_info);
     return box_rest_response(menu_vec);
 }
 
 #[get("/v1/roles?<user_id>")]
-pub fn get_user_roles(user_id: i64) -> content::Json<String> {
+pub fn get_user_roles(user_id: i64) -> content::RawJson<String> {
     let user_roles = user_roles(user_id);
     return box_rest_response(user_roles);
 }
 
 #[put("/v1/save_roles",data = "<request>")]
-pub fn save_user_roles(request:Json<UserRoleRequest>) -> content::Json<String> {
+pub fn save_user_roles(request:Json<UserRoleRequest>) -> content::RawJson<String> {
     return save_user_roles_impl(request);
 }
 
 #[put("/v1/add",data = "<request>")]
-pub fn add(request:Json<AddUserRequest>) -> content::Json<String> {
+pub fn add(request:Json<AddUserRequest>) -> content::RawJson<String> {
     return add_admin_user(request);
 }

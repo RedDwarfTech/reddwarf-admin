@@ -117,7 +117,7 @@ pub fn org_query_tree<T>(request: &Json<OrgRequest>) -> PaginationResponse<Vec<O
     return page_result;
 }
 
-pub fn org_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
+pub fn org_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     // verify legacy password

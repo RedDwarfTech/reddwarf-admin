@@ -35,7 +35,7 @@ pub fn role_query_list() -> Vec<Role> {
     return query;
 }
 
-pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<String> {
+pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::RawJson<String> {
     // delete the legacy record
     use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
     let connection = config::establish_connection();
@@ -81,7 +81,7 @@ pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::Json<Stri
     return box_rest_response("ok");
 }
 
-pub fn role_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
+pub fn role_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     let request_user_name:String = String::from(&request.userName);

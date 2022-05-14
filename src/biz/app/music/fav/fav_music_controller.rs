@@ -10,7 +10,7 @@ use crate::service::app::music::fav::fav_music_service::fav_music_query;
 use crate::service::app::music::music_service::get_music_by_source_ids;
 
 #[post("/v1/page",data = "<request>")]
-pub fn page(request: Json<FavMusicRequest>) -> content::Json<String> {
+pub fn page(request: Json<FavMusicRequest>) -> content::RawJson<String> {
     let fav_musics = fav_music_query::<Vec<Favorites>>(&request);
     let source_ids: Vec<String> = fav_musics.list
         .iter()

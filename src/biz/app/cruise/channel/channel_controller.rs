@@ -12,13 +12,13 @@ use crate::service::app::cruise::channel::channel_service::{channel_query, edito
 use crate::service::app::cruise::channel::channel_service::update_channel_tags;
 
 #[post("/v1/page", data = "<request>")]
-pub fn page(request: Json<ChannelRequest>, login_user_info: LoginUserInfo) -> content::Json<String> {
+pub fn page(request: Json<ChannelRequest>, login_user_info: LoginUserInfo) -> content::RawJson<String> {
     let channels = channel_query::<Vec<RssSubSource>>(&request, login_user_info);
     return box_rest_response(channels);
 }
 
 #[put("/v1/update", data = "<request>")]
-pub fn update(request: Json<UpdateChannelRequest>) -> content::Json<String> {
+pub fn update(request: Json<UpdateChannelRequest>) -> content::RawJson<String> {
     update_channel(request);
     return box_rest_response("ok");
 }
@@ -28,19 +28,19 @@ pub fn update(request: Json<UpdateChannelRequest>) -> content::Json<String> {
 /// https://coolshell.cn/articles/22173.html
 ///
 #[put("/v1/pick", data = "<request>")]
-pub fn editor_pick(request: Json<PickChannelRequest>) -> content::Json<String> {
+pub fn editor_pick(request: Json<PickChannelRequest>) -> content::RawJson<String> {
     editor_pick_channel(request.channelId, 1);
     return box_rest_response("ok");
 }
 
 #[put("/v1/unpick", data = "<request>")]
-pub fn editor_unpick(request: Json<PickChannelRequest>) -> content::Json<String> {
+pub fn editor_unpick(request: Json<PickChannelRequest>) -> content::RawJson<String> {
     editor_pick_channel(request.channelId, 0);
     return box_rest_response("ok");
 }
 
 #[put("/v1/tags", data = "<request>")]
-pub fn tags(request: Json<TagChannelRequest>) -> content::Json<String> {
+pub fn tags(request: Json<TagChannelRequest>) -> content::RawJson<String> {
     update_channel_tags(&request.channelId, request.tags.to_string());
     return box_rest_response("ok");
 }

@@ -140,7 +140,7 @@ pub fn menu_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec
     return page_result;
 }
 
-pub fn menu_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
+pub fn menu_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
     let connection = config::establish_connection();
     // verify legacy password
@@ -165,7 +165,7 @@ pub fn menu_edit(request: &Json<PasswordRequest>) -> content::Json<String> {
     return box_rest_response("ok");
 }
 
-pub fn menu_add(request: &Json<AddMenuRequest>) -> content::Json<String> {
+pub fn menu_add(request: &Json<AddMenuRequest>) -> content::RawJson<String> {
     let connection = config::establish_connection();
     let current_time = get_current_millisecond();
     let new_menu_resource = MenuResourceAdd{
