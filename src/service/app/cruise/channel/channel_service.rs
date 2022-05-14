@@ -27,9 +27,16 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
         }"#).unwrap();
         query = query.filter(channel_table::tags.eq(format_tags));
     }
+    if let Some(is_channel_tagged) = &request.isTag {
+        if is_channel_tagged == 0 {
+            let format_tags: serde_json::Value = serde_json::from_str(r#"[]"#).unwrap();
+            query = query.filter(channel_table::tags.eq(format_tags));
+        }
+    }
     if let Some(current_sub_status) = &request.subStatus {
         query = query.filter(channel_table::sub_status.eq(current_sub_status));
     }
+
     let query = query
         .order(created_time.desc())
         .paginate(request.pageNum.unwrap_or(1),false)
