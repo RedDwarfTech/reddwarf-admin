@@ -136,6 +136,7 @@ fn build_rocket() -> Rocket<Build> {
         ]).mount("/manage/permission/org", routes![
             org_controller::page_tree,
             org_controller::org_tree,
-            org_controller::edit_org
+            org_controller::edit_org,
+            org_controller::org_list_query
         ])
 }

@@ -141,3 +141,14 @@ pub fn org_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
     }
     return box_rest_response("ok");
 }
+
+
+pub fn org_list() -> Vec<Org> {
+    use crate::model::diesel::dolphin::dolphin_schema::org::dsl::*;
+    let connection = config::establish_connection();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::org::id.gt(0);
+    let org_result = org.filter(&predicate)
+        .load::<Org>(&connection)
+        .expect("Error find org");
+    return org_result;
+}
