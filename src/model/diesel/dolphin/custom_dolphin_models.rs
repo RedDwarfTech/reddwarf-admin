@@ -115,5 +115,7 @@ pub struct MenuResourceAdd {
 #[derive(AsChangeset)]
 #[table_name = "rss_sub_source"]
 pub struct RssSubSourceUpdate {
-    pub part_output: Option<i32>
+    pub part_output: Option<i32>,
+    pub comment_rss: Option<i32>,
+    pub sub_status: Option<i32>,
 }
