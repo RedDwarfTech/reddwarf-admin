@@ -110,3 +110,10 @@ pub struct MenuResourceAdd {
     pub tree_id_path: String,
     pub code: String
 }
+
+
+#[derive(AsChangeset)]
+#[table_name = "rss_sub_source"]
+pub struct RssSubSourceUpdate {
+    pub part_output: Option<i32>
+}

@@ -8,6 +8,7 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::diesel::TextExpressionMethods;
+use crate::model::diesel::dolphin::custom_dolphin_models::RssSubSourceUpdate;
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 use crate::model::request::app::cruise::channel::update_channel_request::UpdateChannelRequest;
@@ -63,10 +64,19 @@ pub fn update_channel_impl(request: &Json<UpdateChannelRequest>){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(request.channelId);
+    // https://diesel.rs/guides/all-about-updates.html
     diesel::update(rss_sub_source.filter(predicate))
-        .set((comment_rss.eq(&request.commentRss),part_output.eq(&request.partOutput),sub_status.eq(&request.subStatus)))
+        .set(&RssSubSourceUpdate{
+            part_output: request.partOutput.to_i32(),
+        })
         .get_result::<RssSubSource>(&connection)
         .expect("unable to update channel");
+
+
+    //diesel::update(rss_sub_source.filter(predicate))
+    //    .set((comment_rss.eq(&request.commentRss),part_output.eq(&request.partOutput),sub_status.eq(&request.subStatus)))
+    //    .get_result::<RssSubSource>(&connection)
+    //    .expect("unable to update channel");
 }
 
 pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){

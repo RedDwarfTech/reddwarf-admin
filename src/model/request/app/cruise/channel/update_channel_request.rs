@@ -8,7 +8,7 @@ pub struct UpdateChannelRequest {
     pub tags: Option<Vec<Tag>>,
     pub commentRss: i32,
     pub partOutput: i32,
-    pub subStatus: i32
+    pub subStatus: Option<i32>
 }
 
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
