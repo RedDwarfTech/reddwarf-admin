@@ -10,8 +10,7 @@ use crate::model::diesel::dolphin::dolphin_schema::*;
 use chrono::NaiveDateTime;
 use chrono::DateTime;
 use chrono::offset::Utc;
-#[derive(Insertable,Queryable,QueryableByName,Debug,Associations,Serialize,Deserialize,Default,Clone)]
-#[belongs_to(Org)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "admin_users"]
 pub struct AdminUser {
     pub id: i64,
@@ -24,8 +23,8 @@ pub struct AdminUser {
     pub pwd: String,
     pub sex: Option<i32>,
     pub level_type: Option<String>,
-    pub phone_region: Option<String>,
-    pub country_code: Option<i32>,
+    pub phone_region: String,
+    pub country_code: i32,
     pub user_status: i32,
     pub user_name: String,
     pub org_id: i32,
@@ -313,7 +312,6 @@ pub struct UserRole {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-
 #[table_name = "users"]
 pub struct User {
     pub id: i64,
