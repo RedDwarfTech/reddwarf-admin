@@ -5,4 +5,6 @@ use rocket::serde::Serialize;
 #[allow(non_snake_case)]
 pub struct SysDictRequest {
     pub dictType: Option<String>,
+    pub pageNum: i64,
+    pub pageSize: i64
 }
