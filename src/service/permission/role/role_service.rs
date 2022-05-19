@@ -111,8 +111,8 @@ pub fn role_add(request: &Json<RoleAddRequest>) -> content::RawJson<String> {
     let connection = config::establish_connection();
     let new_role = RoleAdd{
         name: request.name.to_string(),
-        updated_time: 0,
-        created_time: 0,
+        updated_time: get_current_millisecond(),
+        created_time: get_current_millisecond(),
         remark: request.remark.to_string(),
     };
     diesel::insert_into(role)
