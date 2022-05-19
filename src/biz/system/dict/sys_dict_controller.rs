@@ -10,7 +10,7 @@ pub fn list() -> content::RawJson<String> {
     return box_rest_response(dicts);
 }
 
-#[get("/v1/page")]
+#[post("/v1/page")]
 pub fn page() -> content::RawJson<String> {
     let dicts = dict_page_query::<Vec<SysDict>>();
     return box_rest_response(dicts);
