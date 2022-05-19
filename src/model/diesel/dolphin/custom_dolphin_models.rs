@@ -111,6 +111,14 @@ pub struct MenuResourceAdd {
     pub code: String
 }
 
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "role"]
+pub struct RoleAdd {
+    pub name: String,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub remark: String,
+}
 
 #[derive(AsChangeset)]
 #[table_name = "rss_sub_source"]

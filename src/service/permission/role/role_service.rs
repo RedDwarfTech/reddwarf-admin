@@ -9,8 +9,9 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::custom_dolphin_models::RolePermissionAdd;
+use crate::model::diesel::dolphin::custom_dolphin_models::{RoleAdd, RolePermissionAdd};
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, Role};
+use crate::model::request::permission::role::role_add_request::RoleAddRequest;
 use crate::model::request::permission::role::role_menu_bind_request::RoleMenuBindRequest;
 use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
@@ -102,5 +103,21 @@ pub fn role_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
     }else{
         return box_error_rest_response("", "00100100064007".parse().unwrap(), "old password did not match".parse().unwrap());
     }
+    return box_rest_response("ok");
+}
+
+pub fn role_add(request: &Json<RoleAddRequest>) -> content::RawJson<String> {
+    use crate::model::diesel::dolphin::dolphin_schema::role::dsl::*;
+    let connection = config::establish_connection();
+    let new_role = RoleAdd{
+        name: request.name.to_string(),
+        updated_time: 0,
+        created_time: 0,
+        remark: request.remark.to_string(),
+    };
+    diesel::insert_into(role)
+        .values(&new_role)
+        .execute(&connection)
+        .unwrap();
     return box_rest_response("ok");
 }

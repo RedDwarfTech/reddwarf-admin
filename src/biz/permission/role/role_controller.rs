@@ -4,13 +4,14 @@ use rust_wheel::common::util::model_convert::box_rest_response;
 
 use crate::model::diesel::dolphin::dolphin_models::{MenuResource, Role};
 use crate::model::request::permission::menu::role_menu_request::RoleMenuRequest;
+use crate::model::request::permission::role::role_add_request::RoleAddRequest;
 use crate::model::request::permission::role::role_menu_bind_request::RoleMenuBindRequest;
 use crate::model::request::permission::role::role_request::RoleRequest;
 use crate::model::request::user::password_request::PasswordRequest;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
 use crate::model::response::permission::menu::menu_response_wrapper::MenuResponseWrapper;
 use crate::service::permission::menu::menu_service::menu_query_full_tree;
-use crate::service::permission::role::role_service::{edit_role_menu, role_query_list};
+use crate::service::permission::role::role_service::{edit_role_menu, role_add, role_query_list};
 use crate::service::permission::role::role_service::{role_edit, role_query};
 use crate::service::permission::user::admin_user_service::role_menu_list;
 
@@ -48,4 +49,9 @@ pub fn get_role_menu_tree(request: Json<RoleMenuRequest>) -> content::RawJson<St
 #[post("/v1/role/edit",data = "<request>")]
 pub fn edit_role(request: Json<PasswordRequest>) -> content::RawJson<String> {
     return role_edit(&request);
+}
+
+#[put("/v1/role/add",data = "<request>")]
+pub fn add_role(request: Json<RoleAddRequest>) -> content::RawJson<String> {
+    return role_add(&request);
 }
