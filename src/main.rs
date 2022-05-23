@@ -15,7 +15,6 @@ use biz::app::gallery::repo_app_controller;
 use biz::app::job::interview::interview_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::app::product_controller;
-use biz::app::tag_controller;
 use biz::common::health_controller;
 use biz::home::home_controller;
 use biz::permission::menu::menu_controller;
@@ -23,6 +22,7 @@ use biz::permission::org::org_controller;
 use biz::permission::role::role_controller;
 use biz::permission::user::admin_user_controller;
 use biz::system::dict::sys_dict_controller;
+use biz::system::tag::tag_controller;
 use biz::user::user_controller;
 
 use crate::statistic::app::cruise::channel::channel_task::{refresh_channel_article_count, refresh_channel_rep};
@@ -69,7 +69,7 @@ fn build_rocket() -> Rocket<Build> {
             app_controller::edit,
             app_controller::detail,
         ])
-        .mount("/manage/app/tags",routes![
+        .mount("/manage/system/tag",routes![
             tag_controller::list,
             tag_controller::page,
             tag_controller::add,
