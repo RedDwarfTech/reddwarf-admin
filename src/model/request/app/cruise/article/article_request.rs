@@ -8,5 +8,6 @@ pub struct ArticleRequest {
     pub pageNum: i64,
     pub pageSize: i64,
     pub maxOffset: Option<i64>,
-    pub channelId: Option<i64>
+    pub channelId: Option<i64>,
+    pub title: Option<String>
 }

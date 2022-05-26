@@ -1,4 +1,4 @@
-use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl, TextExpressionMethods};
 use diesel::dsl::any;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQueryFragment;
@@ -23,6 +23,9 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     }
     if let Some(req_channel_id) = &request.channelId {
         query = query.filter(article_table::sub_source_id.eq(req_channel_id));
+    }
+    if let Some(filter_title) = &request.title {
+        query = query.filter(article_table::title.like(format!("{}{}{}","%",filter_title.as_str(),"%")));
     }
     let query = query
         .order(created_time.desc())
