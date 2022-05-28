@@ -184,14 +184,15 @@ pub fn menu_add(request: &Json<AddMenuRequest>) -> content::RawJson<String> {
         tree_id_path: "".to_string(),
         code: request.code.to_string()
     };
+    // https://stackoverflow.com/questions/72412661/why-the-return-id-was-usize-when-inserting-record
     let menu_id = diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::menu_resource::table)
         .values(&new_menu_resource)
         .returning(crate::model::diesel::dolphin::dolphin_schema::menu_resource::id)
         .on_conflict_do_nothing()
-        .execute(&connection)
+        .get_results(&connection)
         .unwrap();
     // update tree id path
-    update_tree_id_path(menu_id as i32,connection);
+    update_tree_id_path(menu_id[0],connection);
     return box_rest_response("ok");
 }
 
