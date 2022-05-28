@@ -2,7 +2,7 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
 
-use crate::model::diesel::dolphin::dolphin_models::App;
+use crate::model::diesel::dolphin::dolphin_models::{App, Tag};
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
@@ -11,7 +11,7 @@ use crate::service::app::tag_service::{tag_create, tag_detail, tag_edit, tag_que
 
 #[post("/v1/page",data = "<request>")]
 pub fn page(request: Json<AppRequest>) -> content::RawJson<String> {
-    let apps = tag_query::<Vec<App>>(&request);
+    let apps = tag_query::<Vec<Tag>>(&request);
     return box_rest_response(apps);
 }
 

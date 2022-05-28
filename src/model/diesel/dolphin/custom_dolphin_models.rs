@@ -134,3 +134,16 @@ pub struct MenuResourcePath {
     pub id: i32,
     pub tree_id_path: String
 }
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "tags"]
+pub struct TagAdd {
+    pub tag_name: String,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub app_id: i32,
+    pub remark: Option<String>,
+    pub group: i32,
+    pub tag_type: String,
+    pub code: String,
+}
