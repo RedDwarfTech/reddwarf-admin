@@ -25,12 +25,12 @@ pub struct ArticleResponse {
 }
 
 impl ArticleResponse {
-    pub(crate) fn new(article: Article, article_content: ArticleContent) -> Self {
+    pub(crate) fn new(article: &Article, article_content: ArticleContent) -> Self {
         Self {
             id: article.id,
             user_id: 0,
-            title: article.title,
-            author: article.author,
+            title: article.title.to_string(),
+            author: article.author.to_string(),
             guid: "".to_string(),
             created_time: article.created_time,
             updated_time: article.updated_time,

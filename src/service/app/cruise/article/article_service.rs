@@ -59,8 +59,10 @@ pub fn append_channel_name(articles: &Vec<Article>, connection:&PgConnection) ->
 }
 
 pub fn article_detail_query(filter_article_id: i64) -> ArticleResponse {
+    use crate::diesel::OptionalExtension;
     use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::article_content::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let query = article.filter(crate::model::diesel::dolphin::dolphin_schema::article::id.eq(filter_article_id))
         .limit(1)
@@ -72,7 +74,14 @@ pub fn article_detail_query(filter_article_id: i64) -> ArticleResponse {
         .load::<ArticleContent>(&connection)
         .expect("query article content failed");
     let single_content = take(contents,0).unwrap();
-    let article_response = ArticleResponse::new(article_result, single_content);
+    let mut article_response = ArticleResponse::new(&article_result, single_content);
+    let channel_predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::id.eq(&article_result.sub_source_id);
+    // https://stackoverflow.com/questions/46297867/how-do-i-get-an-optiont-instead-of-an-optionvect-from-a-diesel-query-which
+    let channel = rss_sub_source.filter(channel_predicate)
+        .first::<RssSubSource>(&connection)
+        .optional()
+        .unwrap();
+    article_response.channel_name = channel.unwrap().sub_name;
     return article_response;
 }
 
