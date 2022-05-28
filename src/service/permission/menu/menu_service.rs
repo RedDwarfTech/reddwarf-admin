@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 use diesel::sql_query;
 use rocket::response::content;
 use rocket::serde::json::Json;
@@ -11,7 +13,7 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::common::enums::resource_type::ResourceType;
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::custom_dolphin_models::MenuResourceAdd;
+use crate::model::diesel::dolphin::custom_dolphin_models::{MenuResourceAdd, MenuResourcePath};
 use crate::model::diesel::dolphin::dolphin_models::AdminUser;
 use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 use crate::model::request::permission::menu::add_menu_request::AddMenuRequest;
@@ -182,10 +184,51 @@ pub fn menu_add(request: &Json<AddMenuRequest>) -> content::RawJson<String> {
         tree_id_path: "".to_string(),
         code: request.code.to_string()
     };
-    diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::menu_resource::table)
+    let menu_id = diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::menu_resource::table)
         .values(&new_menu_resource)
+        .returning(crate::model::diesel::dolphin::dolphin_schema::menu_resource::id)
         .on_conflict_do_nothing()
         .execute(&connection)
         .unwrap();
+    // update tree id path
+    update_tree_id_path(menu_id as i32,connection);
     return box_rest_response("ok");
+}
+
+pub fn update_tree_id_path(menu_id: i32, connection: PgConnection){
+    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
+    let cte_query_sub_menus = format!(" with recursive sub_menus as
+    (
+       SELECT
+           id,
+           parent_id,
+           sort,
+           tree_id_path
+       FROM menu_resource mr
+       WHERE id = 5
+       UNION ALL
+       SELECT
+           origin.id,
+           origin.parent_id,
+           origin.sort,
+           (sub_menus.tree_id_path || '-' || origin.id)
+       FROM sub_menus
+       JOIN menu_resource origin
+       ON origin.parent_id = sub_menus.id
+    )
+    SELECT
+        id,
+        tree_id_path
+    FROM sub_menus
+    where id = {}
+    ORDER BY sort ASC;
+    ",menu_id);
+    let cte_menus = sql_query(cte_query_sub_menus)
+        .load::<MenuResourcePath>(&connection)
+        .expect("Error find menu resource");
+    let predicate = id.eq(menu_id);
+    diesel::update(menu_resource.filter(predicate))
+        .set(tree_id_path.eq(&cte_menus[0].tree_id_path))
+        .get_result::<MenuResource>(&connection)
+        .expect("unable to update new password");
 }

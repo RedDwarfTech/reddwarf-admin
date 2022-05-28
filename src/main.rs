@@ -25,7 +25,7 @@ use biz::system::dict::sys_dict_controller;
 use biz::system::tag::tag_controller;
 use biz::user::user_controller;
 
-use crate::statistic::app::cruise::channel::channel_task::{refresh_channel_article_count, refresh_channel_rep};
+use crate::statistic::app::cruise::channel::channel_task::{refresh_channel_article_count, refresh_channel_rep, remove_low_quality_articles};
 
 mod biz;
 mod statistic;
@@ -40,6 +40,7 @@ mod common;
 async fn rocket() -> _ {
     tokio::spawn(refresh_channel_rep());
     tokio::spawn(refresh_channel_article_count());
+    tokio::spawn(remove_low_quality_articles());
     build_rocket()
 }
 
@@ -115,7 +116,8 @@ fn build_rocket() -> Rocket<Build> {
             repo_app_controller::add,
             repo_app_controller::edit,
             repo_app_controller::detail,
-        ]).mount("/manage/permission/role", routes![
+        ])
+        .mount("/manage/permission/role", routes![
             role_controller::page,
             role_controller::list,
             role_controller::edit_role,

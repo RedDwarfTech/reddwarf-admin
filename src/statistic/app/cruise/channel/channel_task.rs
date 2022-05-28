@@ -18,19 +18,27 @@ pub fn refresh_channel_reputation() {
     }
 }
 
-pub async fn refresh_channel_rep(){
-    let mut  interval = time::interval(Duration::from_millis(250000));
+pub async fn refresh_channel_rep() {
+    let mut interval = time::interval(Duration::from_millis(250000));
     loop {
         interval.tick().await;
         refresh_channel_reputation();
     }
 }
 
-pub async fn refresh_channel_article_count(){
-    let mut  interval = time::interval(Duration::from_millis(25000));
+pub async fn refresh_channel_article_count() {
+    let mut interval = time::interval(Duration::from_millis(25000));
     loop {
         interval.tick().await;
         refresh_channel_article();
+    }
+}
+
+pub async fn remove_low_quality_articles() {
+    let mut interval = time::interval(Duration::from_millis(25000));
+    loop {
+        interval.tick().await;
+        remove_articles();
     }
 }
 
@@ -43,4 +51,8 @@ pub fn refresh_channel_article() {
         let result = get_article_count_by_channel_id(&channel.id);
         update_channel_article_count(result, channel.id)
     }
+}
+
+pub fn remove_articles() {
+    
 }

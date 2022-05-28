@@ -127,3 +127,10 @@ pub struct RssSubSourceUpdate {
     pub comment_rss: Option<i32>,
     pub sub_status: Option<i32>,
 }
+
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "menu_resource"]
+pub struct MenuResourcePath {
+    pub id: i32,
+    pub tree_id_path: String
+}
