@@ -7,9 +7,10 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::custom_dolphin_models::AppAdd;
+use crate::model::diesel::dolphin::custom_dolphin_models::{AppAdd, ProductAdd};
 use crate::model::diesel::dolphin::dolphin_models::{App, Product};
 use crate::model::request::app::add_app_request::AddAppRequest;
+use crate::model::request::app::add_product_request::AddProductRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::product_request::ProductRequest;
 
@@ -25,29 +26,29 @@ pub fn product_query<T>(request: &Json<ProductRequest>) -> PaginationResponse<Ve
     return page_result;
 }
 
-pub fn product_create(request: &Json<AddAppRequest>) {
-    use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
+pub fn product_create(request: &Json<AddProductRequest>) {
+    use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
     let connection = config::establish_connection();
-    let apps_record = apps.order(app_id.desc())
+    let apps_record = products.order(product_id.desc())
         .limit(1)
-        .load::<App>(&connection)
-        .expect("query app  failed");
+        .load::<Product>(&connection)
+        .expect("query app failed");
     let app_db = take(apps_record,0).unwrap();
 
     let current_time = get_current_millisecond();
-    let app = AppAdd{
-        app_name: request.appName.to_string(),
-        remark: None,
+    let app = ProductAdd{
+        product_name: request.productName.to_string(),
+        remark: request.remark.to_string(),
         created_time: current_time,
-        updated_time: Option::from(current_time),
-        user_count: None,
-        online_status: None,
+        updated_time: current_time,
+        user_count: 0,
+        online_status: 1,
         online_time: None,
-        app_tag: None,
-        app_id: app_db.app_id,
-        app_abbr: request.appAbbr.to_string()
+        product_tag: None,
+        product_id: app_db.product_id,
+        product_abbr: request.productAbbr.to_string()
     };
-    diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::apps::table)
+    diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::products::table)
         .values(&app)
         .on_conflict_do_nothing()
         .execute(&connection)

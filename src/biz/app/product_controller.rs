@@ -4,6 +4,7 @@ use rust_wheel::common::util::model_convert::box_rest_response;
 
 use crate::model::diesel::dolphin::dolphin_models::Product;
 use crate::model::request::app::add_app_request::AddAppRequest;
+use crate::model::request::app::add_product_request::AddProductRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::product_request::ProductRequest;
 use crate::service::app::product_service::{product_create, product_detail, product_edit, product_query};
@@ -15,7 +16,7 @@ pub fn page(request: Json<ProductRequest>) -> content::RawJson<String> {
 }
 
 #[post("/v1/add",data = "<request>")]
-pub fn add(request: Json<AddAppRequest>) -> content::RawJson<String> {
+pub fn add(request: Json<AddProductRequest>) -> content::RawJson<String> {
     product_create(&request);
     return box_rest_response("ok");
 }

@@ -176,9 +176,9 @@ table! {
         product_name -> Varchar,
         remark -> Nullable<Varchar>,
         created_time -> Int8,
-        updated_time -> Nullable<Int8>,
-        user_count -> Nullable<Int4>,
-        online_status -> Nullable<Int4>,
+        updated_time -> Int8,
+        user_count -> Int4,
+        online_status -> Int4,
         online_time -> Nullable<Int8>,
         product_abbr -> Varchar,
         product_id -> Int4,
@@ -193,8 +193,8 @@ table! {
         status -> Int4,
         updated_time -> Int8,
         created_time -> Int8,
-        remark -> Nullable<Varchar>,
-        is_deleted -> Nullable<Int4>,
+        remark -> Varchar,
+        is_deleted -> Int4,
     }
 }
 

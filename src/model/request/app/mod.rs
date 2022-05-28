@@ -8,3 +8,4 @@ pub mod edit_app_request;
 pub mod job;
 pub mod product_request;
 pub mod tag_list_request;
+pub mod add_product_request;

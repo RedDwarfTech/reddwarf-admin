@@ -189,9 +189,9 @@ pub struct Product {
     pub product_name: String,
     pub remark: Option<String>,
     pub created_time: i64,
-    pub updated_time: Option<i64>,
-    pub user_count: Option<i32>,
-    pub online_status: Option<i32>,
+    pub updated_time: i64,
+    pub user_count: i32,
+    pub online_status: i32,
     pub online_time: Option<i64>,
     pub product_abbr: String,
     pub product_id: i32,
@@ -206,8 +206,8 @@ pub struct Role {
     pub status: i32,
     pub updated_time: i64,
     pub created_time: i64,
-    pub remark: Option<String>,
-    pub is_deleted: Option<i32>,
+    pub remark: String,
+    pub is_deleted: i32,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]

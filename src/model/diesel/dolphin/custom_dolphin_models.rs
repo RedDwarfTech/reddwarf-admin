@@ -40,6 +40,21 @@ pub struct AppAdd {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
+#[table_name = "products"]
+pub struct ProductAdd {
+    pub product_name: String,
+    pub remark: String,
+    pub created_time: i64,
+    pub updated_time: i64,
+    pub user_count: i32,
+    pub online_status: i32,
+    pub online_time: Option<i64>,
+    pub product_abbr: String,
+    pub product_id: i32,
+    pub product_tag: Option<String>,
+}
+
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
 #[table_name = "interview"]
 pub struct InterviewAdd {
     pub city: String,
