@@ -45,12 +45,11 @@ pub fn product_create(request: &Json<AddProductRequest>) {
         online_status: 1,
         online_time: None,
         product_tag: None,
-        product_id: app_db.product_id,
+        product_id: app_db.product_id + 1,
         product_abbr: request.productAbbr.to_string()
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::products::table)
         .values(&app)
-        .on_conflict_do_nothing()
         .execute(&connection)
         .unwrap();
 }

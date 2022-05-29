@@ -58,7 +58,7 @@ fn build_rocket() -> Rocket<Build> {
             sys_dict_controller::list,
             sys_dict_controller::page,
         ])
-        .mount("/manage/product",routes![
+        .mount("/manage/app/overview/product",routes![
             product_controller::page,
             product_controller::add,
             product_controller::edit,
