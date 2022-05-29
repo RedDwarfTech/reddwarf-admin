@@ -7,7 +7,7 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::custom_dolphin_models::AppAdd;
+use crate::model::diesel::dolphin::custom_dolphin_models::{AppAdd, RepoAppAdd};
 use crate::model::diesel::dolphin::dolphin_models::{App, AppRepo};
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
@@ -35,23 +35,7 @@ pub fn repo_app_create(request: &Json<AddAppRequest>) {
     let app_db = take(apps_record,0).unwrap();
 
     let current_time = get_current_millisecond();
-    let app = AppAdd{
-        app_name: request.appName.to_string(),
-        remark: None,
-        created_time: current_time,
-        updated_time: Option::from(current_time),
-        user_count: None,
-        online_status: None,
-        online_time: None,
-        app_tag: None,
-        app_id: app_db.app_id,
-        app_abbr: request.appAbbr.to_string()
-    };
-    diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::apps::table)
-        .values(&app)
-        .on_conflict_do_nothing()
-        .execute(&connection)
-        .unwrap();
+   
 }
 
 pub fn repo_app_edit(request: &Json<EditAppRequest>) {

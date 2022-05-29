@@ -39,11 +39,11 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         .collect();
     let app = AppAdd{
         app_name: request.appName.to_string(),
-        remark: None,
+        remark: request.remark.to_string(),
         created_time: current_time,
-        updated_time: Option::from(current_time),
-        user_count: None,
-        online_status: None,
+        updated_time: current_time,
+        user_count: 0,
+        online_status: 0,
         online_time: None,
         app_tag: None,
         app_id: rand_string,

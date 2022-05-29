@@ -5,5 +5,7 @@ use rocket::serde::Serialize;
 #[allow(non_snake_case)]
 pub struct AddAppRequest {
     pub appName: String,
-    pub appAbbr: String
+    pub appAbbr: String,
+    pub remark: String,
+    pub productId: i32
 }
