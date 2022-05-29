@@ -64,7 +64,7 @@ fn build_rocket() -> Rocket<Build> {
             product_controller::edit,
             product_controller::get,
         ])
-        .mount("/manage/app",routes![
+        .mount("/manage/app/overview/app",routes![
             app_controller::page,
             app_controller::add,
             app_controller::edit,
