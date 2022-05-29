@@ -1,3 +1,5 @@
+use rand::{Rng, thread_rng};
+use rand::distributions::Alphanumeric;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
@@ -28,13 +30,13 @@ pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> 
 pub fn app_create(request: &Json<AddAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
-    let apps_record = apps.order(app_id.desc())
-        .limit(1)
-        .load::<App>(&connection)
-        .expect("query app  failed");
-    let app_db = take(apps_record,0).unwrap();
-
     let current_time = get_current_millisecond();
+    // https://stackoverflow.com/questions/65478444/how-to-generate-a-random-string-of-alphanumeric-chars
+    let rand_string: String = thread_rng()
+        .sample_iter(&Alphanumeric)
+        .map(char::from)
+        .take(10)
+        .collect();
     let app = AppAdd{
         app_name: request.appName.to_string(),
         remark: None,
@@ -44,7 +46,7 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         online_status: None,
         online_time: None,
         app_tag: None,
-        app_id: app_db.app_id,
+        app_id: rand_string,
         app_abbr: request.appAbbr.to_string()
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::apps::table)
