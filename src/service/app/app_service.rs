@@ -1,3 +1,4 @@
+use num_traits::ToPrimitive;
 use rand::{Rng, thread_rng};
 use rand::distributions::Alphanumeric;
 use rocket::serde::json::Json;
@@ -47,7 +48,8 @@ pub fn app_create(request: &Json<AddAppRequest>) {
         online_time: None,
         app_tag: None,
         app_id: rand_string,
-        app_abbr: request.appAbbr.to_string()
+        app_abbr: request.appAbbr.to_string(),
+        product_id: request.productId
     };
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::apps::table)
         .values(&app)

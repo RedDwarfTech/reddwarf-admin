@@ -37,6 +37,7 @@ pub struct AppAdd {
     pub app_abbr: String,
     pub app_id: String,
     pub app_tag: Option<String>,
+    pub product_id: i32
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
