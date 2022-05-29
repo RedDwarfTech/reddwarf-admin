@@ -7,11 +7,17 @@ use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::add_product_request::AddProductRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::product_request::ProductRequest;
-use crate::service::app::product_service::{product_create, product_detail, product_edit, product_query};
+use crate::service::app::product_service::{product_create, product_detail, product_edit, product_query, product_query_list};
 
 #[post("/v1/page",data = "<request>")]
 pub fn page(request: Json<ProductRequest>) -> content::RawJson<String> {
     let products = product_query::<Vec<Product>>(&request);
+    return box_rest_response(products);
+}
+
+#[get("/v1/list")]
+pub fn list() -> content::RawJson<String> {
+    let products = product_query_list::<Vec<Product>>();
     return box_rest_response(products);
 }
 

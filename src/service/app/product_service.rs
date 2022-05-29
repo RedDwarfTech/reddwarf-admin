@@ -26,6 +26,15 @@ pub fn product_query<T>(request: &Json<ProductRequest>) -> PaginationResponse<Ve
     return page_result;
 }
 
+pub fn product_query_list<T>() -> Vec<Product> {
+    use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
+    let connection = config::establish_connection();
+    let products_record = products
+        .load::<Product>(&connection)
+        .expect("query products failed");
+    return products_record;
+}
+
 pub fn product_create(request: &Json<AddProductRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
     let connection = config::establish_connection();
