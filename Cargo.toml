@@ -22,8 +22,8 @@ num-traits = "0.2"
 tokio = { version = "1.17.0", features = ["full"] }
 futures = "0.3"
 regex = "1.5"
+rand = "0.8.5"
 
 # reddwarf public component
 rust_wheel = { git = "https://github.com/jiangxiaoqiang/rust_wheel.git" }
 
-rand = "0.8.5"

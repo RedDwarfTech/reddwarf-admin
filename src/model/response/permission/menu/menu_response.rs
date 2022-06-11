@@ -1,5 +1,7 @@
 use rocket::serde::Deserialize;
 use rocket::serde::Serialize;
+use rust_wheel::common::util::convert_to_tree::IntoTree;
+
 use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 
 #[derive(Deserialize, Serialize)]
@@ -38,6 +40,30 @@ impl From<&MenuResource> for MenuResponse {
             disableCheckbox: false,
             tree_id_path: p.tree_id_path.to_string(),
             children: vec![]
+        }
+    }
+}
+
+impl IntoTree for &MenuResponse {
+    type Output = MenuResponse;
+
+    fn get_id(&self) -> i32 {
+        self.id
+    }
+
+    fn get_parent_id(&self) -> i32 {
+        self.parent_id
+    }
+
+    fn convert(&self, children: Vec<Self::Output>) -> Self::Output {
+        MenuResponse {
+            id: self.id,
+            parent_id: self.parent_id,
+            disableCheckbox: false,
+            name: self.name.to_string(),
+            children,
+            name_zh: self.name_zh.to_string(),
+            tree_id_path: self.tree_id_path.to_string()
         }
     }
 }

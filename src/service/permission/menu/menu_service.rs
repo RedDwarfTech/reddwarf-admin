@@ -5,7 +5,8 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::collection_util::take;
-use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_pagination_from_list};
+use rust_wheel::common::util::convert_to_tree::convert_to_tree;
+use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_entity, map_pagination_from_list};
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
@@ -97,30 +98,19 @@ pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuRespons
     let cte_menus = sql_query(cte_query_sub_menus)
         .load::<MenuResource>(&connection)
         .expect("Error find menu resource");
-    return convert_menu_to_tree(root_menus, &cte_menus);
+    let menu_resource_resp:Vec<MenuResponse> = map_entity(cte_menus);
+    return convert_to_tree_impl(&menu_resource_resp);
 }
 
-/**
-** convert the list menu to tree recursive
-**/
-pub fn convert_menu_to_tree(root_menus: &Vec<MenuResource>, sub_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
-    let mut menu_res_list = Vec::new();
-    for root_menu in root_menus {
-        let mut origin_menu_res_list = Vec::new();
-        let mut menu_res = MenuResponse::from(root_menu);
-        for sub_menu in sub_menus{
-            if sub_menu.parent_id == root_menu.id {
-                let menu_res_sub = MenuResponse::from(sub_menu);
-                menu_res.children.push(menu_res_sub);
-                origin_menu_res_list.push(sub_menu.clone());
-            }
-        }
-        if !menu_res.children.is_empty() {
-            menu_res.children = convert_menu_to_tree(&origin_menu_res_list, sub_menus);
-        }
-        menu_res_list.push(menu_res);
-    }
-    return menu_res_list;
+fn convert_to_tree_impl(contents: &Vec<MenuResponse>) -> Vec<MenuResponse> {
+    let root_element: Vec<_> = contents.iter()
+        .filter(|content| content.parent_id == 0)
+        .collect();
+    let sub_element: Vec<_> = contents.iter()
+        .filter(|content| content.parent_id != 0)
+        .collect();
+    let result = convert_to_tree(&root_element, &sub_element);
+    return result;
 }
 
 /**
