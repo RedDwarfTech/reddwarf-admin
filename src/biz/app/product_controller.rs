@@ -1,11 +1,9 @@
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
-
+use crate::model::request::app::overview::product::add_product_request::AddProductRequest;
+use crate::model::request::app::overview::product::edit_product_request::EditProductRequest;
 use crate::model::diesel::dolphin::dolphin_models::Product;
-use crate::model::request::app::add_app_request::AddAppRequest;
-use crate::model::request::app::add_product_request::AddProductRequest;
-use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::product_request::ProductRequest;
 use crate::service::app::product_service::{product_create, product_detail, product_edit, product_query, product_query_list};
 
@@ -27,8 +25,8 @@ pub fn add(request: Json<AddProductRequest>) -> content::RawJson<String> {
     return box_rest_response("ok");
 }
 
-#[put("/v1/edit",data = "<request>")]
-pub fn edit(request: Json<EditAppRequest>) -> content::RawJson<String> {
+#[patch("/v1/edit",data = "<request>")]
+pub fn edit(request: Json<EditProductRequest>) -> content::RawJson<String> {
     product_edit(&request);
     return box_rest_response("ok");
 }
