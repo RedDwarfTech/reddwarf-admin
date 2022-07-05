@@ -4,7 +4,6 @@ use rocket::serde::Serialize;
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[allow(non_snake_case)]
 pub struct EditProductRequest {
-    pub productName: String,
     pub remark: String,
     pub id: i32 
 }
