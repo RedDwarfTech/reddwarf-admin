@@ -20,7 +20,7 @@ pub fn add(request: Json<AddAppRequest>) -> content::RawJson<String> {
     return box_rest_response("ok");
 }
 
-#[put("/v1/edit",data = "<request>")]
+#[patch("/v1/edit",data = "<request>")]
 pub fn edit(request: Json<EditAppRequest>) -> content::RawJson<String> {
     app_edit(&request);
     return box_rest_response("ok");

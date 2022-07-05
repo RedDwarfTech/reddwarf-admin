@@ -7,11 +7,10 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::custom_dolphin_models::{AppAdd, RepoAppAdd};
 use crate::model::diesel::dolphin::dolphin_models::{App, AppRepo};
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
-use crate::model::request::app::edit_app_request::EditAppRequest;
+use crate::model::request::app::gallery::repo_app_request::RepoAppRequest;
 
 pub fn repo_app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<AppRepo>> {
     use crate::model::diesel::dolphin::dolphin_schema::app_repo::dsl::*;
@@ -38,7 +37,7 @@ pub fn repo_app_create(request: &Json<AddAppRequest>) {
    
 }
 
-pub fn repo_app_edit(request: &Json<EditAppRequest>) {
+pub fn repo_app_edit(request: &Json<RepoAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId.to_string());
