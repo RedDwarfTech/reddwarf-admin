@@ -63,13 +63,13 @@ pub fn product_create(request: &Json<AddProductRequest>) {
 }
 
 pub fn product_edit(request: &Json<EditProductRequest>) {
-    use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
+    use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
     let connection = config::establish_connection();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::id.eq(request.id);
-    diesel::update(apps.filter(predicate))
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::products::id.eq(request.id);
+    diesel::update(products.filter(predicate))
         .set(remark.eq(&request.remark))
-        .get_result::<App>(&connection)
-        .expect("unable to update app");
+        .get_result::<Product>(&connection)
+        .expect("unable to update products");
 }
 
 pub fn product_detail(query_app_id: i32) -> App {
