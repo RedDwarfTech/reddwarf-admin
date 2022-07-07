@@ -39,6 +39,9 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
     if let Some(channel_sub_name) = &request.sub_name {
         query = query.filter(channel_table::sub_name.like(format!("{}{}{}","%",channel_sub_name.as_str(),"%")));
     }
+    if let Some(channel_sub_url) = &request.sub_url {
+        query = query.filter(channel_table::sub_url.like(format!("{}{}{}","%",channel_sub_url.as_str(),"%")));
+    }
     if let Some(current_sub_status) = &request.subStatus {
         query = query.filter(channel_table::sub_status.eq(current_sub_status));
     }
