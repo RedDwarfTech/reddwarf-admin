@@ -7,11 +7,10 @@ use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
-use crate::model::diesel::dolphin::custom_dolphin_models::{AppAdd, ProductAdd};
+use crate::model::diesel::dolphin::custom_dolphin_models::{ProductAdd};
 use crate::model::diesel::dolphin::dolphin_models::{App, Product};
-use crate::model::request::app::add_app_request::AddAppRequest;
-use crate::model::request::app::add_product_request::AddProductRequest;
-use crate::model::request::app::edit_app_request::EditAppRequest;
+use crate::model::request::app::overview::product::add_product_request::AddProductRequest;
+use crate::model::request::app::overview::product::edit_product_request::EditProductRequest;
 use crate::model::request::app::product_request::ProductRequest;
 
 pub fn product_query<T>(request: &Json<ProductRequest>) -> PaginationResponse<Vec<Product>> {
@@ -63,14 +62,14 @@ pub fn product_create(request: &Json<AddProductRequest>) {
         .unwrap();
 }
 
-pub fn product_edit(request: &Json<EditAppRequest>) {
-    use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
+pub fn product_edit(request: &Json<EditProductRequest>) {
+    use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
     let connection = config::establish_connection();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId.to_string());
-    diesel::update(apps.filter(predicate))
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::products::id.eq(request.id);
+    diesel::update(products.filter(predicate))
         .set(remark.eq(&request.remark))
-        .get_result::<App>(&connection)
-        .expect("unable to update app");
+        .get_result::<Product>(&connection)
+        .expect("unable to update products");
 }
 
 pub fn product_detail(query_app_id: i32) -> App {
