@@ -29,7 +29,7 @@ pub fn update(request: Json<UpdateChannelRequest>) -> content::RawJson<String> {
 ///
 #[put("/v1/pick", data = "<request>")]
 pub fn editor_pick(request: Json<PickChannelRequest>) -> content::RawJson<String> {
-    editor_pick_channel(request.channelId, 1);
+    editor_pick_channel(request.channelId, request.editor_pick);
     return box_rest_response("ok");
 }
 
