@@ -1,8 +1,8 @@
 use diesel::{BoolExpressionMethods, QueryDsl, RunQueryDsl};
 use rocket::serde::json::Json;
 use rust_wheel::config::db::config;
-use crate::diesel::ExpressionMethods;
 
+use crate::diesel::ExpressionMethods;
 use crate::model::diesel::dolphin::dolphin_models::Trend;
 use crate::model::request::app::cruise::overview::cruise_overview_request::CruiseOverviewRequest;
 
@@ -19,5 +19,15 @@ pub fn cruise_trend_query(request: &Json<CruiseOverviewRequest>) -> Vec<Trend> {
     return trend_records;
 }
 
-
+pub fn update_days_article_count(new_trend: &Trend) {
+    use crate::model::diesel::dolphin::dolphin_schema::trend::dsl::*;
+    let connection = config::establish_connection();
+    diesel::insert_into(trend)
+        .values(new_trend)
+        .on_conflict((statistic_time,app_id,trend_item))
+        .do_update()
+        .set(incre_num.eq(new_trend.incre_num))
+        .execute(&connection)
+        .expect("unable to update trend article count");
+}
 

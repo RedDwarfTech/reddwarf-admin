@@ -7,9 +7,9 @@ use rocket::{Build, Rocket};
 
 use biz::app::app_controller;
 use biz::app::cernitor::domain::domain_controller;
-use biz::app::cruise::overview::cruise_trend_controller;
 use biz::app::cruise::article::article_controller;
 use biz::app::cruise::channel::channel_controller;
+use biz::app::cruise::overview::cruise_trend_controller;
 use biz::app::dict::translate::translate_controller;
 use biz::app::dict::word::word_controller;
 use biz::app::gallery::repo_app_controller;
@@ -26,7 +26,7 @@ use biz::system::dict::sys_dict_controller;
 use biz::system::tag::tag_controller;
 use biz::user::user_controller;
 
-use crate::statistic::app::cruise::channel::channel_task::{refresh_channel_article_count, refresh_channel_rep, remove_low_quality_articles};
+use crate::statistic::app::cruise::channel::channel_task::{calculate_article_trend, refresh_channel_article_count, refresh_channel_rep, remove_low_quality_articles};
 
 mod biz;
 mod statistic;
@@ -42,6 +42,7 @@ async fn rocket() -> _ {
     tokio::spawn(refresh_channel_rep());
     tokio::spawn(refresh_channel_article_count());
     tokio::spawn(remove_low_quality_articles());
+    tokio::spawn(calculate_article_trend());
     build_rocket()
 }
 
