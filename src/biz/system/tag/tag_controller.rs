@@ -2,7 +2,7 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::model_convert::box_rest_response;
 
-use crate::model::diesel::dolphin::dolphin_models::{App, Tag};
+use crate::model::diesel::dolphin::dolphin_models::{Tag};
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;

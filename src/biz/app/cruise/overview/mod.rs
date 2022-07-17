@@ -1,0 +1,1 @@
+pub mod cruise_trend_controller;

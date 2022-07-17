@@ -7,6 +7,7 @@ use rocket::{Build, Rocket};
 
 use biz::app::app_controller;
 use biz::app::cernitor::domain::domain_controller;
+use biz::app::cruise::overview::cruise_trend_controller;
 use biz::app::cruise::article::article_controller;
 use biz::app::cruise::channel::channel_controller;
 use biz::app::dict::translate::translate_controller;
@@ -86,6 +87,9 @@ fn build_rocket() -> Rocket<Build> {
             domain_controller::page,
             domain_controller::add,
             domain_controller::edit,
+        ])
+        .mount("/manage/app/cruise/overview", routes![
+            cruise_trend_controller::list
         ])
         .mount("/manage/app/cruise/channel", routes![
             channel_controller::page,

@@ -1,8 +1,6 @@
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
-use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::map_pagination_res;
-use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
@@ -24,16 +22,7 @@ pub fn repo_app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<A
     return page_result;
 }
 
-pub fn repo_app_create(request: &Json<AddAppRequest>) {
-    use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
-    let connection = config::establish_connection();
-    let apps_record = apps.order(app_id.desc())
-        .limit(1)
-        .load::<App>(&connection)
-        .expect("query app  failed");
-    let app_db = take(apps_record,0).unwrap();
-
-    let current_time = get_current_millisecond();
+pub fn repo_app_create(_request: &Json<AddAppRequest>) {
    
 }
 

@@ -1,5 +1,3 @@
-use std::fmt::format;
-
 use diesel::sql_query;
 use rocket::response::content;
 use rocket::serde::json::Json;
@@ -39,7 +37,7 @@ pub fn menu_query_full_tree<T>(filter_parent_id: i32) -> Vec<MenuResponse>{
     return find_sub_menu_cte_impl(&root_menus);
 }
 
-pub fn find_sub_menu_cte_impl(root_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
+pub fn find_sub_menu_cte_impl(_root_menus: &Vec<MenuResource>) -> Vec<MenuResponse>{
     let connection = config::establish_connection();
     let cte_query_sub_menus = " with recursive sub_menus as
     (
