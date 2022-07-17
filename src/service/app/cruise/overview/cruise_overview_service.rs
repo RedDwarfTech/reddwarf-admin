@@ -3,6 +3,7 @@ use rocket::serde::json::Json;
 use rust_wheel::config::db::config;
 
 use crate::diesel::ExpressionMethods;
+use crate::model::diesel::dolphin::custom_dolphin_models::TrendAdd;
 use crate::model::diesel::dolphin::dolphin_models::Trend;
 use crate::model::request::app::cruise::overview::cruise_overview_request::CruiseOverviewRequest;
 
@@ -19,7 +20,7 @@ pub fn cruise_trend_query(request: &Json<CruiseOverviewRequest>) -> Vec<Trend> {
     return trend_records;
 }
 
-pub fn update_days_article_count(new_trend: &Trend) {
+pub fn update_days_article_count(new_trend: &TrendAdd) {
     use crate::model::diesel::dolphin::dolphin_schema::trend::dsl::*;
     let connection = config::establish_connection();
     diesel::insert_into(trend)

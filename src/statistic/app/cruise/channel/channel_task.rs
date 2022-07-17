@@ -3,7 +3,8 @@ use std::time::Duration;
 use rust_wheel::common::util::time_util::{end_of_today, get_current_millisecond, start_of_today};
 use tokio::time;
 
-use crate::model::diesel::dolphin::dolphin_models::{RssSubSource, Trend};
+use crate::model::diesel::dolphin::custom_dolphin_models::TrendAdd;
+use crate::model::diesel::dolphin::dolphin_models::{RssSubSource};
 use crate::service::app::cruise::article::article_fav_service::channel_fav_count;
 use crate::service::app::cruise::article::article_service::get_article_count_by_channel_id;
 use crate::service::app::cruise::article::static_article_service::get_article_count_by_time;
@@ -73,8 +74,7 @@ pub fn remove_articles() {
 
 pub fn calculate_trend_impl(start: i64, end: i64) {
     let article_count = get_article_count_by_time(start,end);
-    let new_trend = Trend{
-        id: 0,
+    let new_trend = TrendAdd{
         trend_item: 1,
         app_id: 1,
         created_time: get_current_millisecond(),
