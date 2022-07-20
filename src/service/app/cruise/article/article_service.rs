@@ -1,5 +1,7 @@
-use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl, TextExpressionMethods};
-use diesel::dsl::any;
+use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::dsl::{any};
+use diesel::query_builder::BoxedSelectStatement;
+use diesel_full_text_search::{to_tsquery, to_tsvector, TsVectorExtensions};
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQueryFragment;
 use rust_wheel::common::util::collection_util::take;
@@ -14,10 +16,8 @@ use crate::model::response::app::cruise::article::article_response::ArticleRespo
 pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Vec<ArticleResponse>> {
     // when pagination with the big table
     // using the estimate rows not the precise row count to speed the query
-    use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
-    let connection = config::establish_connection();
-    let mut query = article_table::table.into_boxed::<diesel::pg::Pg>();
+    let mut query:BoxedSelectStatement<(diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>), article_table::table, diesel::pg::Pg> = article_table::table.into_boxed::<diesel::pg::Pg>();
     if let Some(max_offset) = &request.maxOffset {
         query = query.filter(article_table::id.lt(max_offset));
     }
@@ -25,8 +25,19 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
         query = query.filter(article_table::sub_source_id.eq(req_channel_id));
     }
     if let Some(filter_title) = &request.title {
-        query = query.filter(article_table::title.like(format!("{}{}{}","%",filter_title.as_str(),"%")));
+        let query_items: Vec<&str> = filter_title.trim().split_whitespace().collect();
+        let query_array = query_items.join(" & ");
+        let tsquery = to_tsquery(query_array);
+        let tsvector = to_tsvector("'dolphinzhcfg', title");
+        query = query.filter(tsvector.matches(tsquery));
+        return get_query_result(query,request);
     }
+    return get_query_result(query,request);
+}
+
+pub fn get_query_result(query:BoxedSelectStatement<(diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>), crate::model::diesel::dolphin::dolphin_schema::article::table, diesel::pg::Pg>,request: &Json<ArticleRequest>) -> PaginationResponse<Vec<ArticleResponse>> {
+    use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
+    let connection = config::establish_connection();
     let query = query
         .order(created_time.desc())
         .paginate_pg_big_table(request.pageNum, "article".parse().unwrap())
