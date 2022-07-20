@@ -1,5 +1,5 @@
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
-use diesel::dsl::{any};
+use diesel::dsl::any;
 use diesel::query_builder::BoxedSelectStatement;
 use diesel_full_text_search::{to_tsquery, to_tsvector, TsVectorExtensions};
 use rocket::serde::json::Json;
@@ -26,10 +26,10 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     }
     if let Some(filter_title) = &request.title {
         let query_items: Vec<&str> = filter_title.trim().split_whitespace().collect();
-        let query_array = query_items.join(" & ");
-        let tsquery = to_tsquery(query_array);
-        let tsvector = to_tsvector("'dolphinzhcfg', title");
-        query = query.filter(tsvector.matches(tsquery));
+        let query_array = query_items.join(" ");
+        let ts_query = to_tsquery(query_array);
+        let ts_vector = to_tsvector("'dolphinzhcfg', title");
+        query = query.filter(ts_vector.matches(ts_query));
         return get_query_result(query,request);
     }
     return get_query_result(query,request);
