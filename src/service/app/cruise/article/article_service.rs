@@ -1,7 +1,7 @@
 use diesel::{debug_query, ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use diesel::dsl::any;
 use diesel::query_builder::BoxedSelectStatement;
-use diesel_full_text_search::{plainto_tsquery, to_tsquery, to_tsvector, TsVectorExtensions};
+use diesel_full_text_search::{plainto_tsquery, to_tsvector, TsVectorExtensions};
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQueryFragment;
 use rust_wheel::common::util::collection_util::take;
@@ -26,12 +26,14 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
         query = query.filter(article_table::sub_source_id.eq(req_channel_id));
     }
     if let Some(filter_title) = &request.title {
-        let query_items: Vec<&str> = filter_title.trim().split_whitespace().collect();
-        let query_array = query_items.join("|");
-        let ts_query = plainto_tsquery(format!{"{}{}{}","'",query_array,"'"});
-        let ts_vector = to_tsvector("'dolphinzhcfg', title");
-        query = query.filter(ts_vector.matches(ts_query));
-        return get_query_result(query,request);
+        if !filter_title.trim().is_empty() {
+            let query_items: Vec<&str> = filter_title.trim().split_whitespace().collect();
+            let query_array = query_items.join("|");
+            let ts_query = plainto_tsquery(format! {"{}{}{}", "'", query_array, "'"});
+            let ts_vector = to_tsvector("'dolphinzhcfg', title");
+            query = query.filter(ts_vector.matches(ts_query));
+            return get_query_result(query, request);
+        }
     }
     return get_query_result(query,request);
 }
