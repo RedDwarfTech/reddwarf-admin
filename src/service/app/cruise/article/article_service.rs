@@ -1,7 +1,7 @@
 use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use diesel::dsl::any;
 use diesel::query_builder::BoxedSelectStatement;
-use diesel_full_text_search::{to_tsquery, to_tsvector, TsVectorExtensions};
+use diesel_full_text_search::{plainto_tsquery, to_tsquery, to_tsvector, TsVectorExtensions};
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQueryFragment;
 use rust_wheel::common::util::collection_util::take;
@@ -17,6 +17,7 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     // when pagination with the big table
     // using the estimate rows not the precise row count to speed the query
     use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
+    // https://stackoverflow.com/questions/21747136/how-do-i-print-the-type-of-a-variable
     let mut query:BoxedSelectStatement<(diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>), article_table::table, diesel::pg::Pg> = article_table::table.into_boxed::<diesel::pg::Pg>();
     if let Some(max_offset) = &request.maxOffset {
         query = query.filter(article_table::id.lt(max_offset));
@@ -26,8 +27,8 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     }
     if let Some(filter_title) = &request.title {
         let query_items: Vec<&str> = filter_title.trim().split_whitespace().collect();
-        let query_array = query_items.join(" ");
-        let ts_query = to_tsquery(query_array);
+        let query_array = query_items.join("|");
+        let ts_query = plainto_tsquery(query_array);
         let ts_vector = to_tsvector("'dolphinzhcfg', title");
         query = query.filter(ts_vector.matches(ts_query));
         return get_query_result(query,request);
