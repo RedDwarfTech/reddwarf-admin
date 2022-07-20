@@ -1,4 +1,4 @@
-use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::{debug_query, ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use diesel::dsl::any;
 use diesel::query_builder::BoxedSelectStatement;
 use diesel_full_text_search::{plainto_tsquery, to_tsquery, to_tsvector, TsVectorExtensions};
@@ -43,6 +43,8 @@ pub fn get_query_result(query:BoxedSelectStatement<(diesel::sql_types::BigInt, d
         .order(created_time.desc())
         .paginate_pg_big_table(request.pageNum, "article".parse().unwrap())
         .per_page(request.pageSize);
+    let sql1 = debug_query::<diesel::pg::Pg, _>(&query);
+    println!("sql:{}",sql1);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.pg_big_table_load_and_count_pages_total::<Article>(&connection);
     let article_response = append_channel_name(&query_result.as_ref().unwrap().0, &connection);
     let total = query_result.as_ref().unwrap().2;
