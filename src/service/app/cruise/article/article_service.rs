@@ -29,7 +29,7 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
         if !filter_title.trim().is_empty() {
             let query_items: Vec<&str> = filter_title.trim().split_whitespace().collect();
             let query_array = query_items.join("|");
-            let ts_query = plainto_tsquery(format! {"{}{}{}", "'", query_array, "'"});
+            let ts_query = plainto_tsquery(format! {"{}{}{}", "'dolphinzhcfg','", query_array, "'"});
             let ts_vector = to_tsvector("'dolphinzhcfg', title");
             query = query.filter(ts_vector.matches(ts_query));
             return get_query_result(query, request);
