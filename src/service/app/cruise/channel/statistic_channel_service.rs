@@ -1,4 +1,4 @@
-use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl};
+use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
 use rust_wheel::common::util::time_util::{get_current_millisecond, get_minus_day_millisecond};
 use rust_wheel::config::db::config;
 
@@ -12,6 +12,18 @@ pub fn get_refresh_channels() -> Vec<RssSubSource> {
         .filter(rep_latest_refresh_time.lt(yesterday_of_curry))
         .order(rep_latest_refresh_time.asc())
         .limit(20);
+    let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
+    return query_result;
+}
+
+pub fn get_low_quality_channels() -> Vec<RssSubSource> {
+    use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
+    let connection = config::establish_connection();
+    let predicate = sub_status.eq(3).and(article_count.gt(0));
+    let query = rss_sub_source
+        .filter(predicate)
+        .order(rep_latest_refresh_time.asc())
+        .limit(1);
     let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
     return query_result;
 }

@@ -32,3 +32,9 @@ pub fn update_days_article_count(new_trend: &TrendAdd) {
         .expect("unable to update trend article count");
 }
 
+pub fn delete_low_quality_channel(filter_channel_id: i64) {
+    let connection = config::establish_connection();
+    diesel::sql_query(format!("delete FROM article WHERE ctid in(select ctid from article where channel_id ={} limit 50)",filter_channel_id))
+        .execute(&connection)
+        .expect("An error has occured");
+}

@@ -1,9 +1,9 @@
 # reddwarf-admin
 
-## 开始开发
+## Startup
 
 ```bash
 git clone https://github.com/jiangxiaoqiang/reddwarf-admin.git
-# 编译
+# compile
 cargo build
 ```

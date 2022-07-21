@@ -12,12 +12,14 @@ use crate::model::diesel::dolphin::dolphin_models::{Article, ArticleContent, Rss
 use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
 
+type QueryType<'a> = BoxedSelectStatement<'a, (diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>), crate::model::diesel::dolphin::dolphin_schema::article::table, diesel::pg::Pg>;
+
 pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Vec<ArticleResponse>> {
     // when pagination with the big table
     // using the estimate rows not the precise row count to speed the query
     use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
     // https://stackoverflow.com/questions/21747136/how-do-i-print-the-type-of-a-variable
-    let mut query:BoxedSelectStatement<(diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>), article_table::table, diesel::pg::Pg> = article_table::table.into_boxed::<diesel::pg::Pg>();
+    let mut query: QueryType = article_table::table.into_boxed::<diesel::pg::Pg>();
     if let Some(max_offset) = &request.maxOffset {
         query = query.filter(article_table::id.lt(max_offset));
     }
@@ -45,7 +47,7 @@ pub fn get_full_text_search_result(filter_title: &str) -> PaginationResponse<Vec
 
 }
 
-pub fn get_query_result(query:BoxedSelectStatement<(diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>), crate::model::diesel::dolphin::dolphin_schema::article::table, diesel::pg::Pg>,request: &Json<ArticleRequest>) -> PaginationResponse<Vec<ArticleResponse>> {
+pub fn get_query_result(query: QueryType,request: &Json<ArticleRequest>) -> PaginationResponse<Vec<ArticleResponse>> {
     use crate::model::diesel::dolphin::dolphin_schema::article::dsl::*;
     let connection = config::establish_connection();
     let query = query
