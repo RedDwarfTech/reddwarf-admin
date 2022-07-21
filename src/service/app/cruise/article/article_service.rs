@@ -26,15 +26,17 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     }
     if let Some(filter_title) = &request.title {
         if !filter_title.trim().is_empty() {
-            return get_full_text_search_result();
+            return get_full_text_search_result(filter_title);
         }
     }
     return get_query_result(query,request);
 }
 
-pub fn get_full_text_search_result() -> PaginationResponse<Vec<ArticleResponse>>{
+pub fn get_full_text_search_result(filter_title: &str) -> PaginationResponse<Vec<ArticleResponse>>{
     let connection = config::establish_connection();
-    let results = diesel::sql_query("SELECT * FROM article WHERE to_tsvector('dolphinzhcfg', title) @@ plainto_tsquery('王力宏') limit 10 offset 0")
+    let query_items: Vec<&str> = filter_title.trim().split_whitespace().collect();
+    let query_array = query_items.join("|");
+    let results = diesel::sql_query(format!("SELECT * FROM article WHERE to_tsvector('dolphinzhcfg', title) @@ plainto_tsquery('{}') limit 10 offset 0",query_array))
         .load::<Article>(&connection)
         .expect("An error has occured");
     let article_response = append_channel_name(&results, &connection);
