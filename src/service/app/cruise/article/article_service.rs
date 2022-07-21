@@ -1,7 +1,6 @@
 use diesel::{debug_query, ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
 use diesel::dsl::any;
 use diesel::query_builder::BoxedSelectStatement;
-use diesel_full_text_search::{plainto_tsquery, to_tsvector, TsVectorExtensions};
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination_pg_big_table::PaginateForPgBigTableQueryFragment;
 use rust_wheel::common::util::collection_util::take;
@@ -27,15 +26,21 @@ pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Ve
     }
     if let Some(filter_title) = &request.title {
         if !filter_title.trim().is_empty() {
-            let query_items: Vec<&str> = filter_title.trim().split_whitespace().collect();
-            let query_array = query_items.join("|");
-            let ts_query = plainto_tsquery(format! {"{}{}{}", "'dolphinzhcfg','", query_array, "'"});
-            let ts_vector = to_tsvector("'dolphinzhcfg', title");
-            query = query.filter(ts_vector.matches(ts_query));
-            return get_query_result(query, request);
+            return get_full_text_search_result();
         }
     }
     return get_query_result(query,request);
+}
+
+pub fn get_full_text_search_result() -> PaginationResponse<Vec<ArticleResponse>>{
+    let connection = config::establish_connection();
+    let results = diesel::sql_query("SELECT * FROM article WHERE to_tsvector('dolphinzhcfg', title) @@ plainto_tsquery('王力宏') limit 10 offset 0")
+        .load::<Article>(&connection)
+        .expect("An error has occured");
+    let article_response = append_channel_name(&results, &connection);
+    let page_result = map_pagination_from_list(article_response, 1, 10, 15);
+    return page_result;
+
 }
 
 pub fn get_query_result(query:BoxedSelectStatement<(diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>), crate::model::diesel::dolphin::dolphin_schema::article::table, diesel::pg::Pg>,request: &Json<ArticleRequest>) -> PaginationResponse<Vec<ArticleResponse>> {
