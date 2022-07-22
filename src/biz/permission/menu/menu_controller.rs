@@ -22,7 +22,7 @@ pub fn menu_tree(request: Json<MenuRequest>) -> content::RawJson<String> {
     return box_rest_response(roles);
 }
 
-#[post("/v1/menu/edit",data = "<request>")]
+#[patch("/v1/menu/edit",data = "<request>")]
 pub fn edit_menu(request: Json<UpdateMenuRequest>) -> content::RawJson<String> {
     return menu_edit(&request);
 }
