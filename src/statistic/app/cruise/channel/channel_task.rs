@@ -4,12 +4,12 @@ use rust_wheel::common::util::time_util::{end_of_today, get_current_millisecond,
 use tokio::time;
 
 use crate::model::diesel::dolphin::custom_dolphin_models::TrendAdd;
-use crate::model::diesel::dolphin::dolphin_models::{RssSubSource};
+use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::service::app::cruise::article::article_fav_service::channel_fav_count;
 use crate::service::app::cruise::article::article_service::get_article_count_by_channel_id;
 use crate::service::app::cruise::article::static_article_service::get_article_count_by_time;
-use crate::service::app::cruise::channel::statistic_channel_service::{get_refresh_channels, get_refresh_channels_for_article, update_channel_article_count, update_channel_reputation, get_low_quality_channels};
-use crate::service::app::cruise::overview::cruise_overview_service::{update_days_article_count, delete_low_quality_channel};
+use crate::service::app::cruise::channel::statistic_channel_service::{get_low_quality_channels, get_refresh_channels, get_refresh_channels_for_article, update_channel_article_count, update_channel_reputation};
+use crate::service::app::cruise::overview::cruise_overview_service::{delete_low_quality_channel, update_days_article_count};
 
 pub fn refresh_channel_reputation() {
     let channels: Vec<RssSubSource> = get_refresh_channels();
@@ -47,7 +47,7 @@ pub async fn remove_low_quality_articles() {
 }
 
 pub async fn calculate_article_trend() {
-    let mut interval = time::interval(Duration::from_millis(60*60*1000));
+    let mut interval = time::interval(Duration::from_secs(7200));
     loop {
         interval.tick().await;
         // today
