@@ -34,6 +34,7 @@ pub fn update_days_article_count(new_trend: &TrendAdd) {
 
 pub fn delete_low_quality_channel(filter_channel_id: i64) {
     let connection = config::establish_connection();
+    // https://stackoverflow.com/questions/5170546/how-do-i-delete-a-fixed-number-of-rows-with-sorting-in-postgresql
     diesel::sql_query(format!("delete FROM article WHERE ctid in(select ctid from article where channel_id ={} limit 50)",filter_channel_id))
         .execute(&connection)
         .expect("An error has occured");
