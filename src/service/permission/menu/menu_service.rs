@@ -2,10 +2,8 @@ use diesel::sql_query;
 use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
-use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::convert_to_tree::convert_to_tree;
-use rust_wheel::common::util::model_convert::{box_error_rest_response, box_rest_response, map_entity, map_pagination_from_list};
-use rust_wheel::common::util::security_util::get_sha;
+use rust_wheel::common::util::model_convert::{ box_rest_response, map_entity, map_pagination_from_list};
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
@@ -13,11 +11,10 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 use crate::common::enums::resource_type::ResourceType;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::{MenuResourceAdd, MenuResourcePath};
-use crate::model::diesel::dolphin::dolphin_models::AdminUser;
 use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 use crate::model::request::permission::menu::add_menu_request::AddMenuRequest;
 use crate::model::request::permission::menu::menu_request::MenuRequest;
-use crate::model::request::user::password_request::PasswordRequest;
+use crate::model::request::permission::menu::update_menu_request::UpdateMenuRequest;
 use crate::model::response::permission::menu::menu_response::MenuResponse;
 
 /**
@@ -130,28 +127,14 @@ pub fn menu_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec
     return page_result;
 }
 
-pub fn menu_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
-    use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
+pub fn menu_edit(request: &Json<UpdateMenuRequest>) -> content::RawJson<String> {
+    use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let connection = config::establish_connection();
-    // verify legacy password
-    let request_user_name:String = String::from(&request.userName);
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::admin_users::phone.eq(request_user_name);
-    let db_admin_user = admin_users.filter(&predicate)
-        .limit(1)
-        .load::<AdminUser>(&connection)
-        .expect("query admin user failed");
-    let single_user = take(db_admin_user,0).unwrap();
-    let pwd_salt = single_user.salt;
-    let sha_password = get_sha(String::from(&request.oldPassword), &pwd_salt);
-    if sha_password.eq(&single_user.pwd.as_str()){
-        let new_password = get_sha(String::from(&request.newPassword),&pwd_salt);
-        diesel::update(admin_users.filter(predicate))
-            .set(pwd.eq(new_password))
-            .get_result::<AdminUser>(&connection)
-            .expect("unable to update new password");
-    }else{
-        return box_error_rest_response("", "00100100064007".parse().unwrap(), "old password did not match".parse().unwrap());
-    }
+    let predicate = id.eq(request.id);
+    diesel::update(menu_resource.filter(predicate))
+        .set(sort.eq(request.sort))
+        .get_result::<MenuResource>(&connection)
+        .expect("unable to update menu");
     return box_rest_response("ok");
 }
 

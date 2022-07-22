@@ -5,7 +5,7 @@ use rust_wheel::common::util::model_convert::box_rest_response;
 use crate::model::diesel::dolphin::dolphin_models::MenuResource;
 use crate::model::request::permission::menu::add_menu_request::AddMenuRequest;
 use crate::model::request::permission::menu::menu_request::MenuRequest;
-use crate::model::request::user::password_request::PasswordRequest;
+use crate::model::request::permission::menu::update_menu_request::UpdateMenuRequest;
 use crate::service::permission::menu::menu_service::{menu_add, menu_query_full_tree};
 use crate::service::permission::menu::menu_service::menu_edit;
 use crate::service::permission::menu::menu_service::menu_query_tree;
@@ -23,7 +23,7 @@ pub fn menu_tree(request: Json<MenuRequest>) -> content::RawJson<String> {
 }
 
 #[post("/v1/menu/edit",data = "<request>")]
-pub fn edit_menu(request: Json<PasswordRequest>) -> content::RawJson<String> {
+pub fn edit_menu(request: Json<UpdateMenuRequest>) -> content::RawJson<String> {
     return menu_edit(&request);
 }
 
