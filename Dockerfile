@@ -17,6 +17,10 @@ ENV ROCKET_ADDRESS=0.0.0.0
 # https://stackoverflow.com/questions/69153048/error-while-loading-shared-libraries-libpq-so-5-cannot-open-shared-object-file
 # https://unix.stackexchange.com/questions/668754/what-is-libpq-so-5-and-how-to-make-it-avaliable/668755
 RUN apt-get update && apt-get install libpq5 curl -y
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+RUN echo 'Asia/Shanghai' >/etc/timezone
+
 COPY --from=builder /app/.env /app
 COPY --from=builder /app/settings.toml /app
 # COPY --from=builder /app/target/debug/* /app/
