@@ -19,11 +19,11 @@ pub fn get_refresh_channels() -> Vec<RssSubSource> {
 pub fn get_low_quality_channels() -> Vec<RssSubSource> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
-    let predicate = sub_status.eq(3).and(article_count.gt(0));
+    let predicate = sub_status.eq(-3).and(article_count.gt(0));
     let query = rss_sub_source
         .filter(predicate)
         .order(rep_latest_refresh_time.asc())
-        .limit(1);
+        .limit(2);
     let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
     return query_result;
 }
