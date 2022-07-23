@@ -1,10 +1,15 @@
 use diesel::{BoolExpressionMethods, QueryDsl, RunQueryDsl};
+use diesel::dsl::any;
 use rocket::serde::json::Json;
+use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 
 use crate::diesel::ExpressionMethods;
 use crate::model::diesel::dolphin::custom_dolphin_models::TrendAdd;
-use crate::model::diesel::dolphin::dolphin_models::Trend;
+use crate::model::diesel::dolphin::dolphin_models::{Article, Trend};
+use crate::model::diesel::dolphin::dolphin_schema::article::sub_source_id;
+use crate::model::diesel::dolphin::dolphin_schema::article_content::article_id;
+use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::{article_count, article_count_latest_refresh_time};
 use crate::model::request::app::cruise::overview::cruise_overview_request::CruiseOverviewRequest;
 
 pub fn cruise_trend_query(request: &Json<CruiseOverviewRequest>) -> Vec<Trend> {
@@ -33,9 +38,61 @@ pub fn update_days_article_count(new_trend: &TrendAdd) {
 }
 
 pub fn delete_low_quality_channel(filter_channel_id: i64) {
+    use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
     let connection = config::establish_connection();
-    // https://stackoverflow.com/questions/5170546/how-do-i-delete-a-fixed-number-of-rows-with-sorting-in-postgresql
-    diesel::sql_query(format!("delete FROM article WHERE ctid in(select ctid from article where channel_id ={} limit 50)",filter_channel_id))
-        .execute(&connection)
-        .expect("An error has occured");
+    let predicate = sub_source_id.eq(filter_channel_id);
+    let articles = article_table::table
+        .filter(predicate)
+        .load::<Article>(&connection)
+        .expect("query articles failed");
+    if articles.is_empty() {
+        update_channel_article_count(filter_channel_id);
+        return;
+    }
+    let article_ids = articles.iter()
+        .map(|item| item.id)
+        .collect();
+    let transaction_result = connection.build_transaction()
+        .repeatable_read()
+        .run::<_, diesel::result::Error, _>(||{
+            delete_article(&article_ids);
+            delete_article_detail(&article_ids);
+            Ok(())
+        });
+    match transaction_result {
+        Ok(_v) => {
+
+        },
+        Err(e) =>{
+            error!("error:{}",e.to_string());
+        },
+    }
 }
+
+pub fn delete_article(ids: &Vec<i64>){
+    use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
+    let connection = config::establish_connection();
+    let predicate = article_table::dsl::id.eq(any(ids));
+    diesel::delete(article_table::table.filter(predicate))
+        .execute(&connection).expect("delete article failed");
+}
+
+pub fn delete_article_detail(ids: &Vec<i64>){
+    use crate::model::diesel::dolphin::dolphin_schema::article_content as article_detail_table;
+    let connection = config::establish_connection();
+    let predicate = article_id.eq(any(ids));
+    diesel::delete(article_detail_table::table.filter(predicate))
+        .execute(&connection).expect("delete article detail failed");
+}
+
+pub fn update_channel_article_count(filter_channel_id: i64){
+    use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source as channel_table;
+    let connection = config::establish_connection();
+    let predicate = channel_table::dsl::id.eq(filter_channel_id);
+    let current_time = get_current_millisecond();
+    diesel::update(channel_table::table.filter(predicate))
+        .set((article_count.eq(0),article_count_latest_refresh_time.eq(current_time)))
+        .execute(&connection)
+        .expect("unable to update channel article count");
+}
+
