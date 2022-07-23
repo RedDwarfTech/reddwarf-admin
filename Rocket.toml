@@ -1,5 +1,5 @@
 [release]
-workers = 12
-log_level = "normal"
+workers = 10
+log_level = "critical"
 keep_alive = 5
 port = 11015
