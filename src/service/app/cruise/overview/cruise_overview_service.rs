@@ -43,6 +43,7 @@ pub fn delete_low_quality_channel(filter_channel_id: i64) {
     let predicate = sub_source_id.eq(filter_channel_id);
     let articles = article_table::table
         .filter(predicate)
+        .limit(50)
         .load::<Article>(&connection)
         .expect("query articles failed");
     if articles.is_empty() {
