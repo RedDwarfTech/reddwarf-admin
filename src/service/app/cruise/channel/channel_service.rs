@@ -47,9 +47,23 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
     if let Some(current_sub_status) = &request.subStatus {
         query = query.filter(channel_table::sub_status.eq(current_sub_status));
     }
-
+    if let Some(sort_column) = &request.sort {
+        query = match sort_column.as_str() {
+            "article_count" => {
+                if request.direction.as_ref().unwrap() == "ascend" {
+                    query.order(article_count.asc())
+                } else{
+                    query.order(article_count.desc())
+                }
+            }
+            _=> {
+                query.order(created_time.desc())
+            }
+        }
+    } else{
+        query = query.order(created_time.desc());
+    }
     let query = query
-        .order(created_time.desc())
         .paginate(request.pageNum.unwrap_or(1),false)
         .per_page(request.pageSize.unwrap_or(10));
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<RssSubSource>(&connection);

@@ -14,5 +14,7 @@ pub struct ChannelRequest {
     pub subStatus: Option<i32>,
     pub isTag: Option<i32>,
     pub sub_name: Option<String>,
-    pub sub_url: Option<String>
+    pub sub_url: Option<String>,
+    pub sort: Option<String>,
+    pub direction: Option<String>
 }
