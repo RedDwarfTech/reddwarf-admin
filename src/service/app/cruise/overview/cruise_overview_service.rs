@@ -47,7 +47,7 @@ pub fn delete_low_quality_channel(filter_channel_id: i64) {
         .load::<Article>(&connection)
         .expect("query articles failed");
     if articles.is_empty() {
-        update_channel_article_count(filter_channel_id);
+        update_channel_article_count(filter_channel_id, 0);
         return;
     }
     let article_ids = articles.iter()
@@ -86,13 +86,13 @@ pub fn delete_article_detail(ids: &Vec<i64>){
         .execute(&connection).expect("delete article detail failed");
 }
 
-pub fn update_channel_article_count(filter_channel_id: i64){
+pub fn update_channel_article_count(filter_channel_id: i64, new_article_count: i64){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source as channel_table;
     let connection = config::establish_connection();
     let predicate = channel_table::dsl::id.eq(filter_channel_id);
     let current_time = get_current_millisecond();
     diesel::update(channel_table::table.filter(predicate))
-        .set((article_count.eq(0),article_count_latest_refresh_time.eq(current_time)))
+        .set((article_count.eq(new_article_count),article_count_latest_refresh_time.eq(current_time)))
         .execute(&connection)
         .expect("unable to update channel article count");
 }
