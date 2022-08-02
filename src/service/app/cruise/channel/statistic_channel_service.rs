@@ -32,8 +32,10 @@ pub fn get_refresh_channels_for_article() -> Vec<RssSubSource> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let yesterday_of_curry = get_minus_day_millisecond(-2);
+    let predicate = article_count_latest_refresh_time.lt(yesterday_of_curry)
+        .and(sub_status.eq(1));
     let query = rss_sub_source
-        .filter(article_count_latest_refresh_time.lt(yesterday_of_curry))
+        .filter(predicate)
         .order(article_count_latest_refresh_time.asc())
         .limit(20);
     let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
