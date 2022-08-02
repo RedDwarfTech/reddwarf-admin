@@ -106,7 +106,8 @@ pub fn article_detail_query(filter_article_id: i64) -> ArticleResponse {
         .first::<RssSubSource>(&connection)
         .optional()
         .unwrap();
-    article_response.channel_name = channel.unwrap().sub_name;
+    article_response.channel_name = channel.as_ref().unwrap().sub_name.to_string();
+    article_response.sub_url = channel.as_ref().unwrap().sub_url.to_string();
     return article_response;
 }
 
