@@ -60,7 +60,12 @@ pub async fn calculate_article_trend() {
     }
 }
 
-pub fn refresh_channel_article() -> Result<(), MyError> {
+#[derive(Debug)]
+pub enum AnalysisError {
+    Failed,
+}
+
+pub fn refresh_channel_article() -> Result<(), AnalysisError> {
     let channels: Vec<RssSubSource> = get_refresh_channels_for_article();
     if channels.is_empty() {
         return Ok(());
@@ -69,7 +74,7 @@ pub fn refresh_channel_article() -> Result<(), MyError> {
         let result = get_article_count_by_channel_id(&channel.id);
         update_channel_article_count(result, channel.id)
     }
-    OK(())
+    Ok(())
 }
 
 pub fn remove_articles() {
