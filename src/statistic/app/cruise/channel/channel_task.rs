@@ -34,7 +34,10 @@ pub async fn refresh_channel_article_count() {
     let mut interval = time::interval(Duration::from_millis(25000));
     loop {
         interval.tick().await;
-        refresh_channel_article();
+        match refresh_channel_article() {
+            Ok(_) => (),
+            _ => println!("refresh channel article failed")
+        }
     }
 }
 
@@ -57,15 +60,16 @@ pub async fn calculate_article_trend() {
     }
 }
 
-pub fn refresh_channel_article() {
+pub fn refresh_channel_article() -> Result<(), MyError> {
     let channels: Vec<RssSubSource> = get_refresh_channels_for_article();
     if channels.is_empty() {
-        return;
+        return Ok(());
     }
     for channel in channels {
         let result = get_article_count_by_channel_id(&channel.id);
         update_channel_article_count(result, channel.id)
     }
+    OK(())
 }
 
 pub fn remove_articles() {
