@@ -3,13 +3,16 @@
 #![allow(unused)]
 #![allow(clippy::all)]
 
+use chrono::DateTime;
+use chrono::NaiveDateTime;
+use chrono::offset::Utc;
 use rocket::serde::Serialize;
+use rocket_okapi::okapi::schemars;
+use rocket_okapi::okapi::schemars::JsonSchema;
 use serde::Deserialize;
+
 use crate::model::diesel::dolphin::dolphin_schema::*;
 
-use chrono::NaiveDateTime;
-use chrono::DateTime;
-use chrono::offset::Utc;
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "admin_users"]
 pub struct AdminUser {
@@ -278,7 +281,7 @@ pub struct Tag {
     pub code: String,
 }
 
-#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone, JsonSchema)]
 #[table_name = "trend"]
 pub struct Trend {
     pub id: i64,

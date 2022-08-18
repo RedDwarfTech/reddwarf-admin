@@ -91,6 +91,8 @@ pub fn create_server() -> Rocket<Build> {
         "/permission/org" => org_controller::get_routes_and_docs(&openapi_settings),
         "/app/overview/product" => product_controller::get_routes_and_docs(&openapi_settings),
         "/app/overview/app" => app_controller::get_routes_and_docs(&openapi_settings),
+        "/app/cruise/overview" => cruise_trend_controller::get_routes_and_docs(&openapi_settings),
+        "/app/cruise/channel" => channel_controller::get_routes_and_docs(&openapi_settings),
         "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
     };
 
@@ -107,16 +109,6 @@ fn build_rocket() -> Rocket<Build> {
             domain_controller::page,
             domain_controller::add,
             domain_controller::edit,
-        ])
-        .mount("/manage/app/cruise/overview", routes![
-            cruise_trend_controller::list
-        ])
-        .mount("/manage/app/cruise/channel", routes![
-            channel_controller::page,
-            channel_controller::editor_pick,
-            channel_controller::editor_unpick,
-            channel_controller::tags,
-            channel_controller::update
         ])
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page
