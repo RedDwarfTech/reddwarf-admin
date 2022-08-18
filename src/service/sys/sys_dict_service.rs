@@ -38,7 +38,7 @@ pub fn dict_page_query<T>(request: Json<SysDictRequest>) -> PaginationResponse<V
 }
 
 pub fn dict_create(request: &Json<AddDictRequest>) {
-    let connection = config::establish_connection();
+    let connection = config::establish_quark_connection();
     let current_time = get_current_millisecond();
     let app = AddSysDict{
         key: Option::from(request.key),
