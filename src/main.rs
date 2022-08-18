@@ -93,6 +93,7 @@ pub fn create_server() -> Rocket<Build> {
         "/app/overview/app" => app_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/overview" => cruise_trend_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/channel" => channel_controller::get_routes_and_docs(&openapi_settings),
+        "/app/cruise/article" => article_controller::get_routes_and_docs(&openapi_settings),
         "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
     };
 
