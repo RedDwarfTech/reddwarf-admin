@@ -86,6 +86,7 @@ pub fn create_server() -> Rocket<Build> {
         "/actuator" => health_controller::get_routes_and_docs(&openapi_settings),
         "/home" => home_controller::get_routes_and_docs(&openapi_settings),
         "/sys/dict" => sys_dict_controller::get_routes_and_docs(&openapi_settings),
+        "/sys/tag" => tag_controller::get_routes_and_docs(&openapi_settings),
         "/permission/menu" => menu_controller::get_routes_and_docs(&openapi_settings),
         "/permission/org" => org_controller::get_routes_and_docs(&openapi_settings),
         "/app/overview/product" => product_controller::get_routes_and_docs(&openapi_settings),
@@ -98,19 +99,6 @@ pub fn create_server() -> Rocket<Build> {
 
 fn build_rocket() -> Rocket<Build> {
     rocket::build()
-        .mount("/manage/app/overview/app",routes![
-            app_controller::page,
-            app_controller::add,
-            app_controller::edit,
-            app_controller::detail,
-        ])
-        .mount("/manage/sys/tag",routes![
-            tag_controller::list,
-            tag_controller::page,
-            tag_controller::add,
-            tag_controller::edit,
-            tag_controller::detail,
-        ])
         .mount("/manage/app/user",routes![
             user_controller::page,
             user_controller::edit_pwd
@@ -161,12 +149,5 @@ fn build_rocket() -> Rocket<Build> {
             role_controller::edit_role_menu_bind,
             role_controller::get_role_menu_tree,
             role_controller::add_role
-        ]).mount("/manage/permission/user", routes![
-            admin_user_controller::page,
-            admin_user_controller::edit_pwd,
-            admin_user_controller::get_user_menu,
-            admin_user_controller::get_user_roles,
-            admin_user_controller::save_user_roles,
-            admin_user_controller::add
         ])
 }
