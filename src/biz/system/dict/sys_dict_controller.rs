@@ -6,8 +6,9 @@ use rocket_okapi::settings::OpenApiSettings;
 use rust_wheel::common::util::model_convert::box_rest_response;
 
 use crate::model::diesel::quark::quark_models::SysDict;
+use crate::model::request::sys::add_dict_request::AddDictRequest;
 use crate::model::request::sys::sys_dict_request::SysDictRequest;
-use crate::service::sys::sys_dict_service::{dict_page_query, dict_query};
+use crate::service::sys::sys_dict_service::{dict_create, dict_page_query, dict_query};
 
 pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, OpenApi) {
     openapi_get_routes_spec![settings: list, page]
@@ -20,6 +21,16 @@ pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, O
 #[get("/v1/list")]
 pub fn list() -> content::RawJson<String> {
     let dicts = dict_query::<Vec<SysDict>>();
+    return box_rest_response(dicts);
+}
+
+/// # 新增
+///
+/// 新增
+#[openapi(tag = "字典")]
+#[put("/v1/add",data = "<request>")]
+pub fn add(request: Json<AddDictRequest>) -> content::RawJson<String> {
+    let dicts = dict_create(&request);
     return box_rest_response(dicts);
 }
 
