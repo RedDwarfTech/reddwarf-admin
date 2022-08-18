@@ -11,7 +11,7 @@ use crate::model::request::sys::sys_dict_request::SysDictRequest;
 use crate::service::sys::sys_dict_service::{dict_create, dict_page_query, dict_query};
 
 pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, OpenApi) {
-    openapi_get_routes_spec![settings: list, page]
+    openapi_get_routes_spec![settings: list, page, add]
 }
 
 /// # 列表查询
