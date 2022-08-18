@@ -87,6 +87,7 @@ pub fn create_server() -> Rocket<Build> {
         "/home" => home_controller::get_routes_and_docs(&openapi_settings),
         "/sys/dict" => sys_dict_controller::get_routes_and_docs(&openapi_settings),
         "/permission/menu" => menu_controller::get_routes_and_docs(&openapi_settings),
+        "/permission/org" => org_controller::get_routes_and_docs(&openapi_settings),
     };
 
     building_rocket
@@ -94,10 +95,6 @@ pub fn create_server() -> Rocket<Build> {
 
 fn build_rocket() -> Rocket<Build> {
     rocket::build()
-        .mount("/manage/sys/dict",routes![
-            sys_dict_controller::list,
-            sys_dict_controller::page,
-        ])
         .mount("/manage/app/overview/product",routes![
             product_controller::page,
             product_controller::add,
@@ -175,11 +172,6 @@ fn build_rocket() -> Rocket<Build> {
             admin_user_controller::get_user_roles,
             admin_user_controller::save_user_roles,
             admin_user_controller::add
-        ]).mount("/manage/permission/menu", routes![
-            menu_controller::page_tree,
-            menu_controller::menu_tree,
-            menu_controller::edit_menu,
-            menu_controller::add_menu
         ]).mount("/manage/permission/org", routes![
             org_controller::page_tree,
             org_controller::org_tree,
