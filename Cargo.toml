@@ -28,3 +28,14 @@ rand = "0.8.5"
 # reddwarf public component
 rust_wheel = { git = "https://github.com/jiangxiaoqiang/rust_wheel.git" }
 
+#
+# https://github.com/GREsau/okapi/issues/96
+# https://github.com/GREsau/okapi/issues/100
+# Fortune doc configuration
+#
+okapi = { git = "https://github.com/GREsau/okapi.git"}
+schemars = "0.7"
+rocket_okapi = { git = "https://github.com/GREsau/okapi.git", features = ["swagger", "rapidoc"] }
+
+
+

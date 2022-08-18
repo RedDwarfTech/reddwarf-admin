@@ -2,8 +2,12 @@
 extern crate diesel;
 #[macro_use]
 extern crate rocket;
+#[macro_use]
+extern crate tokio;
 
 use rocket::{Build, Rocket};
+use rocket_okapi::{mount_endpoints_and_merged_docs, OpenApiError, rapidoc::*, swagger_ui::*};
+use rocket_okapi::settings::UrlObject;
 
 use biz::app::app_controller;
 use biz::app::cernitor::domain::domain_controller;
@@ -36,14 +40,56 @@ mod models;
 mod test;
 mod common;
 
-#[launch]
-#[tokio::main]
-async fn rocket() -> _ {
+pub type Result<T> = std::result::Result<T, OpenApiError>;
+
+#[rocket::main]
+async fn main() {
     tokio::spawn(refresh_channel_rep());
     tokio::spawn(refresh_channel_article_count());
     tokio::spawn(remove_low_quality_articles());
     tokio::spawn(calculate_article_trend());
-    build_rocket()
+
+    let launch_result = create_server().launch().await;
+    match launch_result {
+        Ok(_) => println!("Rocket shut down gracefully."),
+        Err(err) => println!("Rocket had an error: {}", err),
+    };
+}
+
+pub fn create_server() -> Rocket<Build> {
+    let mut building_rocket = rocket::build()
+        .mount(
+            "/swagger-ui/",
+            make_swagger_ui(&SwaggerUIConfig {
+                url: "../fortune/openapi.json".to_owned(),
+                ..Default::default()
+            }),
+        )
+        .mount(
+            "/rapidoc/",
+            make_rapidoc(&RapiDocConfig {
+                title: Some("My special documentation | RapiDoc".to_owned()),
+                general: GeneralConfig {
+                    spec_urls: vec![UrlObject::new("General", "../v1/openapi.json")],
+                    ..Default::default()
+                },
+                hide_show: HideShowConfig {
+                    allow_spec_url_load: false,
+                    allow_spec_file_load: false,
+                    ..Default::default()
+                },
+                ..Default::default()
+            }),
+        );
+
+    let openapi_settings = rocket_okapi::settings::OpenApiSettings::default();
+    mount_endpoints_and_merged_docs! {
+        building_rocket, "/manage".to_owned(), openapi_settings,
+        "/actuator" => health_controller::get_routes_and_docs(&openapi_settings),
+        "/home" => home_controller::get_routes_and_docs(&openapi_settings),
+    };
+
+    building_rocket
 }
 
 fn build_rocket() -> Rocket<Build> {
