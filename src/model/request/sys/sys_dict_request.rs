@@ -6,7 +6,7 @@ use rocket_okapi::okapi::schemars::JsonSchema;
 #[derive(Debug, PartialEq, Eq, Deserialize, Serialize, JsonSchema)]
 #[allow(non_snake_case)]
 pub struct SysDictRequest {
-    pub dictType: Option<String>,
+    pub dict_type: Option<String>,
     pub pageNum: i64,
     pub pageSize: i64
 }

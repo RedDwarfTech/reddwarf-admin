@@ -25,7 +25,10 @@ pub fn dict_query<T>() -> Vec<SysDict> {
 pub fn dict_page_query<T>(request: Json<SysDictRequest>) -> PaginationResponse<Vec<SysDict>> {
     use crate::model::diesel::quark::quark_schema::sys_dict as dict_table;
     let connection = config::establish_quark_connection();
-    let query = dict_table::table.into_boxed::<diesel::pg::Pg>();
+    let mut query = dict_table::table.into_boxed::<diesel::pg::Pg>();
+    if let Some(dict_type_req) = &request.dict_type {
+        query = query.filter(dict_table::dict_type.eq(dict_type_req));
+    }
     let query = query
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
