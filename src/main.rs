@@ -90,6 +90,7 @@ pub fn create_server() -> Rocket<Build> {
         "/permission/org" => org_controller::get_routes_and_docs(&openapi_settings),
         "/app/overview/product" => product_controller::get_routes_and_docs(&openapi_settings),
         "/app/overview/app" => app_controller::get_routes_and_docs(&openapi_settings),
+        "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
     };
 
     building_rocket
