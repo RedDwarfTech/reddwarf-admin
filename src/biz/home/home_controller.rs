@@ -10,9 +10,9 @@ pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, O
     openapi_get_routes_spec![settings: trend_overview, overview]
 }
 
-/// # 查询账本模版列表
+/// # 查询概览信息
 ///
-/// 返回不同类型的账本模版列表
+/// 查询概览信息
 #[openapi(tag = "首页")]
 #[get("/v1/dashboard/overview")]
 pub fn overview() -> content::RawJson<String> {
@@ -20,9 +20,9 @@ pub fn overview() -> content::RawJson<String> {
     return box_rest_response(dashboard);
 }
 
-/// # 查询账本模版列表
+/// # 查询趋势
 ///
-/// 返回不同类型的账本模版列表
+/// 查询趋势
 #[openapi(tag = "首页")]
 #[get("/v1/trend/overview")]
 pub fn trend_overview() -> content::RawJson<String> {

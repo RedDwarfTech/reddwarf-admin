@@ -2,8 +2,6 @@
 extern crate diesel;
 #[macro_use]
 extern crate rocket;
-#[macro_use]
-extern crate tokio;
 
 use rocket::{Build, Rocket};
 use rocket_okapi::{mount_endpoints_and_merged_docs, OpenApiError, rapidoc::*, swagger_ui::*};
@@ -87,6 +85,8 @@ pub fn create_server() -> Rocket<Build> {
         building_rocket, "/manage".to_owned(), openapi_settings,
         "/actuator" => health_controller::get_routes_and_docs(&openapi_settings),
         "/home" => home_controller::get_routes_and_docs(&openapi_settings),
+        "/sys/dict" => sys_dict_controller::get_routes_and_docs(&openapi_settings),
+        "/permission/menu" => menu_controller::get_routes_and_docs(&openapi_settings),
     };
 
     building_rocket
@@ -94,14 +94,6 @@ pub fn create_server() -> Rocket<Build> {
 
 fn build_rocket() -> Rocket<Build> {
     rocket::build()
-        .mount("/actuator", routes![
-            health_controller::health,
-            health_controller::liveness
-        ])
-        .mount("/manage/home",routes![
-            home_controller::overview,
-            home_controller::trend_overview
-        ])
         .mount("/manage/sys/dict",routes![
             sys_dict_controller::list,
             sys_dict_controller::page,
