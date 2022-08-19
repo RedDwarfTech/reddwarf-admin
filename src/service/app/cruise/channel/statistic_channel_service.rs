@@ -1,4 +1,5 @@
 use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
+use diesel::dsl::any;
 use rust_wheel::common::util::time_util::{get_current_millisecond, get_minus_day_millisecond};
 use rust_wheel::config::db::config;
 
@@ -19,7 +20,8 @@ pub fn get_refresh_channels() -> Vec<RssSubSource> {
 pub fn get_low_quality_channels() -> Vec<RssSubSource> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
-    let predicate = sub_status.eq(-3).and(article_count.gt(0));
+    let sub_status_arr = [-3,-6];
+    let predicate = sub_status.eq(any(sub_status_arr)).and(article_count.gt(0));
     let query = rss_sub_source
         .filter(predicate)
         .order(rep_latest_refresh_time.asc())
