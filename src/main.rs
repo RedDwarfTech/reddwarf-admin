@@ -95,6 +95,7 @@ pub fn create_server() -> Rocket<Build> {
         "/app/cruise/channel" => channel_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/article" => article_controller::get_routes_and_docs(&openapi_settings),
         "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
+        "/permission/role" => role_controller::get_routes_and_docs(&openapi_settings),
     };
 
     building_rocket
@@ -113,10 +114,6 @@ fn build_rocket() -> Rocket<Build> {
         ])
         .mount("/manage/app/music/fav",routes![
             fav_music_controller::page
-        ])
-        .mount("/manage/app/cruise/article", routes![
-            article_controller::page,
-            article_controller::detail
         ])
         .mount("/manage/app/dict/translate", routes![
             translate_controller::trans

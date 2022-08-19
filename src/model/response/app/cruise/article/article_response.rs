@@ -7,6 +7,9 @@ use rocket_okapi::okapi::schemars::JsonSchema;
 use crate::model::diesel::dolphin::dolphin_models::Article;
 use crate::model::diesel::dolphin::dolphin_models::ArticleContent;
 
+///
+/// https://stackoverflow.com/questions/73405960/the-trait-jsonschema-is-not-implemented-for-chronodatetimeutc
+///
 #[derive( Serialize, Queryable, Deserialize,Default, Clone, JsonSchema)]
 pub struct ArticleResponse {
     pub id: i64,
