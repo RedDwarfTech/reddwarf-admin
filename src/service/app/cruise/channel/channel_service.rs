@@ -59,6 +59,13 @@ pub fn channel_query<T>(request: &ChannelRequest, _login_user_info: LoginUserInf
                     query.order(article_count.desc())
                 }
             }
+            "reputation" => {
+                if request.direction.as_ref().unwrap() == "ascend" {
+                    query.order(reputation.asc())
+                } else{
+                    query.order(reputation.desc())
+                }
+            }
             _=> {
                 query.order(created_time.desc())
             }
