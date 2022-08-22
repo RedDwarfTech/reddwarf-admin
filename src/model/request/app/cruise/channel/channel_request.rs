@@ -3,7 +3,7 @@ use rocket::serde::Serialize;
 use rocket_okapi::okapi::schemars;
 use rocket_okapi::okapi::schemars::JsonSchema;
 
-#[derive(Debug, PartialEq, Eq, Deserialize, Serialize, JsonSchema)]
+#[derive(Debug, PartialEq, Eq, Deserialize, FromForm, Serialize, JsonSchema)]
 #[allow(non_snake_case)]
 pub struct ChannelRequest {
     pub userId: Option<i64>,

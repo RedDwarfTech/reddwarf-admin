@@ -13,7 +13,7 @@ use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 use crate::model::request::app::cruise::channel::update_channel_request::UpdateChannelRequest;
 
-pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginUserInfo) -> PaginationResponse<Vec<RssSubSource>> {
+pub fn channel_query<T>(request: &ChannelRequest, _login_user_info: LoginUserInfo) -> PaginationResponse<Vec<RssSubSource>> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source as channel_table;
     let connection = config::establish_connection();

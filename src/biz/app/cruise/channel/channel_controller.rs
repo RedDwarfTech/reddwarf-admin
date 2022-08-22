@@ -19,9 +19,9 @@ pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, O
 }
 
 #[openapi(tag = "频道")]
-#[post("/v1/page", data = "<request>")]
-pub fn page(request: Json<ChannelRequest>, login_user_info: LoginUserInfo) -> content::RawJson<String> {
-    let channels = channel_query::<Vec<RssSubSource>>(&request, login_user_info);
+#[get("/v1/page?<query..>")]
+pub fn page(query: ChannelRequest, login_user_info: LoginUserInfo) -> content::RawJson<String> {
+    let channels = channel_query::<Vec<RssSubSource>>(&query, login_user_info);
     return box_rest_response(channels);
 }
 
