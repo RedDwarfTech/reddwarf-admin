@@ -7,6 +7,7 @@ use rocket_okapi::okapi::schemars::JsonSchema;
 #[allow(non_snake_case)]
 pub struct ChannelRequest {
     pub userId: Option<i64>,
+    pub id: Option<i64>,
     pub pageNum: Option<i64>,
     pub pageSize: Option<i64>,
     pub editorPick: Option<i32>,

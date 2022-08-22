@@ -24,6 +24,9 @@ pub fn channel_query<T>(request: &Json<ChannelRequest>, _login_user_info: LoginU
     if let Some(minimal_rep_req) = &request.minimalReputation {
         query = query.filter(channel_table::reputation.ge(minimal_rep_req));
     }
+    if let Some(id_req) = &request.id {
+        query = query.filter(channel_table::id.eq(id_req));
+    }
     if let Some(_filter_tag) = &request.tag {
         let format_tags: serde_json::Value = serde_json::from_str(r#"{
             "street": "Article Circle Expressway 1"
