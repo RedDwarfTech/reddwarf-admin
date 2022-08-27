@@ -1,15 +1,22 @@
 use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
+use num_traits::ToPrimitive;
 use rust_wheel::config::db::config;
 
+use crate::model::diesel::dolphin::dolphin_models::ArticleFavorite;
+
+/// diesel did not support group by
+/// https://stackoverflow.com/questions/59197346/how-to-do-sum-in-diesel-rust
 pub fn channel_fav_count(req_channel_id: &i64) -> i64 {
     use crate::model::diesel::dolphin::dolphin_schema::article_favorites::dsl::*;
     let connection = config::establish_connection();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::article_favorites::channel_id.eq(req_channel_id)
-        .and(crate::model::diesel::dolphin::dolphin_schema::article_favorites::upvote_status.eq(1));
-    let query = article_favorites
+    let predicate = channel_id.eq(req_channel_id);
+    let fav_query = article_favorites
         .filter(predicate);
     // https://stackoverflow.com/questions/71634411/how-to-do-a-count-query-when-using-rust-diesel
-    let query_result = query.count().get_result(&connection);
-    return query_result.unwrap_or(0);
+    let favorite_result = fav_query.load::<ArticleFavorite>(&connection).expect("load favorite failed");
+    let upvote_sum = favorite_result.iter()
+        .map(|item| item.upvote_status)
+        .sum::<i32>();
+    return upvote_sum as i64;
 }
 
