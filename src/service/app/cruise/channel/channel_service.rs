@@ -24,6 +24,9 @@ pub fn channel_query<T>(request: &ChannelRequest, _login_user_info: LoginUserInf
     if let Some(minimal_rep_req) = &request.minimalReputation {
         query = query.filter(channel_table::reputation.ge(minimal_rep_req));
     }
+    if let Some(maximal_rep_req) = &request.maximalReputation {
+        query = query.filter(channel_table::reputation.lt(maximal_rep_req));
+    }
     if let Some(id_req) = &request.id {
         query = query.filter(channel_table::id.eq(id_req));
     }
