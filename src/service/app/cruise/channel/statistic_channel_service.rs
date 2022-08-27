@@ -1,18 +1,36 @@
+use chrono::{Duration, Utc};
 use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
 use diesel::dsl::any;
 use rust_wheel::common::util::time_util::{get_current_millisecond, get_minus_day_millisecond};
 use rust_wheel::config::db::config;
 
-use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
+use crate::model::diesel::dolphin::dolphin_models::{ArticleFavorite, RssSubSource};
 
 pub fn get_refresh_channels() -> Vec<RssSubSource> {
+    use crate::model::diesel::dolphin::dolphin_schema::article_favorites::dsl::*;
+    let connection = config::establish_connection();
+    let dt = Utc::now() + Duration::minutes(-5);
+    let fav_query = article_favorites
+        .filter(updated_time.lt(dt.timestamp_millis()));
+    let favorite_result = fav_query.load::<ArticleFavorite>(&connection).expect("load favorite failed");
+    let ids:Vec<i64> = favorite_result.iter()
+        .map(|item| item.channel_id)
+        .collect();
+    return if ids.is_empty() {
+        Vec::new()
+    } else {
+        get_recent_changed_channel(ids)
+    }
+}
+
+/// 只需要更新最新有调整的频道即可
+/// 不需要更新未改变的频道
+///
+pub fn get_recent_changed_channel(ids: Vec<i64>) -> Vec<RssSubSource>{
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
-    let yesterday_of_curry = get_minus_day_millisecond(-1);
     let query = rss_sub_source
-        .filter(rep_latest_refresh_time.lt(yesterday_of_curry))
-        .order(rep_latest_refresh_time.asc())
-        .limit(20);
+        .filter(id.eq(any(ids)));
     let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
     return query_result;
 }

@@ -11,22 +11,26 @@ use crate::service::app::cruise::article::static_article_service::get_article_co
 use crate::service::app::cruise::channel::statistic_channel_service::{get_low_quality_channels, get_refresh_channels, get_refresh_channels_for_article, update_channel_article_count, update_channel_reputation};
 use crate::service::app::cruise::overview::cruise_overview_service::{delete_low_quality_channel, update_days_article_count};
 
-pub fn refresh_channel_reputation() {
+pub fn refresh_channel_reputation() -> Result<(), AnalysisError> {
     let channels: Vec<RssSubSource> = get_refresh_channels();
     if channels.is_empty() {
-        return;
+        return Ok(());
     }
     for channel in channels {
         let result = channel_fav_count(&channel.id);
         update_channel_reputation(result, channel.id)
     }
+    Ok(())
 }
 
 pub async fn refresh_channel_rep() {
     let mut interval = time::interval(Duration::from_millis(250000));
     loop {
         interval.tick().await;
-        refresh_channel_reputation();
+        match refresh_channel_reputation(){
+            Ok(_) => (),
+            _ => println!("refresh channel article failed")
+        };
     }
 }
 
