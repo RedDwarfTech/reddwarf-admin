@@ -1,4 +1,4 @@
-use chrono::{Duration, NaiveDateTime, Utc};
+use chrono::{DateTime, Duration, FixedOffset, NaiveDateTime, TimeZone, Utc};
 use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
 use diesel::dsl::any;
 use rust_wheel::common::util::time_util::{get_current_millisecond, get_minus_day_millisecond};
@@ -52,9 +52,11 @@ pub fn get_low_quality_channels() -> Vec<RssSubSource> {
 pub fn get_refresh_channels_by_time() -> Vec<RssSubSource>{
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
-    let trigger_time = (get_current_millisecond() - 35000) * 1000;
-    let time_with_zone = NaiveDateTime::from_timestamp(0, trigger_time as u32);
-    let predicate = last_trigger_time.lt(time_with_zone)
+    let trigger_time = (get_current_millisecond() - 35000)/1000;
+    let time_without_zone = NaiveDateTime::from_timestamp( trigger_time ,0);
+    let tz_offset = FixedOffset::east(8 * 3600);
+    let dt_with_tz: DateTime<FixedOffset> = tz_offset.from_local_datetime(&time_without_zone).unwrap();
+    let predicate = last_trigger_time.lt(dt_with_tz)
         .and(sub_status.eq(1));
     let query = rss_sub_source
         .filter(predicate)
