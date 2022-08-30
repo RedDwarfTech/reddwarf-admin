@@ -1,4 +1,4 @@
-use chrono::{Duration, Utc};
+use chrono::{Duration, NaiveDateTime, Utc};
 use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
 use diesel::dsl::any;
 use rust_wheel::common::util::time_util::{get_current_millisecond, get_minus_day_millisecond};
@@ -49,16 +49,16 @@ pub fn get_low_quality_channels() -> Vec<RssSubSource> {
     return query_result;
 }
 
-pub fn get_refresh_channels_for_article() -> Vec<RssSubSource> {
+pub fn get_refresh_channels_by_time() -> Vec<RssSubSource>{
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
-    let yesterday_of_curry = get_minus_day_millisecond(-2);
-    let predicate = article_count_latest_refresh_time.lt(yesterday_of_curry)
+    let trigger_time = (get_current_millisecond() - 35000) * 1000;
+    let time_with_zone = NaiveDateTime::from_timestamp(0, trigger_time as u32);
+    let predicate = last_trigger_time.lt(time_with_zone)
         .and(sub_status.eq(1));
     let query = rss_sub_source
         .filter(predicate)
-        .order(article_count_latest_refresh_time.asc())
-        .limit(20);
+        .order(article_count_latest_refresh_time.asc());
     let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
     return query_result;
 }

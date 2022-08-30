@@ -8,7 +8,7 @@ use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::service::app::cruise::article::article_fav_service::channel_fav_count;
 use crate::service::app::cruise::article::article_service::get_article_count_by_channel_id;
 use crate::service::app::cruise::article::static_article_service::get_article_count_by_time;
-use crate::service::app::cruise::channel::statistic_channel_service::{get_low_quality_channels, get_refresh_channels, get_refresh_channels_for_article, update_channel_article_count, update_channel_reputation};
+use crate::service::app::cruise::channel::statistic_channel_service::{get_low_quality_channels, get_refresh_channels, get_refresh_channels_by_time, update_channel_article_count, update_channel_reputation};
 use crate::service::app::cruise::overview::cruise_overview_service::{delete_low_quality_channel, update_days_article_count};
 
 pub fn refresh_channel_reputation() -> Result<(), AnalysisError> {
@@ -70,7 +70,7 @@ pub enum AnalysisError {
 }
 
 pub fn refresh_channel_article() -> Result<(), AnalysisError> {
-    let channels: Vec<RssSubSource> = get_refresh_channels_for_article();
+    let channels: Vec<RssSubSource> = get_refresh_channels_by_time();
     if channels.is_empty() {
         return Ok(());
     }
