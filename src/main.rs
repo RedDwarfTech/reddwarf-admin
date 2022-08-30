@@ -56,6 +56,10 @@ async fn main() {
 
 pub fn create_server() -> Rocket<Build> {
     let mut building_rocket = rocket::build()
+        .mount("/actuator",routes![
+            health_controller::health,
+            health_controller::liveness
+        ])
         .mount(
             "/swagger-ui/",
             make_swagger_ui(&SwaggerUIConfig {
