@@ -56,7 +56,7 @@ pub fn get_refresh_channels_by_time() -> Vec<RssSubSource>{
     let trigger_time = (get_current_millisecond() - 35000)/1000;
     let time_without_zone = NaiveDateTime::from_timestamp( trigger_time ,0);
     let zoned: DateTime<FixedOffset> = DateTime::from_utc(time_without_zone, FixedOffset::east(8 * 3600));
-    let predicate = last_trigger_time.lt(zoned.naive_local())
+    let predicate = last_trigger_time.gt(zoned.naive_local())
         .and(sub_status.eq(1));
     let query = rss_sub_source
         .filter(predicate)
