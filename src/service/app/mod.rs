@@ -7,3 +7,4 @@ pub mod job;
 pub mod product_service;
 pub mod gallery;
 pub mod tag_service;
+pub mod iap_product_service;

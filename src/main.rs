@@ -15,6 +15,7 @@ use biz::app::cruise::overview::cruise_trend_controller;
 use biz::app::dict::translate::translate_controller;
 use biz::app::dict::word::word_controller;
 use biz::app::gallery::repo_app_controller;
+use biz::app::iap_product_controller;
 use biz::app::job::interview::interview_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::app::product_controller;
@@ -94,6 +95,7 @@ pub fn create_server() -> Rocket<Build> {
         "/permission/menu" => menu_controller::get_routes_and_docs(&openapi_settings),
         "/permission/org" => org_controller::get_routes_and_docs(&openapi_settings),
         "/app/overview/product" => product_controller::get_routes_and_docs(&openapi_settings),
+        "/app/overview/iapproduct" => iap_product_controller::get_routes_and_docs(&openapi_settings),
         "/app/overview/app" => app_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/overview" => cruise_trend_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/channel" => channel_controller::get_routes_and_docs(&openapi_settings),
