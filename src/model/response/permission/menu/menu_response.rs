@@ -14,6 +14,8 @@ pub struct MenuResponse {
     pub sort: i32,
     pub disableCheckbox: bool,
     pub tree_id_path: String,
+    pub path: String,
+    pub component: Option<String>,
     pub children: Vec<MenuResponse>
 }
 
@@ -27,6 +29,8 @@ impl Default for MenuResponse {
             sort: 0,
             disableCheckbox: false,
             tree_id_path: "".to_string(),
+            path: "".to_string(),
+            component: None,
             children: vec![]
         }
     }
@@ -42,6 +46,8 @@ impl From<&MenuResource> for MenuResponse {
             sort: p.sort,
             disableCheckbox: false,
             tree_id_path: p.tree_id_path.to_string(),
+            path: p.path.to_string(),
+            component: p.component.to_owned(),
             children: vec![]
         }
     }
@@ -67,7 +73,9 @@ impl IntoTree for &MenuResponse {
             name: self.name.to_string(),
             children,
             name_zh: self.name_zh.to_string(),
-            tree_id_path: self.tree_id_path.to_string()
+            tree_id_path: self.tree_id_path.to_string(),
+            path: self.path.to_string(),
+            component: self.component.to_owned(),
         }
     }
 }
