@@ -8,4 +8,6 @@ use rocket_okapi::okapi::schemars::JsonSchema;
 pub struct UpdateMenuRequest {
     pub id: i32,
     pub sort: i32,
+    pub path: String,
+    pub component: Option<String>
 }

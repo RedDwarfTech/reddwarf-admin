@@ -3,7 +3,7 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::convert_to_tree::convert_to_tree;
-use rust_wheel::common::util::model_convert::{ box_rest_response, map_entity, map_pagination_from_list};
+use rust_wheel::common::util::model_convert::{box_rest_response, map_entity, map_pagination_from_list};
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
@@ -132,7 +132,7 @@ pub fn menu_edit(request: &Json<UpdateMenuRequest>) -> content::RawJson<String> 
     let connection = config::establish_connection();
     let predicate = id.eq(request.id);
     diesel::update(menu_resource.filter(predicate))
-        .set(sort.eq(request.sort))
+        .set((sort.eq(request.sort),path.eq(request.path.to_string(),component.eq(request.component.to_owned()))))
         .get_result::<MenuResource>(&connection)
         .expect("unable to update menu");
     return box_rest_response("ok");
