@@ -131,11 +131,11 @@ pub fn menu_edit(request: &Json<UpdateMenuRequest>) -> content::RawJson<String> 
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let connection = config::establish_connection();
     let predicate = id.eq(request.id);
-    diesel::update(menu_resource.filter(predicate))
+    let update_records = diesel::update(menu_resource.filter(predicate))
         .set((sort.eq(request.sort),path.eq(request.path.to_string()),component.eq(request.component.to_owned())))
-        .get_result::<MenuResource>(&connection)
+        .get_results::<MenuResource>(&connection)
         .expect("unable to update menu");
-    return box_rest_response("ok");
+    return box_rest_response(update_records.get(0));
 }
 
 pub fn menu_add(request: &Json<AddMenuRequest>) -> content::RawJson<String> {
