@@ -3,8 +3,12 @@
 #![allow(unused)]
 #![allow(clippy::all)]
 
+use rocket::serde::Serialize;
+use serde::Deserialize;
+use crate::model::diesel::rhythm::rhythm_schema::*;
 
-#[derive(Queryable, Debug)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "favorites"]
 pub struct Favorite {
     pub id: i64,
     pub song_id: Option<i64>,
@@ -20,7 +24,8 @@ pub struct Favorite {
     pub downloaded: Option<i32>,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "playlist"]
 pub struct Playlist {
     pub id: i64,
     pub creator: i64,
@@ -40,7 +45,8 @@ pub struct Playlist {
     pub playlist_type: i32,
 }
 
-#[derive(Queryable, Debug)]
+#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[table_name = "songs"]
 pub struct Song {
     pub id: i64,
     pub name: String,
