@@ -69,6 +69,7 @@ table! {
         cover_image -> Nullable<Varchar>,
         channel_reputation -> Int4,
         editor_pick -> Nullable<Int4>,
+        permanent_store -> Int2,
     }
 }
 
@@ -118,6 +119,25 @@ table! {
         days_before_trigger -> Int4,
         notify_trigger_date -> Nullable<Timestamp>,
         expire_date_ms -> Nullable<Int8>,
+    }
+}
+
+table! {
+    iap_product (id) {
+        id -> Int4,
+        product_id -> Varchar,
+        product_type -> Int4,
+        online_status -> Int4,
+        created_time -> Int8,
+        updated_time -> Int8,
+        product_title -> Varchar,
+        description -> Varchar,
+        price -> Varchar,
+        raw_price -> Varchar,
+        currency_code -> Nullable<Varchar>,
+        app_id -> Varchar,
+        sort -> Varchar,
+        deleted -> Nullable<Int4>,
     }
 }
 
@@ -320,7 +340,7 @@ table! {
         register_time -> Int8,
         apple_iap_product_id -> Nullable<Varchar>,
         auto_renew_product_expire_time_ms -> Nullable<Int8>,
-        product_id -> Nullable<Int4>,
+        is_guest -> Int4,
     }
 }
 
@@ -333,6 +353,7 @@ allow_tables_to_appear_in_same_query!(
     article_favorites,
     dashboard,
     domain,
+    iap_product,
     interview,
     menu_resource,
     org,

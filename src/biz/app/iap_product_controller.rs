@@ -5,7 +5,8 @@ use rocket_okapi::{openapi, openapi_get_routes_spec};
 use rocket_okapi::settings::OpenApiSettings;
 use rust_wheel::common::util::model_convert::box_rest_response;
 
-use crate::model::diesel::dolphin::dolphin_models::Product;
+use crate::model::diesel::dolphin::dolphin_models::{IapProduct, Product};
+use crate::model::request::app::iap_product_request::IapProductRequest;
 use crate::model::request::app::overview::product::add_product_request::AddProductRequest;
 use crate::model::request::app::overview::product::edit_product_request::EditProductRequest;
 use crate::model::request::app::product_request::ProductRequest;
@@ -18,8 +19,8 @@ pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, O
 
 #[openapi(tag = "商品")]
 #[post("/v1/page",data = "<request>")]
-pub fn page(request: Json<ProductRequest>) -> content::RawJson<String> {
-    let products = iap_product_query::<Vec<Product>>(&request);
+pub fn page(request: Json<IapProductRequest>) -> content::RawJson<String> {
+    let products = iap_product_query::<Vec<IapProduct>>(&request);
     return box_rest_response(products);
 }
 

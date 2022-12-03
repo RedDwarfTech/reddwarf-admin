@@ -8,19 +8,20 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::ProductAdd;
-use crate::model::diesel::dolphin::dolphin_models::{App, Product};
+use crate::model::diesel::dolphin::dolphin_models::{App, IapProduct, Product};
+use crate::model::request::app::iap_product_request::IapProductRequest;
 use crate::model::request::app::overview::product::add_product_request::AddProductRequest;
 use crate::model::request::app::overview::product::edit_product_request::EditProductRequest;
 use crate::model::request::app::product_request::ProductRequest;
 
-pub fn iap_product_query<T>(request: &Json<ProductRequest>) -> PaginationResponse<Vec<Product>> {
-    use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
+pub fn iap_product_query<T>(request: &Json<IapProductRequest>) -> PaginationResponse<Vec<IapProduct>> {
+    use crate::model::diesel::dolphin::dolphin_schema::iap_product::dsl::*;
     let connection = config::establish_connection();
-    let query = products.filter(id.gt(0))
+    let query = iap_product.filter(id.gt(0))
         .order(created_time.desc())
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
-    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Product>(&connection);
+    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<IapProduct>(&connection);
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
 }

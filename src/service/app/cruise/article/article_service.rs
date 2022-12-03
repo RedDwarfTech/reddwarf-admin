@@ -12,7 +12,7 @@ use crate::model::diesel::dolphin::dolphin_models::{Article, ArticleContent, Rss
 use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
 
-type QueryType<'a> = BoxedSelectStatement<'a, (diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>), crate::model::diesel::dolphin::dolphin_schema::article::table, diesel::pg::Pg>;
+type QueryType<'a> = BoxedSelectStatement<'a, (diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::Text, diesel::sql_types::BigInt, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Nullable<diesel::pg::types::sql_types::Timestamptz>, diesel::sql_types::BigInt, diesel::sql_types::Nullable<diesel::sql_types::Text>, diesel::sql_types::Integer, diesel::sql_types::Nullable<diesel::sql_types::Integer>,diesel::sql_types::SmallInt), crate::model::diesel::dolphin::dolphin_schema::article::table, diesel::pg::Pg>;
 
 pub fn article_query<T>(request: &Json<ArticleRequest>) -> PaginationResponse<Vec<ArticleResponse>> {
     // when pagination with the big table

@@ -10,3 +10,4 @@ pub mod product_request;
 pub mod tag_list_request;
 pub mod overview;
 pub mod gallery;
+pub mod iap_product_request;
