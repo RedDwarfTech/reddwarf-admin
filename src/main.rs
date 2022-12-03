@@ -18,6 +18,8 @@ use biz::app::gallery::repo_app_controller;
 use biz::app::iap_product_controller;
 use biz::app::job::interview::interview_controller;
 use biz::app::music::fav::fav_music_controller;
+use biz::app::music::music_controller;
+use biz::app::music::playlist::playlist_controller;
 use biz::app::product_controller;
 use biz::common::health_controller;
 use biz::home::home_controller;
@@ -100,6 +102,7 @@ pub fn create_server() -> Rocket<Build> {
         "/app/cruise/overview" => cruise_trend_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/channel" => channel_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/article" => article_controller::get_routes_and_docs(&openapi_settings),
+        "/app/music/music" => music_controller::get_routes_and_docs(&openapi_settings),
         "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
         "/permission/role" => role_controller::get_routes_and_docs(&openapi_settings),
     };

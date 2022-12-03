@@ -1,20 +1,22 @@
+use diesel::dsl::any;
 use rand::{Rng, thread_rng};
 use rand::distributions::Alphanumeric;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
-use rust_wheel::common::util::model_convert::map_pagination_res;
+use rust_wheel::common::util::model_convert::{map_pagination_from_list, map_pagination_res};
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::AppAdd;
-use crate::model::diesel::dolphin::dolphin_models::App;
+use crate::model::diesel::dolphin::dolphin_models::{App, Product};
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
+use crate::model::response::app::app_response::AppResponse;
 
-pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> {
+pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<AppResponse>> {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
     let query = apps.filter(id.gt(0))
@@ -22,8 +24,30 @@ pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<App>> 
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<App>(&connection);
-    let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
+    let app_response = append_product_name(&query_result.as_ref().unwrap().0, &connection);
+    let total = query_result.as_ref().unwrap().2;
+    let page_result = map_pagination_from_list(app_response, request.pageNum, request.pageSize,total);
     return page_result;
+}
+
+pub fn append_product_name(apps: &Vec<App>, connection:&PgConnection) -> Vec<AppResponse>{
+    use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
+    let channel_ids:Vec<i32> = apps.iter()
+        .map(|item| item.product_id)
+        .collect();
+    let products_result = products.filter(id.eq(any(channel_ids)))
+        .load::<Product>(connection)
+        .expect("query product source failed");
+    let mut app_res = Vec::new();
+    for app_temp in apps {
+        let fetched_product_name:String = products_result.iter().filter(|prod| prod.id== app_temp.product_id)
+            .map(|channel|channel.product_name.to_string())
+            .collect::<String>();
+        let mut app_response = AppResponse::from(app_temp);
+        app_response.product_name = fetched_product_name;
+        app_res.push(app_response);
+    }
+    return app_res;
 }
 
 pub fn app_create(request: &Json<AddAppRequest>) {
