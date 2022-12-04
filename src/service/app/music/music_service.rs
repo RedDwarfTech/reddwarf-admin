@@ -1,9 +1,10 @@
 use diesel::dsl::any;
 use rocket::serde::json::Json;
+use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
-use rust_wheel::common::query::pagination::PaginateForQueryFragment;
+
 use crate::diesel::prelude::*;
 use crate::model::diesel::rhythm::rhythm_models::Song;
 use crate::model::request::app::music::music_request::MusicRequest;
@@ -13,7 +14,7 @@ use crate::models::Music;
 
 pub fn music_query<T>(request: &Json<MusicRequest>) -> PaginationResponse<Vec<Song>> {
     use crate::model::diesel::rhythm::rhythm_schema::songs::dsl::*;
-    let connection = config::establish_connection();
+    let connection = config::establish_music_connection();
     let query = songs.filter(id.gt(0))
         .order(created_time.desc())
         .paginate(request.pageNum,false)
