@@ -37,6 +37,38 @@ pub fn update_days_article_count(new_trend: &TrendAdd) {
         .expect("unable to update trend article count");
 }
 
+pub fn delete_legacy_article() {
+    use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
+    let connection = config::establish_connection();
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::article::created_time.lt(get_current_millisecond()-1000*60*60*24*90);
+    let articles = article_table::table
+        .filter(predicate)
+        .limit(50)
+        .load::<Article>(&connection)
+        .expect("query old articles failed");
+    if articles.is_empty() {
+        return;
+    }
+    let article_ids = articles.iter()
+        .map(|item| item.id)
+        .collect();
+    let transaction_result = connection.build_transaction()
+        .repeatable_read()
+        .run::<_, diesel::result::Error, _>(||{
+            delete_article(&article_ids);
+            delete_article_detail(&article_ids);
+            Ok(())
+        });
+    match transaction_result {
+        Ok(_v) => {
+
+        },
+        Err(e) =>{
+            error!("error:{}",e.to_string());
+        },
+    }
+}
+
 pub fn delete_low_quality_channel(filter_channel_id: i64) {
     use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
     let connection = config::establish_connection();

@@ -9,7 +9,7 @@ use crate::service::app::cruise::article::article_fav_service::channel_fav_count
 use crate::service::app::cruise::article::article_service::get_article_count_by_channel_id;
 use crate::service::app::cruise::article::static_article_service::get_article_count_by_time;
 use crate::service::app::cruise::channel::statistic_channel_service::{get_low_quality_channels, get_refresh_channels, get_refresh_channels_by_time, update_channel_article_count, update_channel_reputation};
-use crate::service::app::cruise::overview::cruise_overview_service::{delete_low_quality_channel, update_days_article_count};
+use crate::service::app::cruise::overview::cruise_overview_service::{delete_low_quality_channel, update_days_article_count, delete_legacy_article};
 
 pub fn refresh_channel_reputation() -> Result<(), AnalysisError> {
     let channels: Vec<RssSubSource> = get_refresh_channels();
@@ -46,10 +46,18 @@ pub async fn refresh_channel_article_count() {
 }
 
 pub async fn remove_low_quality_articles() {
-    let mut interval = time::interval(Duration::from_millis(25000));
+    let mut interval = time::interval(Duration::from_millis(35000));
     loop {
         interval.tick().await;
         remove_articles();
+    }
+}
+
+pub async fn remove_old_articles(){
+    let mut interval = time::interval(Duration::from_millis(25000));
+    loop {
+        interval.tick().await;
+        remove_old_articles_impl();
     }
 }
 
@@ -86,6 +94,10 @@ pub fn remove_articles() {
     for channel in channels {
         delete_low_quality_channel(channel.id);
     }
+}
+
+pub fn remove_old_articles_impl(){
+    delete_legacy_article();
 }
 
 pub fn calculate_trend_impl(start: i64, end: i64) {

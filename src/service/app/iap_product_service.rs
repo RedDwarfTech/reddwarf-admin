@@ -26,11 +26,11 @@ pub fn iap_product_query<T>(request: &Json<IapProductRequest>) -> PaginationResp
     return page_result;
 }
 
-pub fn iap_product_query_list<T>() -> Vec<Product> {
-    use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
+pub fn iap_product_query_list<T>() -> Vec<IapProduct> {
+    use crate::model::diesel::dolphin::dolphin_schema::iap_product::dsl::*;
     let connection = config::establish_connection();
-    let products_record = products
-        .load::<Product>(&connection)
+    let products_record = iap_product
+        .load::<IapProduct>(&connection)
         .expect("query products failed");
     return products_record;
 }

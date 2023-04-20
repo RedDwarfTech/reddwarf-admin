@@ -27,7 +27,7 @@ pub fn page(request: Json<IapProductRequest>) -> content::RawJson<String> {
 #[openapi(tag = "商品")]
 #[get("/v1/list")]
 pub fn list() -> content::RawJson<String> {
-    let products = iap_product_query_list::<Vec<Product>>();
+    let products = iap_product_query_list::<Vec<IapProduct>>();
     return box_rest_response(products);
 }
 
