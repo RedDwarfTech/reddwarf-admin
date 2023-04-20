@@ -43,7 +43,7 @@ pub fn delete_legacy_article() {
     let predicate = crate::model::diesel::dolphin::dolphin_schema::article::created_time.lt(get_current_millisecond()-1000*60*60*24*90);
     let articles = article_table::table
         .filter(predicate)
-        .limit(50)
+        .limit(30)
         .load::<Article>(&connection)
         .expect("query old articles failed");
     if articles.is_empty() {
