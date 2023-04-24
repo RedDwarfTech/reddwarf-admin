@@ -1,6 +1,6 @@
 # reddwarf-admin
 
-english | [中文]([https://github.com/RedDwarf/reddwarf-admin/blob/main/README.zh-CN.md](https://github.com/RedDwarfTech/reddwarf-admin/blob/main/README.zh-CN.md))
+english | [中文](https://github.com/RedDwarfTech/reddwarf-admin/blob/main/README.zh-CN.md)
 
 
 ### about
