@@ -36,6 +36,3 @@ rust_wheel = { git = "https://github.com/jiangxiaoqiang/rust_wheel.git" }
 okapi = { git = "https://github.com/GREsau/okapi.git"}
 schemars = { version = "0.8", features = ["chrono"] }
 rocket_okapi = { git = "https://github.com/GREsau/okapi.git", features = ["swagger", "rapidoc"] }
-
-
-
