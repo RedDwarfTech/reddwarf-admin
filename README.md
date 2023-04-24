@@ -1,6 +1,13 @@
 # reddwarf-admin
 
-## Startup
+english | [中文](https://github.com/RedDwarf/reddwarf-admin/blob/main/README.zh-CN.md)
+
+
+### about
+
+A backend management system RESTful API developed in Rust is highly resource-efficient, requiring only 20MB of memory and 50m of CPU (1,000m per CPU core) to run.
+
+### Startup
 
 ```bash
 git clone https://github.com/jiangxiaoqiang/reddwarf-admin.git
