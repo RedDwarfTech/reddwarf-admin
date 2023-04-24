@@ -44,7 +44,7 @@ pub fn delete_legacy_article() {
     let articles = article_table::table
         .filter(predicate)
         .order(article_table::created_time.asc())
-        .limit(30)
+        .limit(300)
         .load::<Article>(&connection)
         .expect("query old articles failed");
     if articles.is_empty() {
