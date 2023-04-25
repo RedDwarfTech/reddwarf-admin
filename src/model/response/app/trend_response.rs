@@ -1,11 +1,11 @@
-use chrono::{DateTime, Utc};
+
 use rocket::serde::Deserialize;
 use rocket::serde::Serialize;
 use rocket_okapi::okapi::schemars;
 use rocket_okapi::okapi::schemars::JsonSchema;
 
-use crate::model::diesel::dolphin::dolphin_models::{Article, Trend};
-use crate::model::diesel::dolphin::dolphin_models::ArticleContent;
+use crate::model::diesel::dolphin::dolphin_models::{Trend};
+
 
 #[derive( Serialize, Queryable, Deserialize,Default, Clone, JsonSchema)]
 pub struct TrendResponse {

@@ -1,7 +1,7 @@
 use chrono::{DateTime, Duration, FixedOffset, NaiveDateTime, TimeZone, Utc};
 use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
 use diesel::dsl::any;
-use rust_wheel::common::util::time_util::{get_current_millisecond, get_minus_day_millisecond};
+use rust_wheel::common::util::time_util::{get_current_millisecond};
 use rust_wheel::config::db::config;
 
 use crate::model::diesel::dolphin::dolphin_models::{ArticleFavorite, RssSubSource};

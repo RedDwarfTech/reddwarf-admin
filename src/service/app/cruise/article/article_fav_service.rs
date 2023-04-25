@@ -1,5 +1,5 @@
-use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
-use num_traits::ToPrimitive;
+use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl};
+
 use rust_wheel::config::db::config;
 
 use crate::model::diesel::dolphin::dolphin_models::ArticleFavorite;

@@ -8,7 +8,7 @@ use crate::model::diesel::rhythm::rhythm_models::Song;
 use crate::model::request::app::add_app_request::AddAppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::music::music_request::MusicRequest;
-use crate::service::app::app_service::{app_create, app_detail, app_edit, app_query};
+use crate::service::app::app_service::{app_create, app_detail, app_edit};
 use crate::service::app::music::music_service::music_query;
 
 pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, OpenApi) {

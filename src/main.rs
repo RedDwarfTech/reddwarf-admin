@@ -19,7 +19,7 @@ use biz::app::iap_product_controller;
 use biz::app::job::interview::interview_controller;
 use biz::app::music::fav::fav_music_controller;
 use biz::app::music::music_controller;
-use biz::app::music::playlist::playlist_controller;
+
 use biz::app::product_controller;
 use biz::common::health_controller;
 use biz::home::home_controller;
@@ -32,6 +32,7 @@ use biz::system::tag::tag_controller;
 use biz::user::user_controller;
 use statistic::app::cruise::channel::channel_task::remove_old_articles;
 
+use crate::biz::app::music::playlist::playlist_controller;
 use crate::statistic::app::cruise::channel::channel_task::{calculate_article_trend, refresh_channel_article_count, refresh_channel_rep, remove_low_quality_articles};
 
 mod biz;
@@ -104,8 +105,12 @@ pub fn create_server() -> Rocket<Build> {
         "/app/cruise/overview" => cruise_trend_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/channel" => channel_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/article" => article_controller::get_routes_and_docs(&openapi_settings),
-        "/app/cernitor/page" => domain_controller::get_routes_and_docs(&openapi_settings),
+        "/app/cernitor/domain" => domain_controller::get_routes_and_docs(&openapi_settings),
+        "/app/dict/trans" => translate_controller::get_routes_and_docs(&openapi_settings),
+        "/app/dict/word" => word_controller::get_routes_and_docs(&openapi_settings),
+        "/app/gallary/word" => repo_app_controller::get_routes_and_docs(&openapi_settings),
         "/app/music/music" => music_controller::get_routes_and_docs(&openapi_settings),
+        "/app/music/playlist" => playlist_controller::get_routes_and_docs(&openapi_settings),
         "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
         "/permission/role" => role_controller::get_routes_and_docs(&openapi_settings),
     };

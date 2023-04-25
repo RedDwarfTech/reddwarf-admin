@@ -8,8 +8,8 @@ use rust_wheel::model::response::pagination_response::PaginationResponse;
 use crate::diesel::prelude::*;
 use crate::model::diesel::rhythm::rhythm_models::Song;
 use crate::model::request::app::music::music_request::MusicRequest;
-use crate::model::response::app::app_response::AppResponse;
-use crate::model::response::app::music::music_response::MusicResponse;
+
+
 use crate::models::Music;
 
 pub fn music_query<T>(request: &Json<MusicRequest>) -> PaginationResponse<Vec<Song>> {

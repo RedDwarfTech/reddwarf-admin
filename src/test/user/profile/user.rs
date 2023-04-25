@@ -5,7 +5,7 @@ mod test {
 
     #[test]
     fn user_test(){
-        let pr = PasswordRequest{
+        let _pr = PasswordRequest{
             loginType: 0,
             newPassword: "123456".to_string(),
             oldPassword: "$mycruise123".to_string(),
