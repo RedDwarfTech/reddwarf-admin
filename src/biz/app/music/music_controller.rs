@@ -4,11 +4,8 @@ use rocket::serde::json::Json;
 use rocket_okapi::{openapi, openapi_get_routes_spec};
 use rocket_okapi::settings::OpenApiSettings;
 use rust_wheel::common::util::model_convert::box_rest_response;
-
-use crate::model::diesel::dolphin::dolphin_models::App;
 use crate::model::diesel::rhythm::rhythm_models::Song;
 use crate::model::request::app::add_app_request::AddAppRequest;
-use crate::model::request::app::app_request::AppRequest;
 use crate::model::request::app::edit_app_request::EditAppRequest;
 use crate::model::request::app::music::music_request::MusicRequest;
 use crate::service::app::app_service::{app_create, app_detail, app_edit, app_query};

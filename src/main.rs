@@ -104,6 +104,7 @@ pub fn create_server() -> Rocket<Build> {
         "/app/cruise/overview" => cruise_trend_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/channel" => channel_controller::get_routes_and_docs(&openapi_settings),
         "/app/cruise/article" => article_controller::get_routes_and_docs(&openapi_settings),
+        "/app/cernitor/page" => domain_controller::get_routes_and_docs(&openapi_settings),
         "/app/music/music" => music_controller::get_routes_and_docs(&openapi_settings),
         "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
         "/permission/role" => role_controller::get_routes_and_docs(&openapi_settings),

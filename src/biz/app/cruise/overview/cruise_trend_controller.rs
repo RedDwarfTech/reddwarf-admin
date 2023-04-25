@@ -4,8 +4,6 @@ use rocket_okapi::{openapi, openapi_get_routes_spec};
 use rocket_okapi::settings::OpenApiSettings;
 use rust_wheel::common::util::model_convert::{box_type_rest_response, map_entity};
 use rust_wheel::model::response::api_response::ApiResponse;
-
-use crate::model::diesel::dolphin::dolphin_models::Trend;
 use crate::model::request::app::cruise::overview::cruise_overview_request::CruiseOverviewRequest;
 use crate::model::response::app::trend_response::TrendResponse;
 use crate::service::app::cruise::overview::cruise_overview_service::cruise_trend_query;

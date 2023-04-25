@@ -5,13 +5,12 @@ use rocket_okapi::{openapi, openapi_get_routes_spec};
 use rocket_okapi::settings::OpenApiSettings;
 use rust_wheel::common::util::model_convert::box_rest_response;
 
-use crate::model::diesel::dolphin::dolphin_models::{IapProduct, Product};
+use crate::model::diesel::dolphin::dolphin_models::{IapProduct};
 use crate::model::request::app::iap_product_request::IapProductRequest;
 use crate::model::request::app::overview::product::add_product_request::AddProductRequest;
 use crate::model::request::app::overview::product::edit_product_request::EditProductRequest;
-use crate::model::request::app::product_request::ProductRequest;
 use crate::service::app::iap_product_service::{iap_product_create, iap_product_detail, iap_product_query, iap_product_query_list};
-use crate::service::app::product_service::{product_create, product_detail, product_edit, product_query, product_query_list};
+use crate::service::app::product_service::{ product_edit};
 
 pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, OpenApi) {
     openapi_get_routes_spec![settings: page, list, add, edit, get]

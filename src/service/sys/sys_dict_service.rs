@@ -2,7 +2,6 @@ use diesel::ExpressionMethods;
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_res;
-use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
@@ -39,7 +38,6 @@ pub fn dict_page_query<T>(request: Json<SysDictRequest>) -> PaginationResponse<V
 
 pub fn dict_create(request: &Json<AddDictRequest>) {
     let connection = config::establish_quark_connection();
-    let current_time = get_current_millisecond();
     let app = AddSysDict{
         key: Option::from(request.key),
         dict_type: request.dict_type.to_string(),
