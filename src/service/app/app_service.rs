@@ -32,10 +32,10 @@ pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<AppRes
 
 pub fn append_product_name(apps: &Vec<App>, connection:&PgConnection) -> Vec<AppResponse>{
     use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
-    let channel_ids:Vec<i32> = apps.iter()
+    let product_ids:Vec<i32> = apps.iter()
         .map(|item| item.product_id)
         .collect();
-    let products_result = products.filter(id.eq(any(channel_ids)))
+    let products_result = products.filter(product_id.eq(any(product_ids)))
         .load::<Product>(connection)
         .expect("query product source failed");
     let mut app_res = Vec::new();
