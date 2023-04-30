@@ -57,13 +57,13 @@ impl From<&App> for AppResponse {
             product_name: "".to_string(),
             created_time: p.created_time,
             updated_time: p.updated_time,
-            user_count: 0,
-            online_status: 0,
+            user_count: p.user_count,
+            online_status: p.online_status,
             online_time: None,
-            app_abbr: "".to_string(),
+            app_abbr: p.app_abbr.to_string(),
             app_id: p.app_id.to_string(),
             app_tag: None,
-            auth_mode: 0,
+            auth_mode: p.auth_mode,
             product_id: p.product_id,
         }
     }
