@@ -124,20 +124,22 @@ table! {
 
 table! {
     iap_product (id) {
-        id -> Int4,
-        product_id -> Varchar,
+        id -> Int8,
+        product_id -> Int4,
         product_type -> Int4,
         online_status -> Int4,
         created_time -> Int8,
         updated_time -> Int8,
         product_title -> Varchar,
         description -> Varchar,
-        price -> Varchar,
-        raw_price -> Varchar,
+        price -> Numeric,
+        raw_price -> Numeric,
         currency_code -> Nullable<Varchar>,
         app_id -> Varchar,
-        sort -> Varchar,
-        deleted -> Nullable<Int4>,
+        sort -> Int4,
+        deleted -> Int4,
+        amount -> Int4,
+        period -> Int4,
     }
 }
 
@@ -341,6 +343,7 @@ table! {
         apple_iap_product_id -> Nullable<Varchar>,
         auto_renew_product_expire_time_ms -> Nullable<Int8>,
         is_guest -> Int4,
+        product_id -> Int4,
     }
 }
 

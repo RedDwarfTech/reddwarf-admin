@@ -9,8 +9,7 @@ use crate::model::diesel::dolphin::dolphin_models::{IapProduct};
 use crate::model::request::app::iap_product_request::IapProductRequest;
 use crate::model::request::app::overview::product::add_product_request::AddProductRequest;
 use crate::model::request::app::overview::product::edit_product_request::EditProductRequest;
-use crate::service::app::iap_product_service::{iap_product_create, iap_product_detail, iap_product_query, iap_product_query_list};
-use crate::service::app::product_service::{ product_edit};
+use crate::service::app::iap_product_service::{iap_product_create, iap_product_detail, iap_product_query, iap_product_query_list, iap_product_edit};
 
 pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, OpenApi) {
     openapi_get_routes_spec![settings: page, list, add, edit, get]
@@ -40,7 +39,7 @@ pub fn add(request: Json<AddProductRequest>) -> content::RawJson<String> {
 #[openapi(tag = "商品")]
 #[patch("/v1/edit",data = "<request>")]
 pub fn edit(request: Json<EditProductRequest>) -> content::RawJson<String> {
-    product_edit(&request);
+    iap_product_edit(&request);
     return box_rest_response("ok");
 }
 

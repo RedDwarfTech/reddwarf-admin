@@ -8,6 +8,8 @@ use serde::Deserialize;
 use crate::model::diesel::dolphin::dolphin_schema::*;
 
 use chrono::NaiveDateTime;
+
+use bigdecimal::BigDecimal;
 use chrono::DateTime;
 use chrono::offset::Utc;
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
@@ -137,20 +139,22 @@ pub struct Domain {
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "iap_product"]
 pub struct IapProduct {
-    pub id: i32,
-    pub product_id: String,
+    pub id: i64,
+    pub product_id: i32,
     pub product_type: i32,
     pub online_status: i32,
     pub created_time: i64,
     pub updated_time: i64,
     pub product_title: String,
     pub description: String,
-    pub price: String,
-    pub raw_price: String,
+    pub price: BigDecimal,
+    pub raw_price: BigDecimal,
     pub currency_code: Option<String>,
     pub app_id: String,
-    pub sort: String,
-    pub deleted: Option<i32>,
+    pub sort: i32,
+    pub deleted: i32,
+    pub amount: i32,
+    pub period: i32,
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
@@ -354,5 +358,6 @@ pub struct User {
     pub apple_iap_product_id: Option<String>,
     pub auto_renew_product_expire_time_ms: Option<i64>,
     pub is_guest: i32,
+    pub product_id: i32,
 }
 
