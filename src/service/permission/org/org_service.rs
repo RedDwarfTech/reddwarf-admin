@@ -8,6 +8,7 @@ use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
+use crate::common::db::database::get_conn;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, Org};
 use crate::model::request::permission::org::org_request::OrgRequest;
@@ -22,11 +23,10 @@ use crate::model::response::permission::org::org_response::OrgResponse;
  */
 pub fn org_query_full_tree<T>(filter_parent_id: i32) -> Vec<OrgResponse>{
     use crate::model::diesel::dolphin::dolphin_schema::org::dsl::*;
-    let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::org::parent_id.eq(filter_parent_id);
     let root_menus = org.filter(&predicate)
         .order(sort.asc())
-        .load::<Org>(&connection)
+        .load::<Org>(&get_conn())
         .expect("Error find menu resource");
     return find_sub_org_cte_impl(&root_menus);
 }
