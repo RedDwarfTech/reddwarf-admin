@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 
-rocket = { version = "=0.5.0-rc.2", features = ["json"] }
+rocket = { version = "=0.5.0-rc.3", features = ["json"] }
 serde = { version = "1.0.64", features = ["derive"] }
 serde_json = "1.0.64"
 
@@ -34,6 +34,6 @@ rust_wheel = { git = "https://github.com/jiangxiaoqiang/rust_wheel.git" }
 # https://github.com/GREsau/okapi/issues/100
 # Fortune doc configuration
 #
-okapi = { git = "https://github.com/GREsau/okapi.git"}
+okapi = { git = "https://github.com/GREsau/okapi.git",version="0.7.0-rc.1"}
 schemars = { version = "0.8", features = ["chrono"] }
-rocket_okapi = { git = "https://github.com/GREsau/okapi.git", features = ["swagger", "rapidoc"] }
+rocket_okapi = { git = "https://github.com/GREsau/okapi.git", features = ["swagger", "rapidoc"], version="0.8.0-rc.2" }
