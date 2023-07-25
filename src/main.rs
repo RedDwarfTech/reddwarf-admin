@@ -50,7 +50,7 @@ async fn main() {
     tokio::spawn(refresh_channel_rep());
     tokio::spawn(refresh_channel_article_count());
     tokio::spawn(remove_low_quality_articles());
-    tokio::spawn(remove_old_articles());
+    //tokio::spawn(remove_old_articles());
     tokio::spawn(calculate_article_trend());
 
     let launch_result = create_server().launch().await;
