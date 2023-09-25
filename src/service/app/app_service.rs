@@ -2,12 +2,13 @@ use diesel::dsl::any;
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use rocket::serde::json::Json;
-use rust_wheel::common::query::pagination::PaginateForQueryFragment;
+use rust_wheel::common::query::pagination_fragment::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_from_list;
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
+use crate::common::db::database::{get_conn};
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::AppAdd;
 use crate::model::diesel::dolphin::dolphin_models::{App, Product};
@@ -25,8 +26,8 @@ pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<AppRes
         .paginate(request.pageNum, false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> =
-        query.load_and_count_pages_total::<App>(&connection);
-    let app_response = append_product_name(&query_result.as_ref().unwrap().0, &connection);
+        query.load_and_count_pages_total::<App>(&mut get_conn());
+    let app_response = append_product_name(&query_result.as_ref().unwrap().0, &mut get_conn());
     let total = query_result.as_ref().unwrap().2;
     let page_result =
         map_pagination_from_list(app_response, request.pageNum, request.pageSize, total);
@@ -38,7 +39,7 @@ pub fn append_product_name(apps: &Vec<App>, connection: &PgConnection) -> Vec<Ap
     let product_ids: Vec<i32> = apps.iter().map(|item| item.product_id).collect();
     let products_result = products
         .filter(product_id.eq(any(product_ids)))
-        .load::<Product>(connection)
+        .load::<Product>(&mut get_conn())
         .expect("query product source failed");
     let mut app_res = Vec::new();
     for app_temp in apps {
@@ -79,7 +80,7 @@ pub fn app_create(request: &Json<AddAppRequest>) {
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::apps::table)
         .values(&app)
         .on_conflict_do_nothing()
-        .execute(&connection)
+        .execute(&mut get_conn())
         .unwrap();
 }
 
@@ -89,13 +90,13 @@ pub fn app_edit(request: &Json<EditAppRequest>) {
     let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::id.eq(request.id);
     diesel::update(apps.filter(predicate))
         .set(remark.eq(&request.remark))
-        .get_result::<App>(&connection)
+        .get_result::<App>(&mut get_conn())
         .expect("unable to update app");
 }
 
 pub fn app_detail(query_app_id: i32) -> App {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
     let connection = config::establish_connection();
-    let app_result = apps.filter(id.eq(query_app_id)).first::<App>(&connection);
+    let app_result = apps.filter(id.eq(query_app_id)).first::<App>(&mut get_conn());
     return app_result.unwrap();
 }

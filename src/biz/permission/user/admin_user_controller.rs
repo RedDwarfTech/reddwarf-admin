@@ -3,7 +3,7 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rocket_okapi::{openapi, openapi_get_routes_spec};
 use rocket_okapi::settings::OpenApiSettings;
-use rust_wheel::common::util::model_convert::box_rest_response;
+use rust_wheel::common::wrapper::rocket_http_resp::box_rest_response;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
 use crate::model::diesel::dolphin::dolphin_models::AdminUser;
@@ -22,7 +22,7 @@ pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, O
 #[openapi(tag = "后台用户")]
 #[post("/v1/page",data = "<request>")]
 pub fn page(request: Json<UserRequest>) -> content::RawJson<String> {
-    let users = admin_user_query::<Vec<AdminUser>>(&request);
+    let users = admin_user_query::<Vec<AdminUser>>(request.0);
     return box_rest_response(users);
 }
 

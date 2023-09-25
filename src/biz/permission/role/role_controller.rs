@@ -3,8 +3,7 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rocket_okapi::{openapi, openapi_get_routes_spec};
 use rocket_okapi::settings::OpenApiSettings;
-use rust_wheel::common::util::model_convert::box_rest_response;
-
+use rust_wheel::common::wrapper::rocket_http_resp::box_rest_response;
 use crate::model::diesel::dolphin::dolphin_models::{MenuResource, Role};
 use crate::model::request::permission::menu::role_menu_request::RoleMenuRequest;
 use crate::model::request::permission::role::role_add_request::RoleAddRequest;

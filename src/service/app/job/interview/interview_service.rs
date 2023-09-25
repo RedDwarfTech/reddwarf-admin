@@ -1,9 +1,10 @@
 use diesel::QueryResult;
 use rocket::serde::json::Json;
-use rust_wheel::common::query::pagination::PaginateForQueryFragment;
+use rust_wheel::common::query::pagination_fragment::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
+use crate::common::db::database::{ get_conn};
 use crate::model::diesel::dolphin::dolphin_models::Interview;
 use crate::model::request::app::job::interview::interview_request::InterviewRequest;
 use crate::diesel::prelude::*;
@@ -13,7 +14,7 @@ use crate::model::diesel::dolphin::custom_dolphin_models::InterviewAdd;
 use crate::model::request::app::job::interview::add_interview_request::AddInterviewRequest;
 use crate::model::request::app::job::interview::edit_interview_request::EditInterviewRequest;
 
-pub fn interview_query<T>(request: &Json<InterviewRequest>,login_user_info: LoginUserInfo) -> PaginationResponse<Vec<Interview>> {
+pub fn interview_query<T>(request: InterviewRequest,login_user_info: LoginUserInfo) -> PaginationResponse<Vec<Interview>> {
     use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::interview as interview_table;
     let connection = config::establish_connection();
@@ -23,14 +24,14 @@ pub fn interview_query<T>(request: &Json<InterviewRequest>,login_user_info: Logi
     if let Some(query_company) = &request.company {
         query = query.filter(interview_table::company.like(format!("{}{}{}","%",query_company.as_str(),"%")));
     }
-    if let Some(query_city) = &request.city {
+    if let Some(query_city) = request.city {
         query = query.filter(interview_table::city.eq(query_city))
     }
     let query = query
         .order(created_time.desc())
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
-    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Interview>(&connection);
+    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Interview>(&mut get_conn());
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
 }
@@ -55,7 +56,7 @@ pub fn add_interview(request: &Json<AddInterviewRequest>,login_user_info: LoginU
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::interview::table)
         .values(&app)
         .on_conflict_do_nothing()
-        .execute(&connection)
+        .execute(&mut get_conn())
         .unwrap();
 }
 
@@ -72,6 +73,6 @@ pub fn update_interview(request: &Json<EditInterviewRequest>) {
              job_link.eq(&request.job_link),
              address.eq(&request.address))
         )
-        .get_result::<Interview>(&connection)
+        .get_result::<Interview>(&mut get_conn())
         .expect("unable to update interview");
 }

@@ -4,6 +4,7 @@ use diesel::dsl::any;
 use rust_wheel::common::util::time_util::{get_current_millisecond};
 use rust_wheel::config::db::config;
 
+use crate::common::db::database::get_conn;
 use crate::model::diesel::dolphin::dolphin_models::{ArticleFavorite, RssSubSource};
 
 pub fn get_refresh_channels() -> Vec<RssSubSource> {
@@ -12,7 +13,7 @@ pub fn get_refresh_channels() -> Vec<RssSubSource> {
     let dt = Utc::now() + Duration::minutes(-5);
     let fav_query = article_favorites
         .filter(updated_time.lt(dt.timestamp_millis()));
-    let favorite_result = fav_query.load::<ArticleFavorite>(&connection).expect("load favorite failed");
+    let favorite_result = fav_query.load::<ArticleFavorite>(&mut get_conn()).expect("load favorite failed");
     let ids:Vec<i64> = favorite_result.iter()
         .map(|item| item.channel_id)
         .collect();
@@ -31,7 +32,7 @@ pub fn get_recent_changed_channel(ids: Vec<i64>) -> Vec<RssSubSource>{
     let connection = config::establish_connection();
     let query = rss_sub_source
         .filter(id.eq(any(ids)));
-    let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
+    let query_result = query.load::<RssSubSource>(&mut get_conn()).expect("load rss source failed");
     return query_result;
 }
 
@@ -45,7 +46,7 @@ pub fn get_low_quality_channels() -> Vec<RssSubSource> {
         .filter(predicate)
         .order(rep_latest_refresh_time.asc())
         .limit(2);
-    let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
+    let query_result = query.load::<RssSubSource>(&mut get_conn()).expect("load rss source failed");
     return query_result;
 }
 
@@ -61,7 +62,7 @@ pub fn get_refresh_channels_by_time() -> Vec<RssSubSource>{
     let query = rss_sub_source
         .filter(predicate)
         .order(article_count_latest_refresh_time.asc());
-    let query_result = query.load::<RssSubSource>(&connection).expect("load rss source failed");
+    let query_result = query.load::<RssSubSource>(&mut get_conn()).expect("load rss source failed");
     return query_result;
 }
 
@@ -72,7 +73,7 @@ pub fn update_channel_reputation(new_reputation: i64,req_channel_id: i64) {
     let current_time = get_current_millisecond();
     diesel::update(rss_sub_source.filter(predicate))
         .set((reputation.eq(new_reputation),rep_latest_refresh_time.eq(current_time)))
-        .get_result::<RssSubSource>(&connection)
+        .get_result::<RssSubSource>(&mut get_conn())
         .expect("unable to update channel reputation");
 }
 
@@ -83,6 +84,6 @@ pub fn update_channel_article_count(new_count: i64,req_channel_id: i64) {
     let current_time = get_current_millisecond();
     diesel::update(rss_sub_source.filter(predicate))
         .set((article_count.eq(new_count),article_count_latest_refresh_time.eq(current_time)))
-        .get_result::<RssSubSource>(&connection)
+        .get_result::<RssSubSource>(&mut get_conn())
         .expect("unable to update channel article count");
 }

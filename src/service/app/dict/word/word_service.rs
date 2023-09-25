@@ -2,6 +2,7 @@ use rocket::serde::json::Json;
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 
+use crate::common::db::database::get_conn;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dict::custom_dict_models::CustomUserDict;
 use crate::model::diesel::dict::dict_models::{UserDict};
@@ -13,7 +14,7 @@ pub fn glossary_query(_request: &Json<GlossaryRequest>) -> Vec<UserDict> {
     let connection = config::establish_dict_connection();
     let user_dicts:Vec<UserDict> = user_dict
         .limit(100)
-        .load::<UserDict>(&connection)
+        .load::<UserDict>(&mut get_conn())
         .expect("query user dict failed");
     let _words: Vec<String> = user_dicts
         .iter()
@@ -36,7 +37,7 @@ pub fn glossary_add(request: &Json<GlossaryAddRequest>){
     diesel::insert_into(crate::model::diesel::dict::dict_schema::user_dict::table)
         .values(&new_glossary)
         .on_conflict_do_nothing()
-        .execute(&connection)
+        .execute(&mut get_conn())
         .unwrap();
 }
 

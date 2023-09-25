@@ -3,9 +3,8 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rocket_okapi::{openapi, openapi_get_routes_spec};
 use rocket_okapi::settings::OpenApiSettings;
-use rust_wheel::common::util::model_convert::box_rest_response;
+use rust_wheel::common::wrapper::rocket_http_resp::box_rest_response;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
-
 use crate::model::diesel::dolphin::dolphin_models::RssSubSource;
 use crate::model::request::app::cruise::channel::channel_request::ChannelRequest;
 use crate::model::request::app::cruise::channel::pick_channel_request::PickChannelRequest;
@@ -21,7 +20,7 @@ pub fn get_routes_and_docs(settings: &OpenApiSettings) -> (Vec<rocket::Route>, O
 #[openapi(tag = "频道")]
 #[get("/v1/page?<query..>")]
 pub fn page(query: ChannelRequest, login_user_info: LoginUserInfo) -> content::RawJson<String> {
-    let channels = channel_query::<Vec<RssSubSource>>(&query, login_user_info);
+    let channels = channel_query::<Vec<RssSubSource>>(query, login_user_info);
     return box_rest_response(channels);
 }
 

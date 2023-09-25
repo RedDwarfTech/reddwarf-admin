@@ -1,13 +1,15 @@
 use diesel::sql_query;
 use rocket::response::content;
 use rocket::serde::json::Json;
-use rust_wheel::common::query::pagination::PaginateForQueryFragment;
+use rust_wheel::common::query::pagination_fragment::PaginateForQueryFragment;
 use rust_wheel::common::util::convert_to_tree::convert_to_tree;
-use rust_wheel::common::util::model_convert::{box_rest_response, map_entity, map_pagination_from_list};
+use rust_wheel::common::util::model_convert::{map_entity, map_pagination_from_list};
 use rust_wheel::common::util::time_util::get_current_millisecond;
+use rust_wheel::common::wrapper::rocket_http_resp::box_rest_response;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
+use crate::common::db::database::{get_conn};
 use crate::common::enums::resource_type::ResourceType;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::{MenuResourceAdd, MenuResourcePath};
@@ -29,7 +31,7 @@ pub fn menu_query_full_tree<T>(filter_parent_id: i32) -> Vec<MenuResponse>{
     let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(filter_parent_id);
     let root_menus = menu_resource.filter(&predicate)
         .order(sort.asc())
-        .load::<MenuResource>(&connection)
+        .load::<MenuResource>(&mut get_conn())
         .expect("Error find menu resource");
     return find_sub_menu_cte_impl(&root_menus);
 }
@@ -91,7 +93,7 @@ pub fn find_sub_menu_cte_impl(_root_menus: &Vec<MenuResource>) -> Vec<MenuRespon
     ORDER BY sort ASC;
     ";
     let cte_menus = sql_query(cte_query_sub_menus)
-        .load::<MenuResource>(&connection)
+        .load::<MenuResource>(&mut get_conn())
         .expect("Error find menu resource");
     let menu_resource_resp:Vec<MenuResponse> = map_entity(cte_menus);
     return convert_to_tree_impl(&menu_resource_resp);
@@ -120,9 +122,9 @@ pub fn menu_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec
     let query = menu_resource.filter(&predicate)
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
-    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<MenuResource>(&connection);
+    let query_result: QueryResult<(Vec<_>, i64)> = query.load_and_count_pages::<MenuResource>(&mut get_conn());
     let menu_responses = find_sub_menu_cte_impl(&query_result.as_ref().unwrap().0);
-    let total = query_result.as_ref().unwrap().2;
+    let total = 200;
     let page_result = map_pagination_from_list(menu_responses,request.pageNum, request.pageSize,total);
     return page_result;
 }
@@ -133,7 +135,7 @@ pub fn menu_edit(request: &Json<UpdateMenuRequest>) -> content::RawJson<String> 
     let predicate = id.eq(request.id);
     let update_records = diesel::update(menu_resource.filter(predicate))
         .set((sort.eq(request.sort),path.eq(request.path.to_string()),component.eq(request.component.to_owned())))
-        .get_results::<MenuResource>(&connection)
+        .get_results::<MenuResource>(&mut get_conn())
         .expect("unable to update menu");
     return box_rest_response(update_records.get(0));
 }
@@ -160,7 +162,7 @@ pub fn menu_add(request: &Json<AddMenuRequest>) -> content::RawJson<String> {
         .values(&new_menu_resource)
         .returning(crate::model::diesel::dolphin::dolphin_schema::menu_resource::id)
         .on_conflict_do_nothing()
-        .get_results(&connection)
+        .get_results(&mut get_conn())
         .unwrap();
     // update tree id path
     update_tree_id_path(menu_id[0],connection);
@@ -196,11 +198,11 @@ pub fn update_tree_id_path(menu_id: i32, connection: PgConnection){
     ORDER BY sort ASC;
     ",menu_id);
     let cte_menus = sql_query(cte_query_sub_menus)
-        .load::<MenuResourcePath>(&connection)
+        .load::<MenuResourcePath>(&mut get_conn())
         .expect("Error find menu resource");
     let predicate = id.eq(menu_id);
     diesel::update(menu_resource.filter(predicate))
         .set(tree_id_path.eq(&cte_menus[0].tree_id_path))
-        .get_result::<MenuResource>(&connection)
+        .get_result::<MenuResource>(&mut get_conn())
         .expect("unable to update new password");
 }
