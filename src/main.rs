@@ -110,6 +110,7 @@ pub fn create_server() -> Rocket<Build> {
         "/app/gallary/word" => repo_app_controller::get_routes_and_docs(&openapi_settings),
         "/app/music/music" => music_controller::get_routes_and_docs(&openapi_settings),
         "/app/music/playlist" => playlist_controller::get_routes_and_docs(&openapi_settings),
+        "/app/interview" => interview_controller::get_routes_and_docs(&openapi_settings),
         "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
         "/permission/role" => role_controller::get_routes_and_docs(&openapi_settings),
     };
