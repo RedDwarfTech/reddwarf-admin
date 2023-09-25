@@ -2,15 +2,13 @@ use crate::common::db::database::get_conn;
 use crate::model::diesel::dolphin::dolphin_models::{Article, ArticleContent, RssSubSource};
 use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
-use diesel::dsl::any;
 use diesel::internal::table_macro::BoxedSelectStatement;
 use diesel::internal::table_macro::FromClause;
-use diesel::{ExpressionMethods, PgConnection, QueryDsl, QueryResult, RunQueryDsl};
+use diesel::{ExpressionMethods, QueryDsl, QueryResult, RunQueryDsl};
 use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::Paginate;
 use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::map_pagination_from_list;
-use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 
 type QueryType<'a> = BoxedSelectStatement<
@@ -63,7 +61,7 @@ pub fn get_full_text_search_result(filter_title: &str) -> PaginationResponse<Vec
     let results = diesel::sql_query(format!("SELECT * FROM article WHERE to_tsvector('dolphinzhcfg', title) @@ plainto_tsquery('{}') limit 10 offset 0",query_array))
         .load::<Article>(&mut get_conn())
         .expect("An error has occured");
-    let article_response = append_channel_name(&results, &mut get_conn());
+    let article_response = append_channel_name(&results);
     let page_result = map_pagination_from_list(article_response, 1, 10, 15);
     return page_result;
 }
@@ -81,7 +79,7 @@ pub fn get_query_result(
     // println!("sql:{}",sql1);
     let query_result: QueryResult<(Vec<_>, i64)> =
         query.load_and_count_pages::<Article>(&mut get_conn());
-    let article_response = append_channel_name(&query_result.as_ref().unwrap().0, &mut get_conn());
+    let article_response = append_channel_name(&query_result.as_ref().unwrap().0);
     let total = 1000;
     let page_result =
         map_pagination_from_list(article_response, request.pageNum, request.pageSize, total);
@@ -90,12 +88,11 @@ pub fn get_query_result(
 
 pub fn append_channel_name(
     articles: &Vec<Article>,
-    connection: &PgConnection,
 ) -> Vec<ArticleResponse> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let channel_ids: Vec<i64> = articles.iter().map(|item| item.sub_source_id).collect();
     let channels = rss_sub_source
-        .filter(id.eq(any(channel_ids)))
+        .filter(id.eq_any(channel_ids))
         .load::<RssSubSource>(&mut get_conn())
         .expect("query rss sub source failed");
     let mut article_res = Vec::new();

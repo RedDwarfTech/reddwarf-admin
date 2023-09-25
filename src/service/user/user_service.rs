@@ -5,7 +5,6 @@ use rust_wheel::common::util::collection_util::take;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::common::util::security_util::get_sha;
 use rust_wheel::common::wrapper::rocket_http_resp::{box_error_rest_response, box_rest_response};
-use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
 use crate::common::db::database::get_conn;
@@ -16,7 +15,6 @@ use crate::model::request::user::user_request::UserRequest;
 
 pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User>> {
     use crate::model::diesel::dolphin::dolphin_schema::users::dsl::*;
-    
     let query = users
         .filter(id.gt(0))
         .paginate(request.pageNum, false)

@@ -8,7 +8,7 @@ use crate::model::diesel::dolphin::dolphin_schema::*;
 /// https://stackoverflow.com/questions/70547237/what-is-the-best-way-to-handle-the-id-when-insert-record-using-rust-diesel
 
 #[derive(Insertable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "domain"]
+#[diesel(table_name = domain)]
 pub struct Domain {
     pub domain_name: String,
     pub domain_url: String,
@@ -25,7 +25,7 @@ pub struct Domain {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "apps"]
+#[diesel(table_name = apps)]
 pub struct AppAdd {
     pub app_name: String,
     pub remark: String,

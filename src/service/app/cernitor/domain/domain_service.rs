@@ -2,10 +2,8 @@ use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination::Paginate;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::common::util::time_util::get_current_millisecond;
-use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
-
 use crate::common::db::database::get_conn;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::Domain;

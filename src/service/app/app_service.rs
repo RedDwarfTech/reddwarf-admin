@@ -4,7 +4,6 @@ use rocket::serde::json::Json;
 use rust_wheel::common::query::pagination_fragment::PaginateForQueryFragment;
 use rust_wheel::common::util::model_convert::map_pagination_from_list;
 use rust_wheel::common::util::time_util::get_current_millisecond;
-use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use crate::common::db::database::get_conn;
 use crate::diesel::prelude::*;
@@ -24,14 +23,14 @@ pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<AppRes
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> =
         query.load_and_count_pages_total::<App>(&mut get_conn());
-    let app_response = append_product_name(&query_result.as_ref().unwrap().0, &mut get_conn());
+    let app_response = append_product_name(&query_result.as_ref().unwrap().0);
     let total = query_result.as_ref().unwrap().2;
     let page_result =
         map_pagination_from_list(app_response, request.pageNum, request.pageSize, total);
     return page_result;
 }
 
-pub fn append_product_name(apps: &Vec<App>, connection: &PgConnection) -> Vec<AppResponse> {
+pub fn append_product_name(apps: &Vec<App>) -> Vec<AppResponse> {
     use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
     let product_ids: Vec<i32> = apps.iter().map(|item| item.product_id).collect();
     let products_result = products

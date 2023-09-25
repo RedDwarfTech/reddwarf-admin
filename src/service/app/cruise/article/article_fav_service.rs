@@ -1,7 +1,4 @@
 use diesel::{ExpressionMethods, QueryDsl, RunQueryDsl};
-
-use rust_wheel::config::db::config;
-
 use crate::{model::diesel::dolphin::dolphin_models::ArticleFavorite, common::db::database::get_conn};
 
 /// diesel did not support group by
