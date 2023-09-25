@@ -1,4 +1,4 @@
-use diesel::dsl::any;
+use diesel::ExpressionMethods;
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use rocket::response::content;
@@ -12,8 +12,7 @@ use rust_wheel::common::wrapper::rocket_http_resp::{box_error_rest_response, box
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
-
-use crate::common::db::database::{ get_conn};
+use crate::common::db::database::get_conn;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::custom_dolphin_models::{AdminUserAdd, UserRoleAdd};
 use crate::model::diesel::dolphin::dolphin_models::{
@@ -33,7 +32,7 @@ pub fn admin_user_query<T>(request: UserRequest) -> PaginationResponse<Vec<Admin
         query = query.filter(admin_user_table::user_name.eq(filter_user_name));
     }
     let query = query
-        .paginate(request.pageNum,false)
+        .paginate(request.pageNum, false)
         .per_page(request.pageSize);
     let query_result: QueryResult<(Vec<_>, i64, i64)> =
         query.load_and_count_pages_total::<AdminUser>(&mut get_conn());
@@ -60,7 +59,7 @@ pub fn role_menu_list(filter_role_id: i32) -> Vec<MenuResource> {
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource as menu_resource_schema;
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let menu_predicate = menu_resource_schema::dsl::id
-        .eq(any(permission_ids))
+        .eq_any(permission_ids)
         .and(menu_resource_schema::dsl::parent_id.ne(0));
     let menus = menu_resource
         .filter(menu_predicate)
@@ -89,7 +88,7 @@ pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource
     use crate::model::diesel::dolphin::dolphin_schema::role_permission as role_permission_schema;
     use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
     let role_permissions = role_permission
-        .filter(role_permission_schema::dsl::role_id.eq(any(role_ids)))
+        .filter(role_permission_schema::dsl::role_id.eq_any(role_ids))
         .load::<RolePermission>(&mut get_conn())
         .expect("load role permission failed");
     if role_permissions.is_empty() {
@@ -102,8 +101,7 @@ pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource
         .collect();
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource as menu_resource_schema;
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
-    let menu_predicate = menu_resource_schema::dsl::id
-        .eq(any(permission_ids))
+    let menu_predicate = menu_resource_schema::dsl::id.eq_any(permission_ids)
         .and(menu_resource_schema::dsl::parent_id.ne(0));
     let menus = menu_resource
         .filter(menu_predicate)

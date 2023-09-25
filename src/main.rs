@@ -30,7 +30,6 @@ use biz::permission::user::admin_user_controller;
 use biz::system::dict::sys_dict_controller;
 use biz::system::tag::tag_controller;
 use biz::user::user_controller;
-use statistic::app::cruise::channel::channel_task::remove_old_articles;
 
 use crate::biz::app::music::playlist::playlist_controller;
 use crate::statistic::app::cruise::channel::channel_task::{calculate_article_trend, refresh_channel_article_count, refresh_channel_rep, remove_low_quality_articles};

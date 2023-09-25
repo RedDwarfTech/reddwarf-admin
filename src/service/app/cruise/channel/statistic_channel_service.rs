@@ -1,7 +1,7 @@
-use chrono::{DateTime, Duration, FixedOffset, NaiveDateTime, TimeZone, Utc};
+use chrono::{DateTime, Duration, FixedOffset, NaiveDateTime, Utc};
 use diesel::{BoolExpressionMethods, ExpressionMethods, QueryDsl, RunQueryDsl};
 use diesel::dsl::any;
-use rust_wheel::common::util::time_util::{get_current_millisecond};
+use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 
 use crate::common::db::database::get_conn;
@@ -31,7 +31,7 @@ pub fn get_recent_changed_channel(ids: Vec<i64>) -> Vec<RssSubSource>{
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     let connection = config::establish_connection();
     let query = rss_sub_source
-        .filter(id.eq(any(ids)));
+        .filter(id.eq_any(ids));
     let query_result = query.load::<RssSubSource>(&mut get_conn()).expect("load rss source failed");
     return query_result;
 }
