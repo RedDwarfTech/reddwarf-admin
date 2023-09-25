@@ -53,7 +53,7 @@ pub async fn remove_low_quality_articles() {
     }
 }
 
-pub async fn remove_old_articles(){
+pub async fn _remove_old_articles(){
     let mut interval = time::interval(Duration::from_millis(25000));
     loop {
         interval.tick().await;

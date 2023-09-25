@@ -1,9 +1,7 @@
 use diesel::{BoolExpressionMethods, QueryDsl, RunQueryDsl};
-use diesel::dsl::any;
 use rocket::serde::json::Json;
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
-
 use crate::common::db::database::get_conn;
 use crate::diesel::ExpressionMethods;
 use crate::model::diesel::dolphin::custom_dolphin_models::TrendAdd;
@@ -15,7 +13,6 @@ use crate::model::request::app::cruise::overview::cruise_overview_request::Cruis
 
 pub fn cruise_trend_query(request: &Json<CruiseOverviewRequest>) -> Vec<Trend> {
     use crate::model::diesel::dolphin::dolphin_schema::trend as trend_table;
-    let connection = config::establish_connection();
     let predicate = trend_table::dsl::statistic_time.ge(request.startTime).and(
         trend_table::dsl::statistic_time.le(request.endTime)
     );
@@ -28,7 +25,6 @@ pub fn cruise_trend_query(request: &Json<CruiseOverviewRequest>) -> Vec<Trend> {
 
 pub fn update_days_article_count(new_trend: &TrendAdd) {
     use crate::model::diesel::dolphin::dolphin_schema::trend::dsl::*;
-    let connection = config::establish_connection();
     diesel::insert_into(trend)
         .values(new_trend)
         .on_conflict((statistic_time,app_id,trend_item))
@@ -106,23 +102,20 @@ pub fn delete_low_quality_channel(filter_channel_id: i64) {
 
 pub fn delete_article(ids: &Vec<i64>){
     use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
-    let connection = config::establish_connection();
-    let predicate = article_table::dsl::id.eq(any(ids));
+    let predicate = article_table::dsl::id.eq_any(ids);
     diesel::delete(article_table::table.filter(predicate))
         .execute(&mut get_conn()).expect("delete article failed");
 }
 
 pub fn delete_article_detail(ids: &Vec<i64>){
     use crate::model::diesel::dolphin::dolphin_schema::article_content as article_detail_table;
-    let connection = config::establish_connection();
-    let predicate = article_id.eq(any(ids));
+    let predicate = article_id.eq_any(ids);
     diesel::delete(article_detail_table::table.filter(predicate))
         .execute(&mut get_conn()).expect("delete article detail failed");
 }
 
 pub fn update_channel_article_count(filter_channel_id: i64, new_article_count: i64){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source as channel_table;
-    let connection = config::establish_connection();
     let predicate = channel_table::dsl::id.eq(filter_channel_id);
     let current_time = get_current_millisecond();
     diesel::update(channel_table::table.filter(predicate))

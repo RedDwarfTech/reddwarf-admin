@@ -8,8 +8,7 @@ use rust_wheel::common::wrapper::rocket_http_resp::{box_error_rest_response, box
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
-
-use crate::common::db::database::{get_conn};
+use crate::common::db::database::get_conn;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::{AdminUser, User};
 use crate::model::request::user::password_request::PasswordRequest;

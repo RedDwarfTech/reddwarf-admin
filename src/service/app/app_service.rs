@@ -1,4 +1,3 @@
-use diesel::dsl::any;
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use rocket::serde::json::Json;
@@ -18,7 +17,6 @@ use crate::model::response::app::app_response::AppResponse;
 
 pub fn app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<AppResponse>> {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
-    let connection = config::establish_connection();
     let query = apps
         .filter(id.gt(0))
         .order(created_time.desc())
@@ -37,7 +35,7 @@ pub fn append_product_name(apps: &Vec<App>, connection: &PgConnection) -> Vec<Ap
     use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
     let product_ids: Vec<i32> = apps.iter().map(|item| item.product_id).collect();
     let products_result = products
-        .filter(product_id.eq(any(product_ids)))
+        .filter(product_id.eq_any(product_ids))
         .load::<Product>(&mut get_conn())
         .expect("query product source failed");
     let mut app_res = Vec::new();
@@ -55,7 +53,6 @@ pub fn append_product_name(apps: &Vec<App>, connection: &PgConnection) -> Vec<Ap
 }
 
 pub fn app_create(request: &Json<AddAppRequest>) {
-    let connection = config::establish_connection();
     let current_time = get_current_millisecond();
     // https://stackoverflow.com/questions/65478444/how-to-generate-a-random-string-of-alphanumeric-chars
     let rand_string: String = thread_rng()
@@ -85,7 +82,6 @@ pub fn app_create(request: &Json<AddAppRequest>) {
 
 pub fn app_edit(request: &Json<EditAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
-    let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::id.eq(request.id);
     diesel::update(apps.filter(predicate))
         .set(remark.eq(&request.remark))
@@ -95,7 +91,6 @@ pub fn app_edit(request: &Json<EditAppRequest>) {
 
 pub fn app_detail(query_app_id: i32) -> App {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
-    let connection = config::establish_connection();
     let app_result = apps.filter(id.eq(query_app_id)).first::<App>(&mut get_conn());
     return app_result.unwrap();
 }

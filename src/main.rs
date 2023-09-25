@@ -95,6 +95,7 @@ pub fn create_server() -> Rocket<Build> {
         "/actuator" => health_controller::get_routes_and_docs(&openapi_settings),
         "/home" => home_controller::get_routes_and_docs(&openapi_settings),
         "/sys/dict" => sys_dict_controller::get_routes_and_docs(&openapi_settings),
+        "/sys/user" => user_controller::get_routes_and_docs(&openapi_settings),
         "/sys/tag" => tag_controller::get_routes_and_docs(&openapi_settings),
         "/permission/menu" => menu_controller::get_routes_and_docs(&openapi_settings),
         "/permission/org" => org_controller::get_routes_and_docs(&openapi_settings),
@@ -110,6 +111,7 @@ pub fn create_server() -> Rocket<Build> {
         "/app/gallary/word" => repo_app_controller::get_routes_and_docs(&openapi_settings),
         "/app/music/music" => music_controller::get_routes_and_docs(&openapi_settings),
         "/app/music/playlist" => playlist_controller::get_routes_and_docs(&openapi_settings),
+        "/app/music/fav" => fav_music_controller::get_routes_and_docs(&openapi_settings),
         "/app/interview" => interview_controller::get_routes_and_docs(&openapi_settings),
         "/permission/user" => admin_user_controller::get_routes_and_docs(&openapi_settings),
         "/permission/role" => role_controller::get_routes_and_docs(&openapi_settings),
@@ -118,7 +120,7 @@ pub fn create_server() -> Rocket<Build> {
     building_rocket
 }
 
-fn build_rocket() -> Rocket<Build> {
+fn _build_rocket() -> Rocket<Build> {
     rocket::build()
         .mount("/manage/app/user",routes![
             user_controller::page,

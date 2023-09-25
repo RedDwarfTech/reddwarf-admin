@@ -15,7 +15,6 @@ use crate::model::request::app::overview::product::edit_product_request::EditPro
 
 pub fn iap_product_query<T>(request: &Json<IapProductRequest>) -> PaginationResponse<Vec<IapProduct>> {
     use crate::model::diesel::dolphin::dolphin_schema::iap_product::dsl::*;
-    let connection = config::establish_connection();
     let query = iap_product.filter(id.gt(0))
         .order(created_time.desc())
         .paginate(request.pageNum,false)
@@ -27,7 +26,6 @@ pub fn iap_product_query<T>(request: &Json<IapProductRequest>) -> PaginationResp
 
 pub fn iap_product_query_list<T>() -> Vec<IapProduct> {
     use crate::model::diesel::dolphin::dolphin_schema::iap_product::dsl::*;
-    let connection = config::establish_connection();
     let products_record = iap_product
         .load::<IapProduct>(&mut get_conn())
         .expect("query products failed");
