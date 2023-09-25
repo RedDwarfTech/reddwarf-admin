@@ -26,7 +26,6 @@ use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenu
 
 pub fn admin_user_query<T>(request: UserRequest) -> PaginationResponse<Vec<AdminUser>> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users as admin_user_table;
-    
     let mut query = admin_user_table::table.into_boxed::<diesel::pg::Pg>();
     if let Some(filter_user_name) = request.user_name {
         query = query.filter(admin_user_table::user_name.eq(filter_user_name));
@@ -74,7 +73,6 @@ pub fn role_menu_list(filter_role_id: i32) -> Vec<MenuResource> {
 
 pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource> {
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
-    
     // get user roles
     let roles = user_role
         .filter(user_id.eq(login_user_info.userId))
@@ -116,7 +114,6 @@ pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource
 
 pub fn user_roles(filter_user_id: i64) -> Vec<UserRole> {
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
-    
     let user_roles = user_role
         .filter(user_id.eq(filter_user_id))
         .load::<UserRole>(&mut get_conn())

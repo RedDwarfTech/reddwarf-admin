@@ -37,7 +37,7 @@ pub fn update_days_article_count(new_trend: &TrendAdd) {
 pub fn delete_legacy_article() {
     use crate::model::diesel::dolphin::dolphin_schema::article as article_table;
     let mut connection = config::establish_connection();
-    let predicate = crate::model::diesel::dolphin::dolphin_schema::article::created_time.lt(get_current_millisecond()-1000*60*60*24*90);
+    let predicate = crate::model::diesel::dolphin::dolphin_schema::article::created_time.lt(get_current_millisecond()-1000*60*60*24*600);
     let articles = article_table::table
         .filter(predicate)
         .order(article_table::created_time.asc())

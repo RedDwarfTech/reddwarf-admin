@@ -1,15 +1,13 @@
-
+use crate::model::diesel::dolphin::dolphin_models::App;
 use rocket::serde::Deserialize;
 use rocket::serde::Serialize;
 use rocket_okapi::okapi::schemars;
 use rocket_okapi::okapi::schemars::JsonSchema;
 
-use crate::model::diesel::dolphin::dolphin_models::{App};
-
 ///
 /// https://stackoverflow.com/questions/73405960/the-trait-jsonschema-is-not-implemented-for-chronodatetimeutc
 ///
-#[derive( Serialize, Queryable, Deserialize,Default, Clone, JsonSchema)]
+#[derive(Serialize, Queryable, Deserialize, Default, Clone, JsonSchema)]
 pub struct MusicResponse {
     pub id: i32,
     pub app_name: String,
@@ -25,27 +23,6 @@ pub struct MusicResponse {
     pub app_tag: Option<String>,
     pub auth_mode: i16,
     pub product_id: i32,
-}
-
-impl MusicResponse {
-    pub(crate) fn new(article: &App) -> Self {
-        Self {
-            id: 0,
-            app_name: "".to_string(),
-            created_time: article.created_time,
-            updated_time: article.updated_time,
-            user_count: 0,
-            online_status: 0,
-            online_time: None,
-            app_abbr: "".to_string(),
-            app_id: "".to_string(),
-            app_tag: None,
-            auth_mode: 0,
-            remark: "".to_string(),
-            product_id: 0,
-            product_name: "".to_string(),
-        }
-    }
 }
 
 impl From<&App> for MusicResponse {

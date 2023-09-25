@@ -117,7 +117,6 @@ fn convert_to_tree_impl(contents: &Vec<MenuResponse>) -> Vec<MenuResponse> {
  */
 pub fn menu_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec<MenuResponse>> {
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
-    
     let predicate = crate::model::diesel::dolphin::dolphin_schema::menu_resource::parent_id.eq(request.parentId);
     let query = menu_resource.filter(&predicate)
         .paginate(request.pageNum,false)
@@ -131,7 +130,6 @@ pub fn menu_query_tree<T>(request: &Json<MenuRequest>) -> PaginationResponse<Vec
 
 pub fn menu_edit(request: &Json<UpdateMenuRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
-    
     let predicate = id.eq(request.id);
     let update_records = diesel::update(menu_resource.filter(predicate))
         .set((sort.eq(request.sort),path.eq(request.path.to_string()),component.eq(request.component.to_owned())))
@@ -141,7 +139,6 @@ pub fn menu_edit(request: &Json<UpdateMenuRequest>) -> content::RawJson<String> 
 }
 
 pub fn menu_add(request: &Json<AddMenuRequest>) -> content::RawJson<String> {
-    
     let current_time = get_current_millisecond();
     let new_menu_resource = MenuResourceAdd{
         name: request.name.to_string(),
@@ -165,11 +162,11 @@ pub fn menu_add(request: &Json<AddMenuRequest>) -> content::RawJson<String> {
         .get_results(&mut get_conn())
         .unwrap();
     // update tree id path
-    update_tree_id_path(menu_id[0],get_conn());
+    update_tree_id_path(menu_id[0]);
     return box_rest_response("ok");
 }
 
-pub fn update_tree_id_path(menu_id: i32, connection: PgConnection){
+pub fn update_tree_id_path(menu_id: i32){
     use crate::model::diesel::dolphin::dolphin_schema::menu_resource::dsl::*;
     let cte_query_sub_menus = format!(" with recursive sub_menus as
     (

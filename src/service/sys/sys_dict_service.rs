@@ -14,7 +14,6 @@ use crate::model::request::sys::sys_dict_request::SysDictRequest;
 
 pub fn dict_query<T>() -> Vec<SysDict> {
     use crate::model::diesel::quark::quark_schema::sys_dict::dsl::*;
-    let connection = config::establish_quark_connection();
     let query = sys_dict.filter(id.gt(0))
         .limit(2000)
         .load::<SysDict>(&mut get_conn())
@@ -25,7 +24,6 @@ pub fn dict_query<T>() -> Vec<SysDict> {
 pub fn dict_page_query<T>(request: SysDictRequest) -> PaginationResponse<Vec<SysDict>> {
     let req = request.clone();
     use crate::model::diesel::quark::quark_schema::sys_dict as dict_table;
-    let connection = config::establish_quark_connection();
     let mut query = dict_table::table.into_boxed::<diesel::pg::Pg>();
     if let Some(dict_type_req) = request.dict_type {
         query = query.filter(dict_table::dict_type.eq(dict_type_req));
@@ -39,7 +37,6 @@ pub fn dict_page_query<T>(request: SysDictRequest) -> PaginationResponse<Vec<Sys
 }
 
 pub fn dict_create(request: &Json<AddDictRequest>) {
-    let connection = config::establish_quark_connection();
     let app = AddSysDict{
         key: Option::from(request.key),
         dict_type: request.dict_type.to_string(),

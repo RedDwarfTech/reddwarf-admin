@@ -53,8 +53,8 @@ pub async fn remove_low_quality_articles() {
     }
 }
 
-pub async fn _remove_old_articles(){
-    let mut interval = time::interval(Duration::from_millis(25000));
+pub async fn remove_old_articles(){
+    let mut interval = time::interval(Duration::from_millis(6000000));
     loop {
         interval.tick().await;
         remove_old_articles_impl();
@@ -74,7 +74,6 @@ pub async fn calculate_article_trend() {
 
 #[derive(Debug)]
 pub enum AnalysisError {
-    Failed,
 }
 
 pub fn refresh_channel_article() -> Result<(), AnalysisError> {

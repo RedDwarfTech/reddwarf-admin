@@ -1,18 +1,15 @@
 use rocket::serde::json::Json;
 use rust_wheel::common::util::time_util::get_current_millisecond;
-use rust_wheel::config::db::config;
-
 use crate::common::db::database::get_conn;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dict::custom_dict_models::CustomUserDict;
-use crate::model::diesel::dict::dict_models::{UserDict};
+use crate::model::diesel::dict::dict_models::UserDict;
 use crate::model::request::app::dict::word::glossary_add_request::GlossaryAddRequest;
 use crate::model::request::app::dict::word::glossary_request::GlossaryRequest;
 
 pub fn glossary_query(_request: &Json<GlossaryRequest>) -> Vec<UserDict> {
     use crate::model::diesel::dict::dict_schema::user_dict::dsl::*;
-    let connection = config::establish_dict_connection();
-    let user_dicts:Vec<UserDict> = user_dict
+    let user_dicts: Vec<UserDict> = user_dict
         .limit(100)
         .load::<UserDict>(&mut get_conn())
         .expect("query user dict failed");
@@ -23,8 +20,7 @@ pub fn glossary_query(_request: &Json<GlossaryRequest>) -> Vec<UserDict> {
     return user_dicts;
 }
 
-pub fn glossary_add(request: &Json<GlossaryAddRequest>){
-    let connection = config::establish_dict_connection();
+pub fn glossary_add(request: &Json<GlossaryAddRequest>) {
     let timestamp: i64 = get_current_millisecond();
     let new_glossary = CustomUserDict {
         created_time: timestamp,
@@ -32,7 +28,7 @@ pub fn glossary_add(request: &Json<GlossaryAddRequest>){
         status: 0,
         user_id: request.userId,
         word_id: 0,
-        word: request.word.to_string()
+        word: request.word.to_string(),
     };
     diesel::insert_into(crate::model::diesel::dict::dict_schema::user_dict::table)
         .values(&new_glossary)
@@ -40,6 +36,3 @@ pub fn glossary_add(request: &Json<GlossaryAddRequest>){
         .execute(&mut get_conn())
         .unwrap();
 }
-
-
-
