@@ -8,7 +8,8 @@ use serde::Deserialize;
 use crate::model::diesel::rhythm::rhythm_schema::*;
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "favorites"]
+#[diesel(table_name = favorites)]
+
 pub struct Favorite {
     pub id: i64,
     pub song_id: Option<i64>,
@@ -25,7 +26,7 @@ pub struct Favorite {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "playlist"]
+#[diesel(table_name = playlist)]
 pub struct Playlist {
     pub id: i64,
     pub creator: i64,
@@ -46,7 +47,7 @@ pub struct Playlist {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "songs"]
+#[diesel(table_name = songs)]
 pub struct Song {
     pub id: i64,
     pub name: String,

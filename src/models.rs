@@ -2,7 +2,6 @@ use rocket::serde::Serialize;
 use serde::Deserialize;
 
 #[derive(Serialize, Queryable, Deserialize,Default)]
-// #[table_name = "dashboard"]
 pub struct Dashboard {
     pub id: i32,
     pub app_count: i32,

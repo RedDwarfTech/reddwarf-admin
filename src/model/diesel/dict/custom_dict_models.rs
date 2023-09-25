@@ -9,7 +9,7 @@ use serde::Deserialize;
 use crate::model::diesel::dict::dict_schema::*;
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "user_dict"]
+#[diesel(table_name = user_dict)]
 pub struct CustomUserDict {
     pub word_id: i64,
     pub user_id: i64,

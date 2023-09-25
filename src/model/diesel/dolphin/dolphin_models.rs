@@ -13,7 +13,7 @@ use bigdecimal::BigDecimal;
 use chrono::DateTime;
 use chrono::offset::Utc;
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "admin_users"]
+#[diesel(table_name = admin_users)]
 pub struct AdminUser {
     pub id: i64,
     pub nickname: String,
@@ -33,7 +33,7 @@ pub struct AdminUser {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "app_repo"]
+#[diesel(table_name = app_repo)]
 pub struct AppRepo {
     pub id: i64,
     pub app_name: String,
@@ -51,7 +51,7 @@ pub struct AppRepo {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "apps"]
+#[diesel(table_name = apps)]
 pub struct App {
     pub id: i32,
     pub app_name: String,
@@ -69,7 +69,7 @@ pub struct App {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "article"]
+#[diesel(table_name = article)]
 pub struct Article {
     pub id: i64,
     pub user_id: i64,
@@ -88,7 +88,7 @@ pub struct Article {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "article_content"]
+#[diesel(table_name = article_content)]
 pub struct ArticleContent {
     pub id: i64,
     pub article_id: i64,
@@ -96,7 +96,7 @@ pub struct ArticleContent {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "article_favorites"]
+#[diesel(table_name = article_favorites)]
 pub struct ArticleFavorite {
     pub user_id: i64,
     pub article_id: i64,
@@ -111,7 +111,7 @@ pub struct ArticleFavorite {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "dashboard"]
+#[diesel(table_name = dashboard)]
 pub struct Dashboard {
     pub id: i32,
     pub app_count: i32,
@@ -119,7 +119,7 @@ pub struct Dashboard {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "domain"]
+#[diesel(table_name = domain)]
 pub struct Domain {
     pub id: i64,
     pub domain_name: String,
@@ -137,7 +137,7 @@ pub struct Domain {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "iap_product"]
+#[diesel(table_name = iap_product)]
 pub struct IapProduct {
     pub id: i64,
     pub product_id: i32,
@@ -158,7 +158,7 @@ pub struct IapProduct {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "interview"]
+#[diesel(table_name = interview)]
 pub struct Interview {
     pub id: i64,
     pub city: String,
@@ -177,7 +177,7 @@ pub struct Interview {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "menu_resource"]
+#[diesel(table_name = menu_resource)]
 pub struct MenuResource {
     pub id: i32,
     pub name: String,
@@ -195,7 +195,7 @@ pub struct MenuResource {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "org"]
+#[diesel(table_name = org)]
 pub struct Org {
     pub id: i32,
     pub parent_id: i32,
@@ -207,7 +207,7 @@ pub struct Org {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "products"]
+#[diesel(table_name = products)]
 pub struct Product {
     pub id: i32,
     pub product_name: String,
@@ -223,7 +223,7 @@ pub struct Product {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "role"]
+#[diesel(table_name = role)]
 pub struct Role {
     pub id: i32,
     pub name: String,
@@ -235,7 +235,7 @@ pub struct Role {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "role_permission"]
+#[diesel(table_name = role_permission)]
 pub struct RolePermission {
     pub id: i64,
     pub role_id: i32,
@@ -246,7 +246,7 @@ pub struct RolePermission {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "rss_sub_source"]
+#[diesel(table_name = rss_sub_source)]
 pub struct RssSubSource {
     pub id: i64,
     pub sub_url: String,
@@ -289,7 +289,7 @@ pub struct RssSubSource {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "tags"]
+#[diesel(table_name = tags)]
 pub struct Tag {
     pub id: i32,
     pub tag_name: String,
@@ -303,7 +303,7 @@ pub struct Tag {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "trend"]
+#[diesel(table_name = trend)]
 pub struct Trend {
     pub id: i64,
     pub trend_item: i32,
@@ -315,7 +315,7 @@ pub struct Trend {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "user_devices"]
+#[diesel(table_name = user_devices)]
 pub struct UserDevice {
     pub id: i64,
     pub device_id: String,
@@ -326,7 +326,7 @@ pub struct UserDevice {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "user_role"]
+#[diesel(table_name = user_role)]
 pub struct UserRole {
     pub id: i32,
     pub user_id: i64,
@@ -336,7 +336,7 @@ pub struct UserRole {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "users"]
+#[diesel(table_name = users)]
 pub struct User {
     pub id: i64,
     pub nickname: String,

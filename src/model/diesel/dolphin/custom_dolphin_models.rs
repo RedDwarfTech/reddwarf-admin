@@ -41,7 +41,7 @@ pub struct AppAdd {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "apps"]
+#[diesel(table_name = apps)]
 pub struct RepoAppAdd {
     pub app_name: String,
     pub remark: String,
@@ -56,7 +56,7 @@ pub struct RepoAppAdd {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "products"]
+#[diesel(table_name = products)]
 pub struct ProductAdd {
     pub product_name: String,
     pub remark: String,
@@ -71,7 +71,7 @@ pub struct ProductAdd {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "interview"]
+#[diesel(table_name = interview)]
 pub struct InterviewAdd {
     pub city: String,
     pub address: String,
@@ -88,7 +88,7 @@ pub struct InterviewAdd {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "role_permission"]
+#[diesel(table_name = role_permission)]
 pub struct RolePermissionAdd {
     pub role_id: i32,
     pub permission_id: i32,
@@ -98,7 +98,7 @@ pub struct RolePermissionAdd {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "user_role"]
+#[diesel(table_name = user_role)]
 pub struct UserRoleAdd {
     pub user_id: i64,
     pub role_id: i32,
@@ -107,7 +107,7 @@ pub struct UserRoleAdd {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "admin_users"]
+#[diesel(table_name = admin_users)]
 pub struct AdminUserAdd {
     pub nickname: String,
     pub avatar_url: Option<String>,
@@ -126,7 +126,7 @@ pub struct AdminUserAdd {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "menu_resource"]
+#[diesel(table_name = menu_resource)]
 pub struct MenuResourceAdd {
     pub name: String,
     pub res_type: i32,
@@ -143,7 +143,7 @@ pub struct MenuResourceAdd {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "role"]
+#[diesel(table_name = role)]
 pub struct RoleAdd {
     pub name: String,
     pub created_time: i64,
@@ -152,7 +152,7 @@ pub struct RoleAdd {
 }
 
 #[derive(AsChangeset)]
-#[table_name = "rss_sub_source"]
+#[diesel(table_name = rss_sub_source)]
 pub struct RssSubSourceUpdate {
     pub part_output: Option<i32>,
     pub comment_rss: Option<i32>,
@@ -160,14 +160,14 @@ pub struct RssSubSourceUpdate {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "menu_resource"]
+#[diesel(table_name = menu_resource)]
 pub struct MenuResourcePath {
     pub id: i32,
     pub tree_id_path: String
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "tags"]
+#[diesel(table_name = tags)]
 pub struct TagAdd {
     pub tag_name: String,
     pub created_time: i64,
@@ -180,7 +180,7 @@ pub struct TagAdd {
 }
 
 #[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
-#[table_name = "trend"]
+#[diesel(table_name = trend)]
 pub struct TrendAdd {
     pub trend_item: i32,
     pub app_id: i32,

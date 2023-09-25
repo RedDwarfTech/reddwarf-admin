@@ -9,7 +9,7 @@ use serde::Deserialize;
 use crate::model::diesel::quark::quark_schema::*;
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "sys_dict"]
+#[diesel(table_name = sys_dict)]
 pub struct SysDict {
     pub id: i32,
     pub key: Option<i32>,

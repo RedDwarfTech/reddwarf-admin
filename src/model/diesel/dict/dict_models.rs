@@ -9,7 +9,7 @@ use serde::Deserialize;
 use crate::model::diesel::dict::dict_schema::*;
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "dict"]
+#[diesel(table_name = dict)]
 pub struct Dict {
     pub word: String,
     pub phonetic: String,
@@ -30,7 +30,7 @@ pub struct Dict {
 }
 
 #[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default)]
-#[table_name = "user_dict"]
+#[diesel(table_name = user_dict)]
 pub struct UserDict {
     pub id: i64,
     pub word_id: i64,
