@@ -19,7 +19,7 @@ use crate::model::request::user::password_request::PasswordRequest;
 
 pub fn role_query<T>(request: &Json<RoleRequest>) -> PaginationResponse<Vec<Role>> {
     use crate::model::diesel::dolphin::dolphin_schema::role::dsl::*;
-    let connection = config::establish_connection();
+    
     let query = role.filter(id.gt(0))
         .paginate(request.pageNum,false)
         .per_page(request.pageSize);
@@ -30,7 +30,7 @@ pub fn role_query<T>(request: &Json<RoleRequest>) -> PaginationResponse<Vec<Role
 
 pub fn role_query_list() -> Vec<Role> {
     use crate::model::diesel::dolphin::dolphin_schema::role::dsl::*;
-    let connection = config::establish_connection();
+    
     let query = role.filter(id.gt(0))
         .load::<Role>(&mut get_conn())
         .expect("query admin user failed");
@@ -85,7 +85,7 @@ pub fn edit_role_menu(request: &Json<RoleMenuBindRequest>) -> content::RawJson<S
 
 pub fn role_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
-    let connection = config::establish_connection();
+    
     let request_user_name:String = String::from(&request.userName);
     let predicate = crate::model::diesel::dolphin::dolphin_schema::admin_users::phone.eq(request_user_name);
     let db_admin_user = admin_users.filter(&predicate)
@@ -109,7 +109,7 @@ pub fn role_edit(request: &Json<PasswordRequest>) -> content::RawJson<String> {
 
 pub fn role_add(request: &Json<RoleAddRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::role::dsl::*;
-    let connection = config::establish_connection();
+    
     let new_role = RoleAdd{
         name: request.name.to_string(),
         updated_time: get_current_millisecond(),

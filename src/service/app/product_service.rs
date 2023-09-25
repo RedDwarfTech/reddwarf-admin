@@ -16,7 +16,6 @@ use crate::model::request::app::product_request::ProductRequest;
 
 pub fn product_query<T>(request: &Json<ProductRequest>) -> PaginationResponse<Vec<Product>> {
     use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
-    let connection = config::establish_connection();
     let query = products.filter(id.gt(0))
         .order(created_time.desc())
         .paginate(request.pageNum,false)
@@ -28,7 +27,6 @@ pub fn product_query<T>(request: &Json<ProductRequest>) -> PaginationResponse<Ve
 
 pub fn product_query_list<T>() -> Vec<Product> {
     use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
-    let connection = config::establish_connection();
     let products_record = products
         .load::<Product>(&mut get_conn())
         .expect("query products failed");
@@ -37,7 +35,6 @@ pub fn product_query_list<T>() -> Vec<Product> {
 
 pub fn product_create(request: &Json<AddProductRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
-    let connection = config::establish_connection();
     let apps_record = products.order(product_id.desc())
         .limit(1)
         .load::<Product>(&mut get_conn())
@@ -65,7 +62,6 @@ pub fn product_create(request: &Json<AddProductRequest>) {
 
 pub fn product_edit(request: &Json<EditProductRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::products::dsl::*;
-    let connection = config::establish_connection();
     let predicate = crate::model::diesel::dolphin::dolphin_schema::products::id.eq(request.id);
     diesel::update(products.filter(predicate))
         .set(remark.eq(&request.remark))
@@ -75,7 +71,6 @@ pub fn product_edit(request: &Json<EditProductRequest>) {
 
 pub fn product_detail(query_app_id: i32) -> App {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
-    let connection = config::establish_connection();
     let app_result = apps.filter(id.eq(query_app_id))
         .first::<App>(&mut get_conn());
     return app_result.unwrap();

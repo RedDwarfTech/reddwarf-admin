@@ -13,7 +13,7 @@ use crate::model::request::app::gallery::repo_app_request::RepoAppRequest;
 
 pub fn repo_app_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<AppRepo>> {
     use crate::model::diesel::dolphin::dolphin_schema::app_repo::dsl::*;
-    let connection = config::establish_connection();
+    
     let query = app_repo.filter(id.gt(0))
         .order(created_time.desc())
         .paginate(request.pageNum,false)
@@ -29,7 +29,7 @@ pub fn repo_app_create(_request: &Json<AddAppRequest>) {
 
 pub fn repo_app_edit(request: &Json<RepoAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
-    let connection = config::establish_connection();
+    
     let predicate = crate::model::diesel::dolphin::dolphin_schema::apps::app_id.eq(request.appId.to_string());
     diesel::update(apps.filter(predicate))
         .set(remark.eq(&request.remark))
@@ -39,7 +39,7 @@ pub fn repo_app_edit(request: &Json<RepoAppRequest>) {
 
 pub fn repo_app_detail(query_app_id: i32) -> App {
     use crate::model::diesel::dolphin::dolphin_schema::apps::dsl::*;
-    let connection = config::establish_connection();
+    
     let app_result = apps.filter(id.eq(query_app_id))
         .first::<App>(&mut get_conn());
     return app_result.unwrap();

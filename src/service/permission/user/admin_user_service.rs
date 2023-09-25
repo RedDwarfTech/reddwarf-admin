@@ -26,7 +26,7 @@ use crate::model::response::permission::menu::dynamic_menu_response::DynamicMenu
 
 pub fn admin_user_query<T>(request: UserRequest) -> PaginationResponse<Vec<AdminUser>> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users as admin_user_table;
-    let connection = config::establish_connection();
+    
     let mut query = admin_user_table::table.into_boxed::<diesel::pg::Pg>();
     if let Some(filter_user_name) = request.user_name {
         query = query.filter(admin_user_table::user_name.eq(filter_user_name));
@@ -41,7 +41,7 @@ pub fn admin_user_query<T>(request: UserRequest) -> PaginationResponse<Vec<Admin
 }
 
 pub fn role_menu_list(filter_role_id: i32) -> Vec<MenuResource> {
-    let connection = config::establish_connection();
+    
     use crate::model::diesel::dolphin::dolphin_schema::role_permission as role_permission_schema;
     use crate::model::diesel::dolphin::dolphin_schema::role_permission::dsl::*;
     let role_permissions = role_permission
@@ -74,7 +74,7 @@ pub fn role_menu_list(filter_role_id: i32) -> Vec<MenuResource> {
 
 pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource> {
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
-    let connection = config::establish_connection();
+    
     // get user roles
     let roles = user_role
         .filter(user_id.eq(login_user_info.userId))
@@ -116,7 +116,7 @@ pub fn admin_user_menus_list(login_user_info: LoginUserInfo) -> Vec<MenuResource
 
 pub fn user_roles(filter_user_id: i64) -> Vec<UserRole> {
     use crate::model::diesel::dolphin::dolphin_schema::user_role::dsl::*;
-    let connection = config::establish_connection();
+    
     let user_roles = user_role
         .filter(user_id.eq(filter_user_id))
         .load::<UserRole>(&mut get_conn())
@@ -126,7 +126,7 @@ pub fn user_roles(filter_user_id: i64) -> Vec<UserRole> {
 
 pub fn add_admin_user(request: Json<AddUserRequest>) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
-    let connection = config::establish_connection();
+    
     let admin_users_result = admin_users
         .filter(user_name.eq(request.userName.to_string()))
         .load::<AdminUser>(&mut get_conn())
@@ -259,7 +259,7 @@ pub fn admin_password_edit(
     login_user_info: LoginUserInfo,
 ) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
-    let connection = config::establish_connection();
+    
     // verify legacy password
     let predicate =
         crate::model::diesel::dolphin::dolphin_schema::admin_users::id.eq(login_user_info.userId);

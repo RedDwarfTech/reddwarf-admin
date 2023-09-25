@@ -9,7 +9,7 @@ use crate::model::diesel::dolphin::dolphin_models::{ArticleFavorite, RssSubSourc
 
 pub fn get_refresh_channels() -> Vec<RssSubSource> {
     use crate::model::diesel::dolphin::dolphin_schema::article_favorites::dsl::*;
-    let connection = config::establish_connection();
+    
     let dt = Utc::now() + Duration::minutes(-5);
     let fav_query = article_favorites
         .filter(updated_time.lt(dt.timestamp_millis()));
@@ -29,7 +29,7 @@ pub fn get_refresh_channels() -> Vec<RssSubSource> {
 ///
 pub fn get_recent_changed_channel(ids: Vec<i64>) -> Vec<RssSubSource>{
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let connection = config::establish_connection();
+    
     let query = rss_sub_source
         .filter(id.eq_any(ids));
     let query_result = query.load::<RssSubSource>(&mut get_conn()).expect("load rss source failed");
@@ -38,7 +38,7 @@ pub fn get_recent_changed_channel(ids: Vec<i64>) -> Vec<RssSubSource>{
 
 pub fn get_low_quality_channels() -> Vec<RssSubSource> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let connection = config::establish_connection();
+    
     // https://stackoverflow.com/questions/70669873/initialize-vector-using-vec-macro-and-fill-it-with-values-from-existing-array
     let sub_status_arr:Vec<i32> = vec![-3,-6];
     let predicate = sub_status.eq(any(sub_status_arr)).and(article_count.gt(0));
@@ -52,7 +52,7 @@ pub fn get_low_quality_channels() -> Vec<RssSubSource> {
 
 pub fn get_refresh_channels_by_time() -> Vec<RssSubSource>{
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let connection = config::establish_connection();
+    
     // https://stackoverflow.com/questions/73543040/how-to-get-the-timestamp-with-timezone-in-rust
     let trigger_time = (get_current_millisecond() - 35000)/1000;
     let time_without_zone = NaiveDateTime::from_timestamp( trigger_time ,0);
@@ -68,7 +68,7 @@ pub fn get_refresh_channels_by_time() -> Vec<RssSubSource>{
 
 pub fn update_channel_reputation(new_reputation: i64,req_channel_id: i64) {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let connection = config::establish_connection();
+    
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
     let current_time = get_current_millisecond();
     diesel::update(rss_sub_source.filter(predicate))
@@ -79,7 +79,7 @@ pub fn update_channel_reputation(new_reputation: i64,req_channel_id: i64) {
 
 pub fn update_channel_article_count(new_count: i64,req_channel_id: i64) {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let connection = config::establish_connection();
+    
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
     let current_time = get_current_millisecond();
     diesel::update(rss_sub_source.filter(predicate))

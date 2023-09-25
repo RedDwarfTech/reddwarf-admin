@@ -16,7 +16,7 @@ use crate::model::request::user::user_request::UserRequest;
 
 pub fn user_query<T>(request: &Json<UserRequest>) -> PaginationResponse<Vec<User>> {
     use crate::model::diesel::dolphin::dolphin_schema::users::dsl::*;
-    let connection = config::establish_connection();
+    
     let query = users
         .filter(id.gt(0))
         .paginate(request.pageNum, false)
@@ -32,7 +32,7 @@ pub fn password_edit(
     login_user_info: LoginUserInfo,
 ) -> content::RawJson<String> {
     use crate::model::diesel::dolphin::dolphin_schema::admin_users::dsl::*;
-    let connection = config::establish_connection();
+    
     // verify legacy password
     let predicate =
         crate::model::diesel::dolphin::dolphin_schema::admin_users::id.eq(login_user_info.userId);

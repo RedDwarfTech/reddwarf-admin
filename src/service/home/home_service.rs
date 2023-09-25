@@ -7,7 +7,7 @@ use crate::model::diesel::dolphin::dolphin_models::{Dashboard, Trend};
 
 pub fn overview_query() -> Dashboard {
     use crate::model::diesel::dolphin::dolphin_schema::dashboard::dsl::*;
-    let connection = config::establish_connection();
+    
     let dashboards = dashboard.limit(1)
         .load::<Dashboard>(&mut get_conn())
         .expect("load dashboard failed");
@@ -17,7 +17,7 @@ pub fn overview_query() -> Dashboard {
 
 pub fn trend_query() -> Vec<Trend> {
     use crate::model::diesel::dolphin::dolphin_schema::trend::dsl::*;
-    let connection = config::establish_connection();
+    
     let trends = trend
         .load::<Trend>(&mut get_conn())
         .expect("load dashboard failed");

@@ -34,7 +34,7 @@ pub fn org_query_full_tree<T>(filter_parent_id: i32) -> Vec<OrgResponse> {
 }
 
 pub fn find_sub_org_cte_impl(root_menus: &Vec<Org>) -> Vec<OrgResponse> {
-    let connection = config::establish_connection();
+    
     let cte_query_sub_menus = " with recursive sub_org as
     (
       SELECT

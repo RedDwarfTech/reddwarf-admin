@@ -17,7 +17,6 @@ use crate::model::request::app::tag_list_request::TagListRequest;
 
 pub fn tag_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<Tag>> {
     use crate::model::diesel::dolphin::dolphin_schema::tags::dsl::*;
-    let connection = config::establish_connection();
     let query = tags.filter(id.gt(0))
         .order(created_time.desc())
         .paginate(request.pageNum,false)
@@ -29,7 +28,6 @@ pub fn tag_query<T>(request: &Json<AppRequest>) -> PaginationResponse<Vec<Tag>> 
 
 pub fn tag_query_list(_request: &Json<TagListRequest>) -> Vec<Tag> {
     use crate::model::diesel::dolphin::dolphin_schema::tags::dsl::*;
-    let connection = config::establish_connection();
     let tags_record = tags.order(app_id.desc())
         .load::<Tag>(&mut get_conn())
         .expect("query tags failed");
@@ -38,7 +36,6 @@ pub fn tag_query_list(_request: &Json<TagListRequest>) -> Vec<Tag> {
 
 pub fn tag_create(_request: &Json<AddAppRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::tags::dsl::*;
-    let connection = config::establish_connection();
     let apps_record = tags.order(app_id.desc())
         .limit(1)
         .load::<Tag>(&mut get_conn())
@@ -70,7 +67,6 @@ pub fn tag_edit(_request: &Json<EditAppRequest>) {
 
 pub fn tag_detail(query_app_id: i32) -> Tag {
     use crate::model::diesel::dolphin::dolphin_schema::tags::dsl::*;
-    let connection = config::establish_connection();
     let app_result = tags.filter(id.eq(query_app_id))
         .first::<Tag>(&mut get_conn());
     return app_result.unwrap();

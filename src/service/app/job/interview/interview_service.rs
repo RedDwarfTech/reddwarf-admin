@@ -17,7 +17,7 @@ use crate::model::request::app::job::interview::edit_interview_request::EditInte
 pub fn interview_query<T>(request: InterviewRequest,login_user_info: LoginUserInfo) -> PaginationResponse<Vec<Interview>> {
     use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::interview as interview_table;
-    let connection = config::establish_connection();
+    
     // https://stackoverflow.com/questions/65039754/rust-diesel-conditionally-filter-a-query
     let mut query = interview_table::table.into_boxed::<diesel::pg::Pg>();
     query = query.filter(interview_table::user_id.eq(login_user_info.userId));
@@ -37,7 +37,7 @@ pub fn interview_query<T>(request: InterviewRequest,login_user_info: LoginUserIn
 }
 
 pub fn add_interview(request: &Json<AddInterviewRequest>,login_user_info: LoginUserInfo) {
-    let connection = config::establish_connection();
+    
     let current_time = get_current_millisecond();
     let app = InterviewAdd{
         city: request.city.to_string(),
@@ -62,7 +62,7 @@ pub fn add_interview(request: &Json<AddInterviewRequest>,login_user_info: LoginU
 
 pub fn update_interview(request: &Json<EditInterviewRequest>) {
     use crate::model::diesel::dolphin::dolphin_schema::interview::dsl::*;
-    let connection = config::establish_connection();
+    
     let predicate = crate::model::diesel::dolphin::dolphin_schema::interview::id.eq(request.id);
     diesel::update(interview.filter(predicate))
         .set(

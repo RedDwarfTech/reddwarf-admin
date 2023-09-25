@@ -17,7 +17,7 @@ use crate::model::request::app::cruise::channel::update_channel_request::UpdateC
 pub fn channel_query<T>(request: ChannelRequest, _login_user_info: LoginUserInfo) -> PaginationResponse<Vec<RssSubSource>> {
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source as channel_table;
-    let connection = config::establish_connection();
+    
     let mut query = channel_table::table.into_boxed::<diesel::pg::Pg>();
     if let Some(edit_pick_req) = request.editorPick {
         query = query.filter(channel_table::editor_pick.eq(edit_pick_req));
@@ -95,7 +95,7 @@ pub fn update_channel(request: Json<UpdateChannelRequest>){
 
 pub fn update_channel_impl(request: &Json<UpdateChannelRequest>){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let connection = config::establish_connection();
+    
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(request.channelId);
     // https://diesel.rs/guides/all-about-updates.html
     // https://stackoverflow.com/questions/72249171/rust-diesel-conditionally-update-fields
@@ -117,7 +117,7 @@ pub fn update_channel_impl(request: &Json<UpdateChannelRequest>){
 
 pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let connection = config::establish_connection();
+    
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
     diesel::update(rss_sub_source.filter(predicate))
         .set(editor_pick.eq(editor_pick_status))
@@ -127,7 +127,7 @@ pub fn editor_pick_channel(req_channel_id: i64, editor_pick_status: i32){
 
 pub fn update_channel_tags(req_channel_id: &i64, new_tags: String){
     use crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::dsl::*;
-    let connection = config::establish_connection();
+    
     let predicate = crate::model::diesel::dolphin::dolphin_schema::rss_sub_source::id.eq(req_channel_id);
     let tag_db_str: serde_json::Value = serde_json::from_str(&*new_tags).unwrap_or_default();
     diesel::update(rss_sub_source.filter(predicate))
