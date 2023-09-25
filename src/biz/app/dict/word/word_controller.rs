@@ -1,7 +1,7 @@
 use okapi::openapi3::OpenApi;
 use rocket::response::content;
 use rocket::serde::json::Json;
-use rust_wheel::common::util::model_convert::box_rest_response;
+use rust_wheel::common::wrapper::rocket_http_resp::box_rest_response;
 use crate::model::request::app::dict::word::glossary_add_request::GlossaryAddRequest;
 use crate::model::request::app::dict::word::glossary_request::GlossaryRequest;
 use crate::service::app::dict::word::word_service::{glossary_add, glossary_query};

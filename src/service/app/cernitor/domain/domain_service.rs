@@ -1,11 +1,12 @@
 use rocket::serde::json::Json;
-use rust_wheel::common::query::pagination::PaginateForQueryFragment;
+use rust_wheel::common::query::pagination::Paginate;
 use rust_wheel::common::util::model_convert::map_pagination_res;
 use rust_wheel::common::util::time_util::get_current_millisecond;
 use rust_wheel::config::db::config;
 use rust_wheel::model::response::pagination_response::PaginationResponse;
 use rust_wheel::model::user::login_user_info::LoginUserInfo;
 
+use crate::common::db::database::get_conn;
 use crate::diesel::prelude::*;
 use crate::model::diesel::dolphin::dolphin_models::Domain;
 use crate::model::request::app::cernitor::domain::add_domain_request::AddDomainRequest;
@@ -15,10 +16,9 @@ use crate::model::request::app::cernitor::domain::edit_domain_request::EditDomai
 pub fn domain_query<T>(request: &Json<DomainRequest>) -> PaginationResponse<Vec<Domain>> {
     use crate::model::diesel::dolphin::dolphin_schema::domain::dsl::*;
     let connection = config::establish_connection();
-    let query = domain.filter(id.gt(0))
-        .paginate(request.pageNum,false)
+    let query = domain.filter(id.gt(0)).paginate(request.pageNum)
         .per_page(request.pageSize);
-    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Domain>(&connection);
+    let query_result: QueryResult<(Vec<_>, i64, i64)> = query.load_and_count_pages_total::<Domain>(&mut get_conn());
     let page_result = map_pagination_res(query_result, request.pageNum, request.pageSize);
     return page_result;
 }
@@ -43,7 +43,7 @@ pub fn add_domain(request: &Json<AddDomainRequest>, login_user_info: LoginUserIn
     diesel::insert_into(crate::model::diesel::dolphin::dolphin_schema::domain::table)
         .values(&new_domain)
         .on_conflict_do_nothing()
-        .execute(&connection)
+        .execute(&mut get_conn())
         .unwrap();
 }
 
@@ -54,7 +54,7 @@ pub fn edit_domain(request: &Json<EditDomainRequest>, login_user_info: LoginUser
         .and(crate::model::diesel::dolphin::dolphin_schema::domain::user_id.eq(login_user_info.userId));
     diesel::update(domain.filter(predicate))
         .set((domain_url.eq(&request.domainUrl),domain_name.eq(&request.domainName)))
-        .get_result::<Domain>(&connection)
+        .get_result::<Domain>(&mut get_conn())
         .expect("unable to update new password");
 }
 

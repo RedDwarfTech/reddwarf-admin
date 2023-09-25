@@ -106,7 +106,7 @@ pub struct UserRoleAdd {
     pub updated_time: i64,
 }
 
-#[derive(Insertable,Queryable,QueryableByName,Debug,Serialize,Deserialize,Default,Clone)]
+#[derive(Insertable,Queryable,Debug,Serialize,Deserialize,Default,Clone)]
 #[table_name = "admin_users"]
 pub struct AdminUserAdd {
     pub nickname: String,

@@ -3,9 +3,8 @@ use rocket::response::content;
 use rocket::serde::json::Json;
 use rocket_okapi::{openapi, openapi_get_routes_spec};
 use rocket_okapi::settings::OpenApiSettings;
-use rust_wheel::common::util::model_convert::{box_rest_response, box_type_rest_response};
+use rust_wheel::common::wrapper::rocket_http_resp::{box_type_rest_response, box_rest_response};
 use rust_wheel::model::response::api_response::ApiResponse;
-
 use crate::model::diesel::dolphin::dolphin_models::Article;
 use crate::model::request::app::cruise::article::article_request::ArticleRequest;
 use crate::model::response::app::cruise::article::article_response::ArticleResponse;
