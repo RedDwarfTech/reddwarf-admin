@@ -42,4 +42,3 @@ pub fn page(request: Json<SysDictRequest>) -> content::RawJson<String> {
     let dicts = dict_page_query::<Vec<SysDict>>(request.0.clone());
     return box_rest_response(dicts);
 }
-
