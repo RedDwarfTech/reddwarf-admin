@@ -36,6 +36,6 @@ rust_wheel = { git = "https://github.com/jiangxiaoqiang/rust_wheel.git", branch 
 # https://github.com/GREsau/okapi/issues/100
 # Fortune doc configuration
 #
-okapi = { git = "https://github.com/GREsau/okapi.git",version="0.7.0-rc.1"}
+okapi = { version = "0.7.0-rc.1"}
 schemars = { version = "0.8", features = ["chrono"] }
-rocket_okapi = { git = "https://github.com/GREsau/okapi.git", features = ["swagger", "rapidoc"], version="0.8.0-rc.2" }
+rocket_okapi = { version = "0.8.0-rc.3", features = ["swagger", "rapidoc"] }
